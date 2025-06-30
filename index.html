@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comic Market C106 Dev Book Release</title>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #f8f9fa;
+      font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+      color: #222;
+    }
+    .logo {
+      width: 180px;
+      height: auto;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border-radius: 16px;
+      background: #fff;
+      padding: 16px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 16px 0;
+      text-align: center;
+    }
+    .desc {
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+    }
+    li {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: box-shadow 0.2s;
+    }
+    li:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    }
+    @media (max-width: 600px) {
+      .logo { width: 120px; padding: 8px; }
+      h1 { font-size: 1.2rem; }
+      ul { flex-direction: column; gap: 12px; }
+      li { font-size: 0.95rem; padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <img src="logo_1on1.png" alt="ロゴ" class="logo">
+  <h1>Comic Market C106: Dev Book Release(JP only but can be translated)</h1>
+  <div class="desc">OSS Activities</div>
+  <ul>
+    <li><a href="https://www.npmjs.com/package/check-nc-licenses" target="_blank" rel="noopener noreferrer">npm package: check-nc-licenses</a></li>
+    <li>VS Code extension</li>
+  </ul>
+</body>
+</html>
