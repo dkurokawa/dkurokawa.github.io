@@ -62,27 +62,156 @@
       ul { flex-direction: column; gap: 12px; }
       li { font-size: 0.95rem; padding: 10px 12px; }
     }
+    /* Summaries container */
+    .summaries-container {
+      max-width: 720px;
+      margin: 0;
+      padding: 0;
+    }
+    /* Added: left align summaries */
+    .summary {
+      text-align: left;
+      margin: 0;
+    }
+    /* Smaller font for environment and description */
+    .summary .env-desc {
+      font-size: 0.9rem;
+    }
+    /* Code style */
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 0.85em;
+    }
+    /* Copy button style */
+    .copy-button {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 8px;
+      background: #e5e7eb;
+      border: none;
+      border-radius: 3px;
+      font-size: 0.8em;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .copy-button:hover {
+      background: #d1d5db;
+    }
+    .copy-button.copied {
+      background: #10b981;
+      color: white;
+    }
+    /* Added: nicer spacing for separators */
+    hr { border: none; border-top: 1px solid #e5e7eb; margin: 12px 0 20px; max-width: 720px; }
   </style>
 </head>
 <body>
   <img src="logo_1on1.png" alt="ロゴ" class="logo">
-  <h1>Comic Market C106: TIC-80 dev Book Release<br>(JP only but can be translated)</h1>
-  <div class="desc">OSS Activities</div>
+  <h1>Comic Market C106: TIC-80 dev Book Release</h1>
+  <pre>(It's in Japanese but it's a website so it can be translated)</pre>
+  <pre>
+    <div class="desc">OSS Activities</div>
+  </pre>
   <!-- summaries here -->
-  <div class="summary">
-    <strong>環境:</strong> macOS, Linux<br>
-    <strong>説明:</strong> ポート競合を防ぐ管理ツール。CLI + MCP対応。AI支援開発やチーム開発に最適化。<br>
-    <a href="../portman/.html/instruction.html" target="_blank" rel="noopener noreferrer">Portman 詳細・手順</a>
+<div class="summaries-container">
+<div class="summary">
+  <strong>Books (プログラミング教材書籍)</strong> v1.0.0<br>
+  <div class="env-desc">
+    <strong>環境:</strong> ウェブサイト<br>
+    <strong>説明:</strong> C106頒布書籍の開発プロジェクト <a href="https://dkurokawa.github.io/books" target="_blank" rel="noopener noreferrer">詳細はこちら</a><br>
   </div>
+</div>
+<hr>
+<div class="summary">
+  <strong>check-nc-licenses</strong> v0.2.0<br>
+  <div class="env-desc">
+    <strong>環境:</strong> npm package<br>
+    <strong>インストール:</strong> <code>npm install -g check-nc-licenses</code>
+    <button class="copy-button" onclick="copyToClipboard('npm install -g check-nc-licenses', this)">コピー</button><br>
+    <strong>説明:</strong> npm依存関係に含まれる非商用（NC）ライセンスを検出<br>
+  </div>
+</div>
+<hr>
+<div class="summary">
+  <strong>CPU Harmony</strong><br>
+  <div class="env-desc">
+    <strong>環境:</strong> macOS<br>
+    <strong>インストール:</strong> <code>brew install dkurokawa/tap/cpu-harmony</code>
+    <button class="copy-button" onclick="copyToClipboard('brew install dkurokawa/tap/cpu-harmony', this)">コピー</button><br>
+    <span style="font-size: 0.9em; color: #666;">または <a href="https://github.com/dkurokawa/cpu-harmony/releases" target="_blank">GitHubのReleasesページ</a>からダウンロード</span><br>
+    <strong>説明:</strong> 最低限のシステム応答性を確保するCPUリソース調停ツール<br>
+  </div>
+</div>
+<hr>
+<div class="summary">
+  <strong>Portman</strong> v1.4.0<br>
+  <div class="env-desc">
+    <strong>環境:</strong> CLI (macOS, Linux)<br>
+    <strong>インストール:</strong> <code>brew install dkurokawa/tap/portman</code>
+    <button class="copy-button" onclick="copyToClipboard('brew install dkurokawa/tap/portman', this)">コピー</button><br>
+    <span style="font-size: 0.9em; color: #666;">または <a href="https://github.com/dkurokawa/portman/releases" target="_blank">GitHubのReleasesページ</a>からダウンロード</span><br>
+    <strong>説明:</strong> ポート調停ツール。vibe codingでAIが使ってくれると楽できます。Claude code検証済み。 mcpはまだ実験段階です。 なにも指示しなくても裏で勝手にポート管理してくれるといいからと思ったんだけど、勝手にやらないほうがいいのか微妙。<br>
+  </div>
+</div>
+<hr>
+<div class="summary">
+  <strong>VSCode Port Monitor</strong> v0.5.1<br>
+  <div class="env-desc">
+    <strong>環境:</strong> VS Code拡張機能<br>
+    <strong>インストール:</strong> VS Code Marketplaceで「VSCode Port Monitor」を検索<br>
+    <strong>説明:</strong> VS Codeでシステム開発時に関連するポートを登録し利用状況を表示<br>
+  </div>
+</div>
+<hr>
+<div class="summary">
+  <strong>VSCode Web Panel</strong> v0.2.0<br>
+  <div class="env-desc">
+    <strong>環境:</strong> VS Code拡張機能<br>
+    <strong>インストール:</strong> VS Code Marketplaceで「VSCode Web Panel」を検索<br>
+    <strong>説明:</strong> VS Codeのパネルやサイドビューにウェブを表示。ダッシュボードを表示すると便利。<br>
+  </div>
+</div>
+<hr>
+</div>
   <!-- summaries end -->
-  <div class="summary">
-    <strong>環境:</strong> macOS, bash<br>
-    <strong>説明:</strong> このページは、Comic Market C106 Dev Book Releaseの補足説明やセットアップ手順などを掲載しています。<br>
-    <a href="instructions.html" target="_blank" rel="noopener noreferrer">詳細な手順・説明はこちら</a>
-  </div>
   <ul>
-    <li><a href="https://www.npmjs.com/package/check-nc-licenses" target="_blank" rel="noopener noreferrer">npm package: check-nc-licenses</a></li>
     <li><a href="https://www.linkedin.com/in/daisuke-kurokawa" target="_blank" rel="noopener noreferrer">LinkedIn: Daisuke Kurokawa</a></li>
   </ul>
+  <script>
+    function copyToClipboard(text, button) {
+      navigator.clipboard.writeText(text).then(function() {
+        button.textContent = 'コピー済み';
+        button.classList.add('copied');
+        setTimeout(function() {
+          button.textContent = 'コピー';
+          button.classList.remove('copied');
+        }, 2000);
+      }).catch(function(err) {
+        console.error('コピーに失敗しました:', err);
+      });
+    }
+  </script>
+  
+  <div style="text-align: center; margin-top: 40px; padding: 20px 0; color: #666; font-size: 0.9rem;">
+    最終更新: 2025年08月10日 01:50
+  </div>
+  <div style="text-align: center; margin-top: 40px; padding: 20px 0; color: #666; font-size: 0.9rem;">
+    最終更新: 2025年08月10日 01:53
+  </div>
+  <div style="text-align: center; margin-top: 40px; padding: 20px 0; color: #666; font-size: 0.9rem;">
+    最終更新: 2025年08月10日 02:35
+  </div>
+  <div style="text-align: center; margin-top: 40px; padding: 20px 0; color: #666; font-size: 0.9rem;">
+    最終更新: 2025年08月10日 02:40
+  </div>
+  <div style="text-align: center; margin-top: 40px; padding: 20px 0; color: #666; font-size: 0.9rem;">
+    最終更新: 2025年08月10日 02:42
+  </div>
+  <div style="text-align: center; margin-top: 40px; padding: 20px 0; color: #666; font-size: 0.9rem;">
+    最終更新: 2025年08月10日 02:46
+  </div>
 </body>
 </html>

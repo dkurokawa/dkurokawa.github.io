@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portman - AI-Friendly Port Management</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 { color: #333; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Portman v1.4.0</h1>
+    <p>ポート調停ツール。vibe codingでAIが使ってくれると楽できます。Claude code検証済み。</p>
+    
+    <h2>インストール</h2>
+    <pre><code># Go install
+go install github.com/daikurokawa/portman/cmd/portman@latest
+
+# または、リポジトリをクローンしてビルド
+git clone https://github.com/daikurokawa/portman.git
+cd portman/portman-go
+go build -o portman ./cmd/portman</code></pre>
+    
+    <h2>使い方</h2>
+    <pre><code># ポートを取得/割り当て
+portman get "project-name"
+
+# ポート一覧
+portman list
+
+# ダッシュボード
+portman dashboard</code></pre>
+    
+    <p>詳細は <a href="https://github.com/daikurokawa/portman">GitHub</a> を参照してください。</p>
+</body>
+</html>
