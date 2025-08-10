@@ -189,20 +189,185 @@ awk -v summary_file="$TMP_SUMMARY" '
 # Remove existing update date and add new one
 UPDATE_DATE=$(date +"%Y年%m月%d日 %H:%M")
 
-# First, remove all existing update date divs
-sed '/<div style="text-align: center;.*最終更新:/,/<\/div>/d' "$INDEX.tmp" > "$INDEX.tmp2"
-
-# Then add the new update date before </body>
+# Remove all existing update date divs and add the new one before </body>
 awk -v date="$UPDATE_DATE" '
+  BEGIN { in_update_div = 0; skip_next = 0 }
+  /<div style="text-align: center; margin-top: 40px; padding: 20px 0; color: #666; font-size: 0.9rem;">/ {
+    # Check if next line contains 最終更新
+    getline next_line
+    if (next_line ~ /最終更新:/) {
+      in_update_div = 1
+      next
+    } else {
+      print $0
+      print next_line
+    }
+    next
+  }
+  in_update_div && /<\/div>/ { in_update_div = 0; next }
+  in_update_div { next }
   /<\/body>/ {
     print "  <div style=\"text-align: center; margin-top: 40px; padding: 20px 0; color: #666; font-size: 0.9rem;\">"
     print "    最終更新: " date
     print "  </div>"
+    print
+    next
   }
-  {print}
-' "$INDEX.tmp2" > "$INDEX"
-rm -f "$INDEX.tmp" "$INDEX.tmp2"
+  { print }
+' "$INDEX.tmp" > "$INDEX"
+rm -f "$INDEX.tmp"
 
 rm -f "$TMP_SUMMARY"
 
+# Generate mini-panel.html
+MINI_PANEL="$WORKDIR/mini-panel.html"
+cat > "$MINI_PANEL" << 'EOF'
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSS Projects</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #333;
+            background: #f8f9fa;
+            padding: 12px;
+            width: 300px;
+        }
+        h2 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #222;
+            text-align: center;
+        }
+        .project-list {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .project-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        .project-item:hover {
+            background-color: #f3f4f6;
+        }
+        .project-item:last-child {
+            border-bottom: none;
+        }
+        .project-name {
+            font-weight: 500;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding-right: 8px;
+        }
+        .project-version {
+            font-size: 11px;
+            color: #666;
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+        .no-version {
+            color: #999;
+        }
+        .footer {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>OSS Projects</h2>
+    <div class="project-list">
+EOF
+
+# Process each project for mini panel
+for project_dir in "$WORKDIR/target-projects"/*; do
+    if [ -d "$project_dir" ]; then
+        project_name="$(basename "$project_dir")"
+        name=""
+        version=""
+        
+        case "$project_name" in
+            "books")
+                name="Books"
+                version=$(get_node_version "$project_dir")
+                ;;
+            "check-nc-licenses")
+                name="check-nc-licenses"
+                version=$(get_node_version "$project_dir")
+                ;;
+            "cpu-harmony")
+                name="CPU Harmony"
+                version=$(get_go_version "$project_dir")
+                ;;
+            "portman")
+                name="Portman"
+                version=$(get_go_version "$project_dir")
+                ;;
+            "vscode-port-monitor")
+                name="Port Monitor"
+                version=$(get_node_version "$project_dir")
+                ;;
+            "vscode-web-panel")
+                name="Web Panel"
+                version=$(get_node_version "$project_dir")
+                ;;
+        esac
+        
+        if [ -n "$name" ]; then
+            echo "        <div class=\"project-item\">" >> "$MINI_PANEL"
+            echo "            <span class=\"project-name\">$name</span>" >> "$MINI_PANEL"
+            if [ -n "$version" ]; then
+                echo "            <span class=\"project-version\">$version</span>" >> "$MINI_PANEL"
+            else
+                echo "            <span class=\"project-version no-version\">-</span>" >> "$MINI_PANEL"
+            fi
+            echo "        </div>" >> "$MINI_PANEL"
+        fi
+    fi
+done
+
+cat >> "$MINI_PANEL" << EOF
+    </div>
+    <div class="footer">
+        <a href="https://github.com/dkurokawa" target="_blank">GitHub</a>
+        <div style="margin-top: 8px; font-size: 10px; color: #999;">
+            最終更新: $UPDATE_DATE
+        </div>
+    </div>
+</body>
+</html>
+EOF
+
 echo "All project summaries updated!"
+echo "Mini panel generated: mini-panel.html"
+echo "File URL: file://$MINI_PANEL"
