@@ -1,0 +1,10 @@
+# Jekyll configuration for GitHub Pages
+# Exclude directories that might cause issues
+exclude:
+  - target-projects
+  - for-software-projects
+  - update_summaries_direct.sh
+  - update_summaries_direct_en.sh
+  - nohup.out
+  - CLAUDE.md
+  - README.md
