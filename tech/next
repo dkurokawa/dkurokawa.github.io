@@ -1,0 +1,57 @@
+戦略
+	•	トップページはそのまま（コミケ仕様維持）
+	•	/tech/index.html を作って、テックイベント用ポートフォリオにする
+	•	名刺やLinkedInからは /tech/ に直リンク
+	•	内容は「できること・実績・OSS・連絡先」にフォーカス
+
+⸻
+
+/tech/index.html に載せるべき内容　※適宜ピックアップ
+
+1. ヘッダー
+	•	Daisuke Kurokawa / 黒川 大輔
+	•	簡単な肩書き：「AI × Full-stack Engineer」
+
+2. 現在の業務
+	•	[wip] 最新業務(B2B2C): Next.js + github Actions + AWS
+	•	[wip] AI画像判定システム（ Computer Vision ）
+	•	[wip] AIカメラ判定フロントエンド ( Yolo / TensorFlow / PyTorch)
+	•	[wip] AI判定バックエンド ( Yolo / TensorFlow / PyTorch)
+3. 実績
+	•	[実績] Webサービス開発・運用（ B2C / B2B / B2B2C ）
+	•	[実績] GitHub Enterprise 運用経験（GREE）
+	•	[実績] フルスタック開発（ Web / Expo / Mobile / Unity / IoT ）
+	•	[実績] カメラ→バーコード処理システム開発運用 ( Vitest )
+4. 興味
+	•	AI / Web3 / OSS開発
+
+5. リンク
+	•	LinkedIn QR
+
+6. 連絡先
+	•	kurokawapc@gmail.com
+
+
+///////////////////////////////////////////////////////
+ここ以下は名刺の話し
+⸻
+
+見せ方のトーン
+	•	青系ベース（淡いブルーやグラデ背景）
+	•	モダンなフォント（sans-serif）
+	•	名刺から飛んだ先で「お、この人テックイベント慣れてる」と感じさせる
+
+⸻
+
+選択肢
+	1.	きっちり整えた /tech/index.html
+→ 自分の専門性を全面に出せる
+→ LinkedInを補完するポートフォリオ的役割
+	2.	超シンプルに「LinkedIn見てね」だけ書いたページ
+→ 急ぎならアリ
+→ でも「LinkedIn + α」で差がつく
+
+⸻
+
+👉おすすめは (1)。
+WebXみたいな場では「LinkedInだけ」だと没個性になりやすいので、軽い実績まとめページを作るだけでも差が出ます。
