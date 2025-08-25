@@ -1,0 +1,2 @@
+# Exclude symlink directories from archive
+target-projects/* export-ignore
