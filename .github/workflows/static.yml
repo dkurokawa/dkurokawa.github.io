@@ -35,12 +35,15 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
         
+      - name: Remove symlinks before upload
+        run: |
+          rm -rf target-projects
+          
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository except symlinks
+          # Upload entire repository
           path: '.'
-          # This action automatically excludes .git and other unnecessary files
           
       - name: Deploy to GitHub Pages
         id: deployment
