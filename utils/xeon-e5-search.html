@@ -138,6 +138,25 @@
             overflow-x: auto;
         }
 
+        /* モバイル用の短縮表記 */
+        @media (max-width: 768px) {
+            .desktop-label {
+                display: none;
+            }
+            .mobile-label {
+                display: inline;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .desktop-label {
+                display: inline;
+            }
+            .mobile-label {
+                display: none;
+            }
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -147,23 +166,32 @@
         th {
             background: linear-gradient(135deg, #0074D9, #001f3f);
             color: white;
-            padding: 8px 6px;
+            padding: 0;
             text-align: left;
             font-weight: 600;
             position: sticky;
             top: 0;
             z-index: 10;
+            font-size: 13px;
+        }
+        
+        th.sortable {
             cursor: pointer;
             user-select: none;
             transition: all 0.2s ease;
-            font-size: 13px;
+        }
+        
+        th.sortable > * {
+            display: block;
+            padding: 8px 6px;
+            width: 100%;
         }
 
-        th:first-child {
+        th:first-child > * {
             padding-left: 12px;
         }
 
-        th:last-child {
+        th:last-child > * {
             padding-right: 12px;
         }
 
@@ -316,12 +344,18 @@
                 font-size: 11px;
             }
 
-            th:first-child,
+            th:first-child > * {
+                padding-left: 8px;
+            }
+            
             td:first-child {
                 padding-left: 8px;
             }
 
-            th:last-child,
+            th:last-child > * {
+                padding-right: 8px;
+            }
+            
             td:last-child {
                 padding-right: 8px;
             }
@@ -342,16 +376,16 @@
     <div class="container">
         <div class="header">
             <h1>🔍 Intel Xeon E5 CPU スペック検索</h1>
-            <p>型番の一部や数字を入力してCPUスペックを検索（*で任意の文字列）</p>
+            <p>型番検索とスペック条件でCPUを絞り込み（複数条件の組み合わせ可）</p>
             <div class="oc-note">
-                💡 検索例: E5-*v3 (v3世代全て), 26*0 (2600, 2610, 2620等), *80* (2680, 2780等)
+                💡 名称フィールドが空欄の場合は全CPUを表示。カラムクリックでソート可能
             </div>
         </div>
 
         <div class="search-section">
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="例: 2680, v3, E5-*70, 26*0 など..." autocomplete="off">
-                <button class="clear-btn" onclick="clearSearch()">クリア</button>
+                <button class="clear-btn" onclick="clearAllFilters()">全フィルタクリア</button>
             </div>
 
             <div class="stats">
@@ -370,6 +404,70 @@
             </div>
         </div>
 
+        <div class="filters-section">
+            <div class="active-filters" id="activeFilters">
+                <!-- Active filters will be displayed here -->
+            </div>
+            
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label>世代</label>
+                    <select id="generationFilter">
+                        <option value="">すべて</option>
+                        <option value="v1">v1 (Sandy Bridge)</option>
+                        <option value="v2">v2 (Ivy Bridge)</option>
+                        <option value="v3">v3 (Haswell)</option>
+                        <option value="v4">v4 (Broadwell)</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>コア数</label>
+                    <div class="range-inputs">
+                        <input type="number" id="coresMin" placeholder="最小" min="4" max="22">
+                        <span>～</span>
+                        <input type="number" id="coresMax" placeholder="最大" min="4" max="22">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>TDP (W)</label>
+                    <div class="range-inputs">
+                        <input type="number" id="tdpMin" placeholder="最小" min="80" max="145">
+                        <span>～</span>
+                        <input type="number" id="tdpMax" placeholder="最大" min="80" max="145">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>ベースクロック (GHz)</label>
+                    <div class="range-inputs">
+                        <input type="number" id="baseClockMin" placeholder="最小" min="1.8" max="3.5" step="0.1">
+                        <span>～</span>
+                        <input type="number" id="baseClockMax" placeholder="最大" min="1.8" max="3.5" step="0.1">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>ターボクロック (GHz)</label>
+                    <div class="range-inputs">
+                        <input type="number" id="turboClockMin" placeholder="最小" min="2.5" max="4.0" step="0.1">
+                        <span>～</span>
+                        <input type="number" id="turboClockMax" placeholder="最大" min="2.5" max="4.0" step="0.1">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>キャッシュ (MB)</label>
+                    <div class="range-inputs">
+                        <input type="number" id="cacheMin" placeholder="最小" min="5" max="60">
+                        <span>～</span>
+                        <input type="number" id="cacheMax" placeholder="最大" min="5" max="60">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="results-section">
             <div class="results-table" id="resultsContainer">
                 <!-- Results will be populated here -->
@@ -380,31 +478,87 @@
     <script>
         // Intel Xeon E5 CPU データベース
         const xeonE5Database = [
-            // v1 (Sandy Bridge-EP)
-            { name: "E5-2690", generation: "v1", cores: 8, threads: 16, baseClock: "2.9 GHz", turboClock: "3.8 GHz", cache: "20 MB", tdp: "135W", socket: "LGA 2011", ocMax: "4.2 GHz*" },
-            { name: "E5-2680", generation: "v1", cores: 8, threads: 16, baseClock: "2.7 GHz", turboClock: "3.5 GHz", cache: "20 MB", tdp: "130W", socket: "LGA 2011", ocMax: "3.8 GHz*" },
-            { name: "E5-2670", generation: "v1", cores: 8, threads: 16, baseClock: "2.6 GHz", turboClock: "3.3 GHz", cache: "20 MB", tdp: "115W", socket: "LGA 2011", ocMax: "3.6 GHz*" },
-            { name: "E5-2660", generation: "v1", cores: 8, threads: 16, baseClock: "2.2 GHz", turboClock: "3.0 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.3 GHz*" },
-            { name: "E5-2650", generation: "v1", cores: 8, threads: 16, baseClock: "2.0 GHz", turboClock: "2.8 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.1 GHz*" },
-            { name: "E5-2630", generation: "v1", cores: 6, threads: 12, baseClock: "2.3 GHz", turboClock: "2.8 GHz", cache: "15 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.0 GHz*" },
-            { name: "E5-2620", generation: "v1", cores: 6, threads: 12, baseClock: "2.0 GHz", turboClock: "2.5 GHz", cache: "15 MB", tdp: "95W", socket: "LGA 2011", ocMax: "2.7 GHz*" },
-            { name: "E5-2609", generation: "v1", cores: 4, threads: 4, baseClock: "2.4 GHz", turboClock: "-", cache: "10 MB", tdp: "80W", socket: "LGA 2011", ocMax: "2.6 GHz*" },
+            // v1 (Sandy Bridge-EP) - E5-1600 Series
+            { name: "E5-1620", generation: "v1", cores: 4, threads: 8, baseClock: "3.6 GHz", turboClock: "3.8 GHz", cache: "10 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.2 GHz" },
+            { name: "E5-1650", generation: "v1", cores: 6, threads: 12, baseClock: "3.2 GHz", turboClock: "3.8 GHz", cache: "12 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.1 GHz" },
+            { name: "E5-1660", generation: "v1", cores: 6, threads: 12, baseClock: "3.3 GHz", turboClock: "3.9 GHz", cache: "15 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.3 GHz" },
+            { name: "E5-1680", generation: "v1", cores: 8, threads: 16, baseClock: "3.0 GHz", turboClock: "3.8 GHz", cache: "20 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.2 GHz" },
+            
+            // v1 (Sandy Bridge-EP) - E5-2600 Series
             { name: "E5-2603", generation: "v1", cores: 4, threads: 4, baseClock: "1.8 GHz", turboClock: "-", cache: "10 MB", tdp: "80W", socket: "LGA 2011", ocMax: "2.0 GHz*" },
+            { name: "E5-2609", generation: "v1", cores: 4, threads: 4, baseClock: "2.4 GHz", turboClock: "-", cache: "10 MB", tdp: "80W", socket: "LGA 2011", ocMax: "2.6 GHz*" },
+            { name: "E5-2618L", generation: "v1", cores: 6, threads: 12, baseClock: "2.0 GHz", turboClock: "2.0 GHz", cache: "15 MB", tdp: "50W", socket: "LGA 2011", ocMax: "2.2 GHz*" },
+            { name: "E5-2620", generation: "v1", cores: 6, threads: 12, baseClock: "2.0 GHz", turboClock: "2.5 GHz", cache: "15 MB", tdp: "95W", socket: "LGA 2011", ocMax: "2.7 GHz*" },
+            { name: "E5-2628L", generation: "v1", cores: 8, threads: 16, baseClock: "1.8 GHz", turboClock: "2.0 GHz", cache: "20 MB", tdp: "70W", socket: "LGA 2011", ocMax: "2.2 GHz*" },
+            { name: "E5-2630", generation: "v1", cores: 6, threads: 12, baseClock: "2.3 GHz", turboClock: "2.8 GHz", cache: "15 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.0 GHz*" },
+            { name: "E5-2630L", generation: "v1", cores: 6, threads: 12, baseClock: "2.0 GHz", turboClock: "2.5 GHz", cache: "15 MB", tdp: "60W", socket: "LGA 2011", ocMax: "2.7 GHz*" },
+            { name: "E5-2637", generation: "v1", cores: 2, threads: 4, baseClock: "3.0 GHz", turboClock: "3.5 GHz", cache: "5 MB", tdp: "80W", socket: "LGA 2011", ocMax: "3.8 GHz*" },
+            { name: "E5-2640", generation: "v1", cores: 6, threads: 12, baseClock: "2.5 GHz", turboClock: "3.0 GHz", cache: "15 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.3 GHz*" },
+            { name: "E5-2643", generation: "v1", cores: 4, threads: 8, baseClock: "3.3 GHz", turboClock: "3.5 GHz", cache: "10 MB", tdp: "130W", socket: "LGA 2011", ocMax: "3.8 GHz*" },
+            { name: "E5-2648L", generation: "v1", cores: 8, threads: 16, baseClock: "1.8 GHz", turboClock: "2.1 GHz", cache: "20 MB", tdp: "70W", socket: "LGA 2011", ocMax: "2.3 GHz*" },
+            { name: "E5-2650", generation: "v1", cores: 8, threads: 16, baseClock: "2.0 GHz", turboClock: "2.8 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.1 GHz*" },
+            { name: "E5-2650L", generation: "v1", cores: 8, threads: 16, baseClock: "1.8 GHz", turboClock: "2.3 GHz", cache: "20 MB", tdp: "70W", socket: "LGA 2011", ocMax: "2.5 GHz*" },
+            { name: "E5-2658", generation: "v1", cores: 8, threads: 16, baseClock: "2.1 GHz", turboClock: "2.4 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "2.7 GHz*" },
+            { name: "E5-2660", generation: "v1", cores: 8, threads: 16, baseClock: "2.2 GHz", turboClock: "3.0 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.3 GHz*" },
+            { name: "E5-2665", generation: "v1", cores: 8, threads: 16, baseClock: "2.4 GHz", turboClock: "3.1 GHz", cache: "20 MB", tdp: "115W", socket: "LGA 2011", ocMax: "3.4 GHz*" },
+            { name: "E5-2667", generation: "v1", cores: 6, threads: 12, baseClock: "2.9 GHz", turboClock: "3.5 GHz", cache: "15 MB", tdp: "130W", socket: "LGA 2011", ocMax: "3.8 GHz*" },
+            { name: "E5-2670", generation: "v1", cores: 8, threads: 16, baseClock: "2.6 GHz", turboClock: "3.3 GHz", cache: "20 MB", tdp: "115W", socket: "LGA 2011", ocMax: "3.6 GHz*" },
+            { name: "E5-2680", generation: "v1", cores: 8, threads: 16, baseClock: "2.7 GHz", turboClock: "3.5 GHz", cache: "20 MB", tdp: "130W", socket: "LGA 2011", ocMax: "3.8 GHz*" },
+            { name: "E5-2687W", generation: "v1", cores: 8, threads: 16, baseClock: "3.1 GHz", turboClock: "3.8 GHz", cache: "20 MB", tdp: "150W", socket: "LGA 2011", ocMax: "4.3 GHz*" },
+            { name: "E5-2689", generation: "v1", cores: 8, threads: 16, baseClock: "2.6 GHz", turboClock: "3.6 GHz", cache: "20 MB", tdp: "115W", socket: "LGA 2011", ocMax: "3.9 GHz*" },
+            { name: "E5-2690", generation: "v1", cores: 8, threads: 16, baseClock: "2.9 GHz", turboClock: "3.8 GHz", cache: "20 MB", tdp: "135W", socket: "LGA 2011", ocMax: "4.2 GHz*" },
+            
+            // v1 (Sandy Bridge-EP) - E5-4600 Series
+            { name: "E5-4603", generation: "v1", cores: 4, threads: 8, baseClock: "2.0 GHz", turboClock: "-", cache: "10 MB", tdp: "95W", socket: "LGA 2011", ocMax: "2.2 GHz*" },
+            { name: "E5-4607", generation: "v1", cores: 6, threads: 12, baseClock: "2.2 GHz", turboClock: "-", cache: "12 MB", tdp: "95W", socket: "LGA 2011", ocMax: "2.4 GHz*" },
+            { name: "E5-4610", generation: "v1", cores: 6, threads: 12, baseClock: "2.4 GHz", turboClock: "2.9 GHz", cache: "15 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.1 GHz*" },
+            { name: "E5-4617", generation: "v1", cores: 6, threads: 6, baseClock: "2.9 GHz", turboClock: "3.4 GHz", cache: "15 MB", tdp: "130W", socket: "LGA 2011", ocMax: "3.6 GHz*" },
+            { name: "E5-4620", generation: "v1", cores: 8, threads: 16, baseClock: "2.2 GHz", turboClock: "2.6 GHz", cache: "16 MB", tdp: "95W", socket: "LGA 2011", ocMax: "2.8 GHz*" },
+            { name: "E5-4640", generation: "v1", cores: 8, threads: 16, baseClock: "2.4 GHz", turboClock: "2.8 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.0 GHz*" },
+            { name: "E5-4650", generation: "v1", cores: 8, threads: 16, baseClock: "2.7 GHz", turboClock: "3.3 GHz", cache: "20 MB", tdp: "130W", socket: "LGA 2011", ocMax: "3.5 GHz*" },
+            { name: "E5-4650L", generation: "v1", cores: 8, threads: 16, baseClock: "2.6 GHz", turboClock: "3.1 GHz", cache: "20 MB", tdp: "115W", socket: "LGA 2011", ocMax: "3.3 GHz*" },
 
-            // v2 (Ivy Bridge-EP)
-            { name: "E5-2697 v2", generation: "v2", cores: 12, threads: 24, baseClock: "2.7 GHz", turboClock: "3.5 GHz", cache: "30 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.0 GHz" },
-            { name: "E5-2695 v2", generation: "v2", cores: 12, threads: 24, baseClock: "2.4 GHz", turboClock: "3.2 GHz", cache: "30 MB", tdp: "115W", socket: "LGA 2011", ocMax: "3.6 GHz*" },
-            { name: "E5-2690 v2", generation: "v2", cores: 10, threads: 20, baseClock: "3.0 GHz", turboClock: "3.6 GHz", cache: "25 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.1 GHz" },
-            { name: "E5-2680 v2", generation: "v2", cores: 10, threads: 20, baseClock: "2.8 GHz", turboClock: "3.6 GHz", cache: "25 MB", tdp: "115W", socket: "LGA 2011", ocMax: "4.0 GHz" },
-            { name: "E5-1680 v2", generation: "v2", cores: 8, threads: 16, baseClock: "3.0 GHz", turboClock: "3.9 GHz", cache: "25 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.2 GHz" },
-            { name: "E5-2670 v2", generation: "v2", cores: 10, threads: 20, baseClock: "2.5 GHz", turboClock: "3.3 GHz", cache: "25 MB", tdp: "115W", socket: "LGA 2011", ocMax: "3.7 GHz*" },
-            { name: "E5-2667 v2", generation: "v2", cores: 8, threads: 16, baseClock: "3.3 GHz", turboClock: "4.0 GHz", cache: "25 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.5 GHz" },
-            { name: "E5-2660 v2", generation: "v2", cores: 10, threads: 20, baseClock: "2.2 GHz", turboClock: "3.0 GHz", cache: "25 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.4 GHz*" },
-            { name: "E5-2650 v2", generation: "v2", cores: 8, threads: 16, baseClock: "2.6 GHz", turboClock: "3.4 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.8 GHz*" },
-            { name: "E5-2640 v2", generation: "v2", cores: 8, threads: 16, baseClock: "2.0 GHz", turboClock: "2.5 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "2.8 GHz*" },
-            { name: "E5-2630 v2", generation: "v2", cores: 6, threads: 12, baseClock: "2.6 GHz", turboClock: "3.1 GHz", cache: "15 MB", tdp: "80W", socket: "LGA 2011", ocMax: "3.4 GHz*" },
-            { name: "E5-2620 v2", generation: "v2", cores: 6, threads: 12, baseClock: "2.1 GHz", turboClock: "2.6 GHz", cache: "15 MB", tdp: "80W", socket: "LGA 2011", ocMax: "2.9 GHz*" }, v2", generation: "v2", cores: 6, threads: 12, baseClock: "2.6 GHz", turboClock: "3.1 GHz", cache: "15 MB", tdp: "80W", socket: "LGA 2011", ocMax: "3.4 GHz * " },
+            // v2 (Ivy Bridge-EP) - E5-1600 v2 Series
+            { name: "E5-1620 v2", generation: "v2", cores: 4, threads: 8, baseClock: "3.7 GHz", turboClock: "3.9 GHz", cache: "10 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.3 GHz" },
+            { name: "E5-1650 v2", generation: "v2", cores: 6, threads: 12, baseClock: "3.5 GHz", turboClock: "3.9 GHz", cache: "12 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.3 GHz" },
+            { name: "E5-1660 v2", generation: "v2", cores: 6, threads: 12, baseClock: "3.7 GHz", turboClock: "4.0 GHz", cache: "15 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.4 GHz" },
+            { name: "E5-1680 v2", generation: "v2", cores: 8, threads: 16, baseClock: "3.0 GHz", turboClock: "3.9 GHz", cache: "25 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.3 GHz" },
+            
+            // v2 (Ivy Bridge-EP) - E5-2600 v2 Series
+            { name: "E5-2603 v2", generation: "v2", cores: 4, threads: 4, baseClock: "1.8 GHz", turboClock: "1.8 GHz", cache: "10 MB", tdp: "80W", socket: "LGA 2011", ocMax: "2.0 GHz*" },
+            { name: "E5-2609 v2", generation: "v2", cores: 4, threads: 4, baseClock: "2.5 GHz", turboClock: "2.5 GHz", cache: "10 MB", tdp: "80W", socket: "LGA 2011", ocMax: "2.7 GHz*" },
+            { name: "E5-2618L v2", generation: "v2", cores: 6, threads: 12, baseClock: "2.0 GHz", turboClock: "2.0 GHz", cache: "15 MB", tdp: "50W", socket: "LGA 2011", ocMax: "2.2 GHz*" },
             { name: "E5-2620 v2", generation: "v2", cores: 6, threads: 12, baseClock: "2.1 GHz", turboClock: "2.6 GHz", cache: "15 MB", tdp: "80W", socket: "LGA 2011", ocMax: "2.9 GHz*" },
+            { name: "E5-2628L v2", generation: "v2", cores: 8, threads: 16, baseClock: "1.9 GHz", turboClock: "2.4 GHz", cache: "20 MB", tdp: "70W", socket: "LGA 2011", ocMax: "2.7 GHz*" },
+            { name: "E5-2630 v2", generation: "v2", cores: 6, threads: 12, baseClock: "2.6 GHz", turboClock: "3.1 GHz", cache: "15 MB", tdp: "80W", socket: "LGA 2011", ocMax: "3.4 GHz*" },
+            { name: "E5-2630L v2", generation: "v2", cores: 6, threads: 12, baseClock: "2.4 GHz", turboClock: "2.8 GHz", cache: "15 MB", tdp: "60W", socket: "LGA 2011", ocMax: "3.1 GHz*" },
+            { name: "E5-2637 v2", generation: "v2", cores: 4, threads: 8, baseClock: "3.5 GHz", turboClock: "3.8 GHz", cache: "15 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.2 GHz*" },
+            { name: "E5-2640 v2", generation: "v2", cores: 8, threads: 16, baseClock: "2.0 GHz", turboClock: "2.5 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "2.8 GHz*" },
+            { name: "E5-2643 v2", generation: "v2", cores: 6, threads: 12, baseClock: "3.5 GHz", turboClock: "3.8 GHz", cache: "25 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.2 GHz*" },
+            { name: "E5-2648L v2", generation: "v2", cores: 10, threads: 20, baseClock: "1.9 GHz", turboClock: "2.5 GHz", cache: "25 MB", tdp: "70W", socket: "LGA 2011", ocMax: "2.8 GHz*" },
+            { name: "E5-2650 v2", generation: "v2", cores: 8, threads: 16, baseClock: "2.6 GHz", turboClock: "3.4 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.8 GHz*" },
+            { name: "E5-2650L v2", generation: "v2", cores: 10, threads: 20, baseClock: "1.7 GHz", turboClock: "2.1 GHz", cache: "25 MB", tdp: "70W", socket: "LGA 2011", ocMax: "2.4 GHz*" },
+            { name: "E5-2651 v2", generation: "v2", cores: 12, threads: 24, baseClock: "1.8 GHz", turboClock: "2.4 GHz", cache: "30 MB", tdp: "105W", socket: "LGA 2011", ocMax: "2.7 GHz*" },
+            { name: "E5-2658 v2", generation: "v2", cores: 10, threads: 20, baseClock: "2.4 GHz", turboClock: "3.0 GHz", cache: "25 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.3 GHz*" },
+            { name: "E5-2660 v2", generation: "v2", cores: 10, threads: 20, baseClock: "2.2 GHz", turboClock: "3.0 GHz", cache: "25 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.4 GHz*" },
+            { name: "E5-2667 v2", generation: "v2", cores: 8, threads: 16, baseClock: "3.3 GHz", turboClock: "4.0 GHz", cache: "25 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.5 GHz" },
+            { name: "E5-2670 v2", generation: "v2", cores: 10, threads: 20, baseClock: "2.5 GHz", turboClock: "3.3 GHz", cache: "25 MB", tdp: "115W", socket: "LGA 2011", ocMax: "3.7 GHz*" },
+            { name: "E5-2680 v2", generation: "v2", cores: 10, threads: 20, baseClock: "2.8 GHz", turboClock: "3.6 GHz", cache: "25 MB", tdp: "115W", socket: "LGA 2011", ocMax: "4.0 GHz" },
+            { name: "E5-2687W v2", generation: "v2", cores: 8, threads: 16, baseClock: "3.4 GHz", turboClock: "4.0 GHz", cache: "25 MB", tdp: "150W", socket: "LGA 2011", ocMax: "4.5 GHz" },
+            { name: "E5-2690 v2", generation: "v2", cores: 10, threads: 20, baseClock: "3.0 GHz", turboClock: "3.6 GHz", cache: "25 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.1 GHz" },
+            { name: "E5-2695 v2", generation: "v2", cores: 12, threads: 24, baseClock: "2.4 GHz", turboClock: "3.2 GHz", cache: "30 MB", tdp: "115W", socket: "LGA 2011", ocMax: "3.6 GHz*" },
+            { name: "E5-2697 v2", generation: "v2", cores: 12, threads: 24, baseClock: "2.7 GHz", turboClock: "3.5 GHz", cache: "30 MB", tdp: "130W", socket: "LGA 2011", ocMax: "4.0 GHz" },
+            
+            // v2 (Ivy Bridge-EP) - E5-4600 v2 Series
+            { name: "E5-4603 v2", generation: "v2", cores: 4, threads: 8, baseClock: "2.2 GHz", turboClock: "2.2 GHz", cache: "10 MB", tdp: "95W", socket: "LGA 2011", ocMax: "2.4 GHz*" },
+            { name: "E5-4607 v2", generation: "v2", cores: 6, threads: 12, baseClock: "2.6 GHz", turboClock: "2.6 GHz", cache: "15 MB", tdp: "95W", socket: "LGA 2011", ocMax: "2.8 GHz*" },
+            { name: "E5-4610 v2", generation: "v2", cores: 8, threads: 16, baseClock: "2.3 GHz", turboClock: "2.7 GHz", cache: "16 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.0 GHz*" },
+            { name: "E5-4620 v2", generation: "v2", cores: 8, threads: 16, baseClock: "2.6 GHz", turboClock: "3.0 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.3 GHz*" },
+            { name: "E5-4624L v2", generation: "v2", cores: 10, threads: 20, baseClock: "1.9 GHz", turboClock: "2.5 GHz", cache: "25 MB", tdp: "70W", socket: "LGA 2011", ocMax: "2.8 GHz*" },
+            { name: "E5-4627 v2", generation: "v2", cores: 8, threads: 8, baseClock: "3.3 GHz", turboClock: "3.6 GHz", cache: "16 MB", tdp: "130W", socket: "LGA 2011", ocMax: "3.9 GHz*" },
+            { name: "E5-4640 v2", generation: "v2", cores: 10, threads: 20, baseClock: "2.2 GHz", turboClock: "2.7 GHz", cache: "20 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.0 GHz*" },
+            { name: "E5-4650 v2", generation: "v2", cores: 10, threads: 20, baseClock: "2.4 GHz", turboClock: "2.9 GHz", cache: "25 MB", tdp: "95W", socket: "LGA 2011", ocMax: "3.2 GHz*" },
+            { name: "E5-4657L v2", generation: "v2", cores: 12, threads: 24, baseClock: "2.4 GHz", turboClock: "2.9 GHz", cache: "30 MB", tdp: "115W", socket: "LGA 2011", ocMax: "3.2 GHz*" },
 
             // v3 (Haswell-EP)
             { name: "E5-2699 v3", generation: "v3", cores: 18, threads: 36, baseClock: "2.3 GHz", turboClock: "3.6 GHz", cache: "45 MB", tdp: "145W", socket: "LGA 2011-3", ocMax: "3.8 GHz*" },
@@ -438,67 +592,117 @@
         ];
 
         let filteredResults = [...xeonE5Database];
-        let currentSort = null;
-        let sortDirection = null; // null: 無選択, 'desc': 降順, 'asc': 昇順
+        let currentSort = [];
+        let filters = {
+            name: '',
+            generation: '',
+            coresMin: null,
+            coresMax: null,
+            tdpMin: null,
+            tdpMax: null,
+            baseClockMin: null,
+            baseClockMax: null,
+            turboClockMin: null,
+            turboClockMax: null,
+            cacheMin: null,
+            cacheMax: null
+        };
 
         function initializeApp() {
             updateStats();
             displayResults(filteredResults);
 
-            document.getElementById('searchInput').addEventListener('input', handleSearch);
-            document.getElementById('searchInput').addEventListener('keydown', function (e) {
-                if (e.key === 'Enter') {
-                    handleSearch();
-                }
-            });
+            // 検索入力イベント
+            document.getElementById('searchInput').addEventListener('input', applyAllFilters);
+            
+            // フィルターイベント
+            document.getElementById('generationFilter').addEventListener('change', applyAllFilters);
+            document.getElementById('coresMin').addEventListener('input', applyAllFilters);
+            document.getElementById('coresMax').addEventListener('input', applyAllFilters);
+            document.getElementById('tdpMin').addEventListener('input', applyAllFilters);
+            document.getElementById('tdpMax').addEventListener('input', applyAllFilters);
+            document.getElementById('baseClockMin').addEventListener('input', applyAllFilters);
+            document.getElementById('baseClockMax').addEventListener('input', applyAllFilters);
+            document.getElementById('turboClockMin').addEventListener('input', applyAllFilters);
+            document.getElementById('turboClockMax').addEventListener('input', applyAllFilters);
+            document.getElementById('cacheMin').addEventListener('input', applyAllFilters);
+            document.getElementById('cacheMax').addEventListener('input', applyAllFilters);
 
             // カラムヘッダーにクリックイベントを追加
             document.addEventListener('click', function (e) {
-                if (e.target.classList.contains('sortable')) {
-                    const column = e.target.dataset.column;
-                    sortByColumn(column, e.target);
+                // クリックされた要素またはその親要素でsortableクラスを持つものを探す
+                const sortableHeader = e.target.closest('th.sortable');
+                if (sortableHeader) {
+                    const column = sortableHeader.dataset.column;
+                    sortByColumn(column, sortableHeader);
                 }
             });
         }
 
-        function handleSearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        function applyAllFilters() {
+            // フィルター値を収集
+            filters.name = document.getElementById('searchInput').value.toLowerCase().trim();
+            filters.generation = document.getElementById('generationFilter').value;
+            filters.coresMin = document.getElementById('coresMin').value ? parseInt(document.getElementById('coresMin').value) : null;
+            filters.coresMax = document.getElementById('coresMax').value ? parseInt(document.getElementById('coresMax').value) : null;
+            filters.tdpMin = document.getElementById('tdpMin').value ? parseInt(document.getElementById('tdpMin').value) : null;
+            filters.tdpMax = document.getElementById('tdpMax').value ? parseInt(document.getElementById('tdpMax').value) : null;
+            filters.baseClockMin = document.getElementById('baseClockMin').value ? parseFloat(document.getElementById('baseClockMin').value) : null;
+            filters.baseClockMax = document.getElementById('baseClockMax').value ? parseFloat(document.getElementById('baseClockMax').value) : null;
+            filters.turboClockMin = document.getElementById('turboClockMin').value ? parseFloat(document.getElementById('turboClockMin').value) : null;
+            filters.turboClockMax = document.getElementById('turboClockMax').value ? parseFloat(document.getElementById('turboClockMax').value) : null;
+            filters.cacheMin = document.getElementById('cacheMin').value ? parseInt(document.getElementById('cacheMin').value) : null;
+            filters.cacheMax = document.getElementById('cacheMax').value ? parseInt(document.getElementById('cacheMax').value) : null;
 
-            if (query === '') {
-                filteredResults = [...xeonE5Database];
-            } else {
-                // ワイルドカード検索対応
-                const regex = createWildcardRegex(query);
+            // フィルタリング実行
+            filteredResults = xeonE5Database.filter(cpu => {
+                // 名前フィルター（空欄なら全表示）
+                if (filters.name !== '') {
+                    const regex = createWildcardRegex(filters.name);
+                    const nameMatch = regex.test(cpu.name.toLowerCase()) ||
+                        cpu.name.toLowerCase().includes(filters.name);
+                    if (!nameMatch) return false;
+                }
 
-                filteredResults = xeonE5Database.filter(cpu =>
-                    regex.test(cpu.name.toLowerCase()) ||
-                    regex.test(cpu.generation.toLowerCase()) ||
-                    regex.test(cpu.cores.toString()) ||
-                    regex.test(cpu.threads.toString()) ||
-                    regex.test(cpu.baseClock.toLowerCase()) ||
-                    regex.test(cpu.turboClock.toLowerCase()) ||
-                    regex.test(cpu.cache.toLowerCase()) ||
-                    regex.test(cpu.tdp.toLowerCase()) ||
-                    regex.test(cpu.socket.toLowerCase()) ||
-                    regex.test(cpu.ocMax.toLowerCase()) ||
-                    // 完全一致検索もサポート
-                    cpu.name.toLowerCase().includes(query) ||
-                    cpu.generation.toLowerCase().includes(query) ||
-                    cpu.cores.toString().includes(query) ||
-                    cpu.threads.toString().includes(query) ||
-                    cpu.baseClock.toLowerCase().includes(query) ||
-                    cpu.turboClock.toLowerCase().includes(query) ||
-                    cpu.cache.toLowerCase().includes(query) ||
-                    cpu.tdp.toLowerCase().includes(query) ||
-                    cpu.socket.toLowerCase().includes(query) ||
-                    cpu.ocMax.toLowerCase().includes(query)
-                );
-            }
+                // 世代フィルター
+                if (filters.generation && cpu.generation !== filters.generation) {
+                    return false;
+                }
+
+                // コア数フィルター
+                if (filters.coresMin !== null && cpu.cores < filters.coresMin) return false;
+                if (filters.coresMax !== null && cpu.cores > filters.coresMax) return false;
+
+                // TDPフィルター
+                const tdpValue = parseInt(cpu.tdp.replace('W', ''));
+                if (filters.tdpMin !== null && tdpValue < filters.tdpMin) return false;
+                if (filters.tdpMax !== null && tdpValue > filters.tdpMax) return false;
+
+                // ベースクロックフィルター
+                const baseClockValue = parseFloat(cpu.baseClock.replace(' GHz', ''));
+                if (filters.baseClockMin !== null && baseClockValue < filters.baseClockMin) return false;
+                if (filters.baseClockMax !== null && baseClockValue > filters.baseClockMax) return false;
+
+                // ターボクロックフィルター
+                if (cpu.turboClock !== '-') {
+                    const turboClockValue = parseFloat(cpu.turboClock.replace(' GHz', ''));
+                    if (filters.turboClockMin !== null && turboClockValue < filters.turboClockMin) return false;
+                    if (filters.turboClockMax !== null && turboClockValue > filters.turboClockMax) return false;
+                } else {
+                    if (filters.turboClockMin !== null || filters.turboClockMax !== null) return false;
+                }
+
+                // キャッシュフィルター
+                const cacheValue = parseInt(cpu.cache.replace(' MB', ''));
+                if (filters.cacheMin !== null && cacheValue < filters.cacheMin) return false;
+                if (filters.cacheMax !== null && cacheValue > filters.cacheMax) return false;
+
+                return true;
+            });
 
             // 現在のソート設定を適用
-            if (currentSort && sortDirection) {
-                applySorting();
-            }
+            applySorting();
+            updateActiveFilters();
             updateStats();
             displayResults(filteredResults);
         }
@@ -508,172 +712,154 @@
             if (query.includes('*')) {
                 // 特殊文字をエスケープし、*を.*に変換
                 const escapedQuery = query
-                    .replace(/[.+?^${}()|[\]\\]/g, '\\        function handleSearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+                    .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // 特殊文字をエスケープ
+                    .replace(/\*/g, '.*'); // *を.*に変換
 
-                if (query === '') {
-                    filteredResults = [...xeonE5Database];
-                } else {
-                    filteredResults = xeonE5Database.filter(cpu =>
-                        cpu.name.toLowerCase().includes(query) ||
-                        cpu.generation.toLowerCase().includes(query) ||
-                        cpu.cores.toString().includes(query) ||
-                        cpu.threads.toString().includes(query) ||
-                        cpu.baseClock.toLowerCase().includes(query) ||
-                        cpu.turboClock.toLowerCase().includes(query) ||
-                        cpu.cache.toLowerCase().includes(query) ||
-                        cpu.tdp.toLowerCase().includes(query) ||
-                        cpu.socket.toLowerCase().includes(query) ||
-                        cpu.ocMax.toLowerCase().includes(query)
-                    );
-                }
-
-                // 現在のソート設定を適用
-                if (currentSort && sortDirection) {
-                    applySorting();
-                }
-                updateStats();
-                displayResults(filteredResults);
-            } ') // 特殊文字をエスケープ
-                .replace(/\\\*/g, '.*'); // エスケープされた*を.*に変換
-
-            return new RegExp(escapedQuery, 'i');
-        } else {
-            // *が含まれていない場合は部分一致
-            return new RegExp(query.replace(/[.+?^${}()|[\]\\]/g, '\\        function handleSearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
-
-            if (query === '') {
-                filteredResults = [...xeonE5Database];
+                return new RegExp(escapedQuery, 'i');
             } else {
-                filteredResults = xeonE5Database.filter(cpu =>
-                    cpu.name.toLowerCase().includes(query) ||
-                    cpu.generation.toLowerCase().includes(query) ||
-                    cpu.cores.toString().includes(query) ||
-                    cpu.threads.toString().includes(query) ||
-                    cpu.baseClock.toLowerCase().includes(query) ||
-                    cpu.turboClock.toLowerCase().includes(query) ||
-                    cpu.cache.toLowerCase().includes(query) ||
-                    cpu.tdp.toLowerCase().includes(query) ||
-                    cpu.socket.toLowerCase().includes(query) ||
-                    cpu.ocMax.toLowerCase().includes(query)
-                );
-            }
-
-            // 現在のソート設定を適用
-            if (currentSort && sortDirection) {
-                applySorting();
-            }
-            updateStats();
-            displayResults(filteredResults);
-        } '), 'i');
+                // *が含まれていない場合は部分一致
+                return new RegExp(query.replace(/[.+?^${}()|[\]\\]/g, '\\$&'), 'i');
             }
         }
 
         function sortByColumn(column, headerElement) {
-            // 全てのヘッダーからソートクラスを削除
-            document.querySelectorAll('th.sortable').forEach(th => {
-                th.classList.remove('sort-desc', 'sort-asc');
-            });
-
-            // 同じ列をクリックした場合は状態を切り替え
-            if (currentSort === column) {
-                if (sortDirection === null) {
-                    sortDirection = 'desc';
-                    headerElement.classList.add('sort-desc');
-                } else if (sortDirection === 'desc') {
-                    sortDirection = 'asc';
+            const existingSort = currentSort.find(s => s.column === column);
+            
+            if (existingSort) {
+                // 既存のソートを更新
+                if (existingSort.direction === 'desc') {
+                    existingSort.direction = 'asc';
                     headerElement.classList.remove('sort-desc');
                     headerElement.classList.add('sort-asc');
-                } else if (sortDirection === 'asc') {
-                    sortDirection = null;
-                    currentSort = null;
+                } else {
+                    // ソートを削除
+                    currentSort = currentSort.filter(s => s.column !== column);
                     headerElement.classList.remove('sort-asc');
-                    // 元の順序に戻す
-                    filteredResults = xeonE5Database.filter(cpu => filteredResults.includes(cpu));
-                    displayResults(filteredResults);
-                    return;
                 }
             } else {
-                // 新しい列の場合は降順から開始
-                currentSort = column;
-                sortDirection = 'desc';
+                // 新しいソートを追加（Shiftキーで複数ソート、それ以外は単一ソート）
+                if (!event.shiftKey) {
+                    // 既存のソートをクリア
+                    document.querySelectorAll('th.sortable').forEach(th => {
+                        th.classList.remove('sort-desc', 'sort-asc');
+                    });
+                    currentSort = [];
+                }
+                
+                currentSort.push({ column: column, direction: 'desc' });
                 headerElement.classList.add('sort-desc');
             }
 
             applySorting();
             displayResults(filteredResults);
+            updateActiveFilters();
         }
 
         function applySorting() {
-            if (!currentSort || !sortDirection) return;
+            if (currentSort.length === 0) return;
 
             filteredResults.sort((a, b) => {
-                let valueA, valueB;
+                for (const sort of currentSort) {
+                    let valueA, valueB;
 
-                switch (currentSort) {
-                    case 'name':
-                        valueA = a.name.toLowerCase();
-                        valueB = b.name.toLowerCase();
-                        break;
-                    case 'generation':
-                        // v1, v2, v3, v4 の順序を保持
-                        const genOrder = { 'v1': 1, 'v2': 2, 'v3': 3, 'v4': 4 };
-                        valueA = genOrder[a.generation] || 0;
-                        valueB = genOrder[b.generation] || 0;
-                        break;
-                    case 'cores':
-                        valueA = a.cores;
-                        valueB = b.cores;
-                        break;
-                    case 'threads':
-                        valueA = a.threads;
-                        valueB = b.threads;
-                        break;
-                    case 'baseClock':
-                        valueA = parseFloat(a.baseClock.replace(' GHz', ''));
-                        valueB = parseFloat(b.baseClock.replace(' GHz', ''));
-                        break;
-                    case 'turboClock':
-                        valueA = parseFloat(a.turboClock.replace(' GHz', '').replace('-', '0'));
-                        valueB = parseFloat(b.turboClock.replace(' GHz', '').replace('-', '0'));
-                        break;
-                    case 'cache':
-                        valueA = parseInt(a.cache.replace(' MB', ''));
-                        valueB = parseInt(b.cache.replace(' MB', ''));
-                        break;
-                    case 'tdp':
-                        valueA = parseInt(a.tdp.replace('W', ''));
-                        valueB = parseInt(b.tdp.replace('W', ''));
-                        break;
-                    case 'ocMax':
-                        valueA = parseFloat(a.ocMax.replace(' GHz', '').replace('*', ''));
-                        valueB = parseFloat(b.ocMax.replace(' GHz', '').replace('*', ''));
-                        break;
-                    default:
-                        valueA = a[currentSort];
-                        valueB = b[currentSort];
-                }
+                    switch (sort.column) {
+                        case 'name':
+                            valueA = a.name.toLowerCase();
+                            valueB = b.name.toLowerCase();
+                            break;
+                        case 'generation':
+                            // v1, v2, v3, v4 の順序を保持
+                            const genOrder = { 'v1': 1, 'v2': 2, 'v3': 3, 'v4': 4 };
+                            valueA = genOrder[a.generation] || 0;
+                            valueB = genOrder[b.generation] || 0;
+                            break;
+                        case 'cores':
+                            valueA = a.cores;
+                            valueB = b.cores;
+                            break;
+                        case 'threads':
+                            valueA = a.threads;
+                            valueB = b.threads;
+                            break;
+                        case 'baseClock':
+                            valueA = parseFloat(a.baseClock.replace(' GHz', ''));
+                            valueB = parseFloat(b.baseClock.replace(' GHz', ''));
+                            break;
+                        case 'turboClock':
+                            valueA = parseFloat(a.turboClock.replace(' GHz', '').replace('-', '0'));
+                            valueB = parseFloat(b.turboClock.replace(' GHz', '').replace('-', '0'));
+                            break;
+                        case 'cache':
+                            valueA = parseInt(a.cache.replace(' MB', ''));
+                            valueB = parseInt(b.cache.replace(' MB', ''));
+                            break;
+                        case 'tdp':
+                            valueA = parseInt(a.tdp.replace('W', ''));
+                            valueB = parseInt(b.tdp.replace('W', ''));
+                            break;
+                        case 'ocMax':
+                            valueA = parseFloat(a.ocMax.replace(' GHz', '').replace('*', ''));
+                            valueB = parseFloat(b.ocMax.replace(' GHz', '').replace('*', ''));
+                            break;
+                        default:
+                            valueA = a[sort.column];
+                            valueB = b[sort.column];
+                    }
 
-                if (sortDirection === 'desc') {
-                    return valueA < valueB ? 1 : valueA > valueB ? -1 : 0;
-                } else {
-                    return valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+                    let compareResult;
+                    if (sort.direction === 'desc') {
+                        compareResult = valueA < valueB ? 1 : valueA > valueB ? -1 : 0;
+                    } else {
+                        compareResult = valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+                    }
+
+                    if (compareResult !== 0) {
+                        return compareResult;
+                    }
                 }
+                return 0;
             });
         }
 
-        function clearSearch() {
+        function clearAllFilters() {
+            // すべてのフィルターをクリア
             document.getElementById('searchInput').value = '';
-            filteredResults = [...xeonE5Database];
+            document.getElementById('generationFilter').value = '';
+            document.getElementById('coresMin').value = '';
+            document.getElementById('coresMax').value = '';
+            document.getElementById('tdpMin').value = '';
+            document.getElementById('tdpMax').value = '';
+            document.getElementById('baseClockMin').value = '';
+            document.getElementById('baseClockMax').value = '';
+            document.getElementById('turboClockMin').value = '';
+            document.getElementById('turboClockMax').value = '';
+            document.getElementById('cacheMin').value = '';
+            document.getElementById('cacheMax').value = '';
 
             // ソート状態をクリア
-            currentSort = null;
-            sortDirection = null;
+            currentSort = [];
             document.querySelectorAll('th.sortable').forEach(th => {
                 th.classList.remove('sort-desc', 'sort-asc');
             });
 
+            // フィルターオブジェクトをリセット
+            filters = {
+                name: '',
+                generation: '',
+                coresMin: null,
+                coresMax: null,
+                tdpMin: null,
+                tdpMax: null,
+                baseClockMin: null,
+                baseClockMax: null,
+                turboClockMin: null,
+                turboClockMax: null,
+                cacheMin: null,
+                cacheMax: null
+            };
+
+            filteredResults = [...xeonE5Database];
+            updateActiveFilters();
             updateStats();
             displayResults(filteredResults);
             document.getElementById('searchInput').focus();
@@ -696,27 +882,42 @@
                 container.innerHTML = `
                     <div class="no-results">
                         <i>🔍</i>
-                        <h3>検索結果が見つかりません</h3>
-                        <p>別のキーワードで検索してみてください</p>
+                        <h3>条件に一致するCPUが見つかりません</h3>
+                        <p>フィルター条件を調整してください</p>
                     </div>
                 `;
                 return;
             }
+
+            // ヘッダーにソート状態を反映
+            const headers = [];
+            const columns = [
+                { key: 'name', label: 'CPU名', mobileLabel: 'CPU' },
+                { key: 'generation', label: '世代', mobileLabel: '世代' },
+                { key: 'cores', label: 'コア', mobileLabel: 'コア' },
+                { key: 'threads', label: 'スレッド', mobileLabel: 'Th' },
+                { key: 'baseClock', label: 'ベースクロック', mobileLabel: 'Base' },
+                { key: 'turboClock', label: 'ターボクロック', mobileLabel: 'Turbo' },
+                { key: 'cache', label: 'キャッシュ', mobileLabel: 'Cache' },
+                { key: 'tdp', label: 'TDP', mobileLabel: 'TDP' },
+                { key: 'ocMax', label: 'OC実績最高値', mobileLabel: 'OC' }
+            ];
+
+            columns.forEach(col => {
+                const sort = currentSort.find(s => s.column === col.key);
+                const sortIndex = sort ? currentSort.indexOf(sort) + 1 : null;
+                const sortClass = sort ? (sort.direction === 'desc' ? 'sort-desc' : 'sort-asc') : '';
+                const sortIndicator = sortIndex ? `<span class="sort-indicator">${sortIndex}</span>` : '';
+                
+                headers.push(`<th class="sortable ${sortClass}" data-column="${col.key}"><div><span class="desktop-label">${col.label}</span><span class="mobile-label">${col.mobileLabel}</span>${sortIndicator}</div></th>`);
+            });
 
             const tableHtml = `
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th class="sortable" data-column="name">CPU名</th>
-                                <th class="sortable" data-column="generation">世代</th>
-                                <th class="sortable" data-column="cores">コア</th>
-                                <th class="sortable" data-column="threads">スレッド</th>
-                                <th class="sortable" data-column="baseClock">ベースクロック</th>
-                                <th class="sortable" data-column="turboClock">ターボクロック</th>
-                                <th class="sortable" data-column="cache">キャッシュ</th>
-                                <th class="sortable" data-column="tdp">TDP</th>
-                                <th class="sortable" data-column="ocMax">OC実績最高値</th>
+                                ${headers.join('')}
                             </tr>
                         </thead>
                         <tbody>
@@ -739,6 +940,117 @@
             `;
 
             container.innerHTML = tableHtml;
+        }
+
+        function updateActiveFilters() {
+            const activeFiltersEl = document.getElementById('activeFilters');
+            const activeFilterTags = [];
+
+            // 名前フィルター
+            if (filters.name) {
+                activeFilterTags.push(`<div class="filter-tag">名前: ${filters.name} <button onclick="clearFilter('name')">×</button></div>`);
+            }
+
+            // 世代フィルター
+            if (filters.generation) {
+                activeFilterTags.push(`<div class="filter-tag">世代: ${filters.generation} <button onclick="clearFilter('generation')">×</button></div>`);
+            }
+
+            // 範囲フィルター
+            if (filters.coresMin !== null || filters.coresMax !== null) {
+                const min = filters.coresMin !== null ? filters.coresMin : '―';
+                const max = filters.coresMax !== null ? filters.coresMax : '―';
+                activeFilterTags.push(`<div class="filter-tag">コア: ${min}～${max} <button onclick="clearFilter('cores')">×</button></div>`);
+            }
+
+            if (filters.tdpMin !== null || filters.tdpMax !== null) {
+                const min = filters.tdpMin !== null ? filters.tdpMin : '―';
+                const max = filters.tdpMax !== null ? filters.tdpMax : '―';
+                activeFilterTags.push(`<div class="filter-tag">TDP: ${min}～${max}W <button onclick="clearFilter('tdp')">×</button></div>`);
+            }
+
+            if (filters.baseClockMin !== null || filters.baseClockMax !== null) {
+                const min = filters.baseClockMin !== null ? filters.baseClockMin : '―';
+                const max = filters.baseClockMax !== null ? filters.baseClockMax : '―';
+                activeFilterTags.push(`<div class="filter-tag">ベース: ${min}～${max}GHz <button onclick="clearFilter('baseClock')">×</button></div>`);
+            }
+
+            if (filters.turboClockMin !== null || filters.turboClockMax !== null) {
+                const min = filters.turboClockMin !== null ? filters.turboClockMin : '―';
+                const max = filters.turboClockMax !== null ? filters.turboClockMax : '―';
+                activeFilterTags.push(`<div class="filter-tag">ターボ: ${min}～${max}GHz <button onclick="clearFilter('turboClock')">×</button></div>`);
+            }
+
+            if (filters.cacheMin !== null || filters.cacheMax !== null) {
+                const min = filters.cacheMin !== null ? filters.cacheMin : '―';
+                const max = filters.cacheMax !== null ? filters.cacheMax : '―';
+                activeFilterTags.push(`<div class="filter-tag">キャッシュ: ${min}～${max}MB <button onclick="clearFilter('cache')">×</button></div>`);
+            }
+
+            // ソート情報
+            if (currentSort.length > 0) {
+                const sortLabels = {
+                    'name': 'CPU名',
+                    'generation': '世代',
+                    'cores': 'コア',
+                    'threads': 'スレッド',
+                    'baseClock': 'ベースクロック',
+                    'turboClock': 'ターボクロック',
+                    'cache': 'キャッシュ',
+                    'tdp': 'TDP',
+                    'ocMax': 'OC実績'
+                };
+                
+                currentSort.forEach((sort, index) => {
+                    const direction = sort.direction === 'desc' ? '降順' : '昇順';
+                    activeFilterTags.push(`<div class="filter-tag">ソート${index + 1}: ${sortLabels[sort.column]} ${direction} <button onclick="clearSort('${sort.column}')">×</button></div>`);
+                });
+            }
+
+            activeFiltersEl.innerHTML = activeFilterTags.join('');
+        }
+
+        function clearFilter(filterType) {
+            switch (filterType) {
+                case 'name':
+                    document.getElementById('searchInput').value = '';
+                    break;
+                case 'generation':
+                    document.getElementById('generationFilter').value = '';
+                    break;
+                case 'cores':
+                    document.getElementById('coresMin').value = '';
+                    document.getElementById('coresMax').value = '';
+                    break;
+                case 'tdp':
+                    document.getElementById('tdpMin').value = '';
+                    document.getElementById('tdpMax').value = '';
+                    break;
+                case 'baseClock':
+                    document.getElementById('baseClockMin').value = '';
+                    document.getElementById('baseClockMax').value = '';
+                    break;
+                case 'turboClock':
+                    document.getElementById('turboClockMin').value = '';
+                    document.getElementById('turboClockMax').value = '';
+                    break;
+                case 'cache':
+                    document.getElementById('cacheMin').value = '';
+                    document.getElementById('cacheMax').value = '';
+                    break;
+            }
+            applyAllFilters();
+        }
+
+        function clearSort(column) {
+            currentSort = currentSort.filter(s => s.column !== column);
+            const header = document.querySelector(`th[data-column="${column}"]`);
+            if (header) {
+                header.classList.remove('sort-desc', 'sort-asc');
+            }
+            applySorting();
+            displayResults(filteredResults);
+            updateActiveFilters();
         }
 
         // Initialize the app when DOM is loaded
