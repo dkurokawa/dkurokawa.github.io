@@ -1,4 +1,39 @@
 <!DOCTYPE html>
+<!--
+Intel Xeon E5 CPU Specification Search System
+Intel Xeon E5 CPU スペック検索システム
+Copyright (c) 2024 Daisuke Kurokawa
+
+LICENSE AND TERMS OF USE:
+The copyright of this system is retained by the developer.
+The intellectual property rights of CPU specification data belong to Intel Corporation.
+
+本ソフトウェアの使用許諾:
+本システムの著作権は開発者が保持します。
+CPUスペックデータの知的財産権はIntel Corporationに帰属します。
+
+DISCLAIMER:
+THIS SYSTEM AND INFORMATION ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+DEVELOPER BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+OR CONSEQUENTIAL DAMAGES ARISING FROM THE USE OR INABILITY TO USE THIS SYSTEM.
+
+免責事項:
+本システムおよび情報は「現状有姿」で提供されます。商品性、特定目的への
+適合性、非侵害性を含むがこれらに限定されない、明示または黙示のいかなる
+保証も行いません。本システムの使用または使用不能により生じた直接的、
+間接的、偶発的、特殊、懲罰的または結果的損害について、開発者は一切の
+責任を負いません。
+
+DATA ACCURACY:
+The CPU information provided is for reference only. Please refer to the official
+Intel website for accurate specifications.
+
+データの正確性:
+掲載されているCPU情報は参考値です。正確な仕様については
+Intel公式サイトをご確認ください。
+-->
 <html lang="ja">
 
 <head>
@@ -298,6 +333,93 @@
             opacity: 0.3;
         }
 
+        /* Filters section styling */
+        .filters-section {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 6px 10px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+
+        .filter-group select {
+            min-width: 120px;
+        }
+
+        .range-inputs {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .range-inputs input {
+            width: 70px;
+        }
+
+        .range-inputs span {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .filter-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-tag button {
+            background: none;
+            border: none;
+            color: #1976d2;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0 4px;
+            font-weight: bold;
+        }
+
+        .filter-tag button:hover {
+            color: #1565c0;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 5px;
@@ -368,6 +490,39 @@
                 font-size: 9px;
                 padding: 1px 6px;
             }
+
+            /* Mobile filter adjustments */
+            .filters-section {
+                padding: 10px 15px;
+            }
+
+            .filter-controls {
+                gap: 10px;
+            }
+
+            .filter-group {
+                flex: 1 1 auto;
+                min-width: 120px;
+            }
+
+            .filter-group label {
+                font-size: 12px;
+            }
+
+            .filter-group select,
+            .filter-group input {
+                padding: 4px 6px;
+                font-size: 12px;
+            }
+
+            .range-inputs input {
+                width: 60px;
+            }
+
+            .filter-tag {
+                font-size: 11px;
+                padding: 3px 6px;
+            }
         }
     </style>
 </head>
@@ -376,10 +531,6 @@
     <div class="container">
         <div class="header">
             <h1>🔍 Intel Xeon E5 CPU スペック検索</h1>
-            <p>型番検索とスペック条件でCPUを絞り込み（複数条件の組み合わせ可）</p>
-            <div class="oc-note">
-                💡 名称フィールドが空欄の場合は全CPUを表示。カラムクリックでソート可能
-            </div>
         </div>
 
         <div class="search-section">
@@ -940,6 +1091,29 @@
             `;
 
             container.innerHTML = tableHtml;
+
+            // フッターに免責事項を追加
+            if (!document.getElementById('disclaimerFooter')) {
+                const footer = document.createElement('div');
+                footer.id = 'disclaimerFooter';
+                footer.style.cssText = `
+                    text-align: center;
+                    padding: 20px;
+                    margin-top: 30px;
+                    color: #666;
+                    font-size: 12px;
+                    line-height: 1.6;
+                    border-top: 1px solid #eee;
+                `;
+                footer.innerHTML = `
+                    <p>※ 掲載されているCPU情報は参考値です。正確な仕様については<a href="https://ark.intel.com" target="_blank">Intel ARK</a>をご確認ください。<br>
+                    <span style="font-size: 11px;">* CPU information provided is for reference only. Please refer to <a href="https://ark.intel.com" target="_blank">Intel ARK</a> for accurate specifications.</span></p>
+                    <p>本システムの使用により生じたいかなる損害についても責任を負いません。<br>
+                    <span style="font-size: 11px;">The developer is not liable for any damages arising from the use of this system.</span></p>
+                    <p style="margin-top: 10px; font-size: 11px;">Intel® Xeon®はIntel Corporationの商標です。 / Intel® Xeon® is a trademark of Intel Corporation.</p>
+                `;
+                document.querySelector('.container').appendChild(footer);
+            }
         }
 
         function updateActiveFilters() {
