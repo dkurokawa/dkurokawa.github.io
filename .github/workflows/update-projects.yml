@@ -124,9 +124,6 @@ jobs:
           
           fs.writeFileSync('index.html', html);
           
-          // ミニパネルも生成
-          generateMiniPanel(projects.projects, updateDate);
-          
           function generateProjectSummary(project) {
             let html = '<div class="summary">\n';
             
@@ -169,118 +166,6 @@ jobs:
             
             return html;
           }
-          
-          function generateMiniPanel(projects, updateDate) {
-            // ミニパネルのHTMLを直接生成
-            let miniHtml = '<!DOCTYPE html>'
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSS Projects</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
-            font-size: 13px;
-            line-height: 1.4;
-            color: #333;
-            background: #f8f9fa;
-            padding: 12px;
-            width: 300px;
-        }
-        h2 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #222;
-            text-align: center;
-        }
-        .project-list {
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-        .project-item {
-            padding: 8px 12px;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.2s;
-        }
-        .project-item:hover {
-            background-color: #f3f4f6;
-        }
-        .project-item:last-child {
-            border-bottom: none;
-        }
-        .project-name {
-            font-weight: 500;
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            padding-right: 8px;
-        }
-        .project-version {
-            font-size: 11px;
-            color: #666;
-            background: #f3f4f6;
-            padding: 2px 6px;
-            border-radius: 3px;
-            white-space: nowrap;
-        }
-        .no-version {
-            color: #999;
-        }
-        .footer {
-            margin-top: 12px;
-            text-align: center;
-            font-size: 11px;
-            color: #666;
-        }
-        a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <h2>OSS Projects</h2>
-    <div class="project-list">';
-            
-            // プロジェクトアイテムを生成
-            for (const project of projects) {
-              let displayName = project.name;
-              // VS Code拡張の名前を短くする
-              if (project.environment === 'VS Code拡張機能') {
-                displayName = displayName.replace('VSCode ', '');
-              }
-              
-              miniHtml += '\n        <div class="project-item">\n            <span class="project-name">' + displayName + '</span>';
-              
-              if (project.version) {
-                miniHtml += '\n            <span class="project-version">' + project.version + '</span>';
-              } else {
-                miniHtml += '\n            <span class="project-version no-version">-</span>';
-              }
-              
-              miniHtml += '\n        </div>';
-            }
-            
-            miniHtml += '\n    </div>\n    <div class="footer">\n        <a href="https://github.com/dkurokawa" target="_blank">GitHub</a>\n        <div style="margin-top: 8px; font-size: 10px; color: #999;">\n            最終更新: ' + updateDate + '\n        </div>\n    </div>\n</body>\n</html>';
-            
-            fs.writeFileSync('mini-panel.html', miniHtml);
-          }
           SCRIPT
           
           node generate-html.js
@@ -290,6 +175,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add index.html mini-panel.html projects-with-versions.json
+          git add index.html projects-with-versions.json
           git diff --staged --quiet || git commit -m "Update project versions [skip ci]"
           git push
