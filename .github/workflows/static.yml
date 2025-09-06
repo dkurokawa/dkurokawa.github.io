@@ -35,18 +35,18 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
         
-      - name: Remove symlinks before upload
+      - name: Prepare files for upload
         run: |
-          rm -rf target-projects
-          # Debug: List files to be uploaded
-          echo "Files to be uploaded:"
-          ls -la
+          # Create a clean directory for upload
+          mkdir -p ../upload-content
+          # Copy all files except target-projects
+          rsync -av --exclude='target-projects' --exclude='.git' ./ ../upload-content/
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # Upload from clean directory
+          path: '../upload-content'
           
       - name: Deploy to GitHub Pages
         id: deployment

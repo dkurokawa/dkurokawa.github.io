@@ -1,0 +1,50 @@
+Archive artifact
+  ./
+  ./logo_1on1.png
+  ./SETUP_GITHUB_ACTIONS.md
+  ./.nojekyll
+  ./utils/
+  ./utils/xeon-e5-search.html
+  ./utils/xeon-e5-complete-db.js
+  ./README.md
+  ./for-software-projects/
+  ./for-software-projects/generate-docs.sh
+  ./for-software-projects/GENERATE_HTML_DOCS.md
+  ./for-software-projects/ppn-page.code-workspace
+  tar: ./target-projects/cpu-harmony: File removed before we read it
+  tar: ./target-projects/portman: File removed before we read it
+  tar: ./target-projects/vscode-web-panel: File removed before we read it
+  tar: ./target-projects/check-nc-licenses: File removed before we read it
+  tar: ./target-projects/vscode-port-monitor: File removed before we read it
+  tar: ./target-projects/books: File removed before we read it
+  ./for-software-projects/instruction_template.md
+  ./target-projects/
+  ./CLAUDE.md
+  ./docs/
+  ./docs/vitest-secrets-guide.md
+  ./docs/go-secrets-guide.md
+  ./projects/
+  ./projects/books.html
+  ./projects/vscode-web-panel.html
+  ./projects/check-nc-licenses.html
+  ./projects/vscode-port-monitor.html
+  ./projects/portman.html
+  ./projects/cpu-harmony.html
+  ./tech/
+  ./tech/index_en.html
+  ./tech/index.html
+  ./nohup.out
+  ./next
+  ./update_summaries_direct.sh
+  ./mds/
+  ./mds/intel_xeon_e5_2600_v3_specs.md
+  ./mds/intel-xeon-e5-v2-processors.md
+  ./mds/home-10u-rack-server-guide.md
+  ./mds/xeon-e5-4600-series-guide.md
+  ./.gitattributes
+  ./mini-panel.html
+  ./update_summaries_direct_en.sh
+  ./projects.json
+  ./index.html
+  ./SECRETS_MANAGEMENT.md
+  Error: Process completed with exit code 1.
