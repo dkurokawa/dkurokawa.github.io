@@ -85,7 +85,7 @@ jobs:
             
       - name: Generate HTML
         run: |
-          node << 'EOF'
+          cat > generate-html.js << 'SCRIPT'
           const fs = require('fs');
           const projects = JSON.parse(fs.readFileSync('projects-with-versions.json', 'utf8'));
           
@@ -281,7 +281,10 @@ jobs:
             
             fs.writeFileSync('mini-panel.html', miniHtml);
           }
-          EOF
+          SCRIPT
+          
+          node generate-html.js
+          rm generate-html.js
           
       - name: Commit and push changes
         run: |
