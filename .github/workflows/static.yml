@@ -38,6 +38,9 @@ jobs:
       - name: Remove symlinks before upload
         run: |
           rm -rf target-projects
+          # Debug: List files to be uploaded
+          echo "Files to be uploaded:"
+          ls -la
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
