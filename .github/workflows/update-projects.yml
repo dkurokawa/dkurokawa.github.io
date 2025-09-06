@@ -1,0 +1,186 @@
+name: Update Project Information
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 毎日午前3時（JST）に実行
+    - cron: '0 18 * * *'
+  
+  # 他のリポジトリからのwebhookトリガー
+  repository_dispatch:
+    types: [project-update]
+
+jobs:
+  update-projects:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Fetch latest project versions
+        id: fetch-versions
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const projects = JSON.parse(fs.readFileSync('projects.json', 'utf8'));
+            
+            // バージョン情報を取得する関数
+            async function getLatestVersion(project) {
+              if (!project.github) return null;
+              
+              try {
+                const [owner, repo] = project.github.split('/');
+                
+                // NPMパッケージの場合
+                if (project.type === 'npm') {
+                  const packageInfo = await github.rest.repos.getContent({
+                    owner,
+                    repo,
+                    path: 'package.json'
+                  });
+                  
+                  const content = Buffer.from(packageInfo.data.content, 'base64').toString();
+                  const pkg = JSON.parse(content);
+                  return pkg.version ? `v${pkg.version}` : null;
+                }
+                
+                // Goプロジェクトの場合（タグから取得）
+                if (project.type === 'go') {
+                  const tags = await github.rest.repos.listTags({
+                    owner,
+                    repo,
+                    per_page: 1
+                  });
+                  
+                  return tags.data.length > 0 ? tags.data[0].name : null;
+                }
+              } catch (error) {
+                console.error(`Failed to fetch version for ${project.id}:`, error.message);
+              }
+              
+              return null;
+            }
+            
+            // 各プロジェクトのバージョンを更新
+            for (const project of projects.projects) {
+              const version = await getLatestVersion(project);
+              if (version) {
+                project.version = version;
+                console.log(`${project.id}: ${version}`);
+              }
+            }
+            
+            // 更新されたデータを保存
+            fs.writeFileSync('projects-with-versions.json', JSON.stringify(projects, null, 2));
+            
+      - name: Generate HTML
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          const projects = JSON.parse(fs.readFileSync('projects-with-versions.json', 'utf8'));
+          
+          // HTMLテンプレートを読み込み
+          let html = fs.readFileSync('index.html', 'utf8');
+          
+          // プロジェクトサマリーを生成
+          let summaries = '';
+          for (const project of projects.projects) {
+            summaries += generateProjectSummary(project);
+          }
+          
+          // HTML内のサマリー部分を置換
+          const startTag = '<!-- summaries here -->';
+          const endTag = '<!-- summaries end -->';
+          const startIndex = html.indexOf(startTag) + startTag.length;
+          const endIndex = html.indexOf(endTag);
+          
+          html = html.substring(0, startIndex) + 
+                 '\n<div class="summaries-container">\n' + 
+                 summaries + 
+                 '</div>\n  ' +
+                 html.substring(endIndex);
+          
+          // 更新日時を追加
+          const now = new Date();
+          const updateDate = now.toLocaleDateString('ja-JP', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+          }).replace(/\//g, '年').replace(' ', '月').replace(':', '日 ') + ':' + now.getMinutes().toString().padStart(2, '0');
+          
+          html = html.replace(/最終更新: .+<\/div>/, `最終更新: ${updateDate}</div>`);
+          
+          fs.writeFileSync('index.html', html);
+          
+          // ミニパネルも生成
+          generateMiniPanel(projects.projects, updateDate);
+          
+          function generateProjectSummary(project) {
+            let html = '<div class="summary">\n';
+            
+            // プロジェクト名とバージョン
+            if (project.version) {
+              html += `  <strong>${project.name}</strong> ${project.version}<br>\n`;
+            } else {
+              html += `  <strong>${project.name}</strong><br>\n`;
+            }
+            
+            html += '  <div class="env-desc">\n';
+            html += `    <strong>環境:</strong> ${project.environment}<br>\n`;
+            
+            // インストール方法
+            if (project.install) {
+              if (project.install.npm) {
+                html += `    <strong>インストール:</strong> <code>${project.install.npm}</code>\n`;
+                html += `    <button class="copy-button" onclick="copyToClipboard('${project.install.npm}', this)">コピー</button><br>\n`;
+              } else if (project.install.brew) {
+                html += `    <strong>インストール:</strong> <code>${project.install.brew}</code>\n`;
+                html += `    <button class="copy-button" onclick="copyToClipboard('${project.install.brew}', this)">コピー</button><br>\n`;
+                if (project.install.github_release) {
+                  html += `    <span style="font-size: 0.9em; color: #666;">または <a href="https://github.com/${project.github}/releases" target="_blank">GitHubのReleasesページ</a>からダウンロード</span><br>\n`;
+                }
+              } else if (project.install.marketplace) {
+                html += `    <strong>インストール:</strong> VS Code Marketplaceで「${project.install.marketplace}」を検索<br>\n`;
+              }
+            }
+            
+            // 説明
+            html += `    <strong>説明:</strong> ${project.description}`;
+            if (project.url) {
+              html += ` <a href="${project.url}" target="_blank" rel="noopener noreferrer">詳細はこちら</a>`;
+            }
+            html += '<br>\n';
+            
+            html += '  </div>\n';
+            html += '</div>\n';
+            html += '<hr>\n';
+            
+            return html;
+          }
+          
+          function generateMiniPanel(projects, updateDate) {
+            // ミニパネル生成ロジック（既存のコードと同様）
+            let miniHtml = fs.readFileSync('mini-panel-template.html', 'utf8');
+            // ... 実装
+          }
+          EOF
+          
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add index.html mini-panel.html projects-with-versions.json
+          git diff --staged --quiet || git commit -m "Update project versions [skip ci]"
+          git push
