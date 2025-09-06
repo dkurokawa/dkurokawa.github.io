@@ -172,7 +172,7 @@ jobs:
           
           function generateMiniPanel(projects, updateDate) {
             // ミニパネルのHTMLを直接生成
-            let miniHtml = `<!DOCTYPE html>
+            let miniHtml = '<!DOCTYPE html>'
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -256,7 +256,7 @@ jobs:
 </head>
 <body>
     <h2>OSS Projects</h2>
-    <div class="project-list">`;
+    <div class="project-list">';
             
             // プロジェクトアイテムを生成
             for (const project of projects) {
@@ -266,32 +266,18 @@ jobs:
                 displayName = displayName.replace('VSCode ', '');
               }
               
-              miniHtml += `
-        <div class="project-item">
-            <span class="project-name">${displayName}</span>`;
+              miniHtml += '\n        <div class="project-item">\n            <span class="project-name">' + displayName + '</span>';
               
               if (project.version) {
-                miniHtml += `
-            <span class="project-version">${project.version}</span>`;
+                miniHtml += '\n            <span class="project-version">' + project.version + '</span>';
               } else {
-                miniHtml += `
-            <span class="project-version no-version">-</span>`;
+                miniHtml += '\n            <span class="project-version no-version">-</span>';
               }
               
-              miniHtml += `
-        </div>`;
+              miniHtml += '\n        </div>';
             }
             
-            miniHtml += `
-    </div>
-    <div class="footer">
-        <a href="https://github.com/dkurokawa" target="_blank">GitHub</a>
-        <div style="margin-top: 8px; font-size: 10px; color: #999;">
-            最終更新: ${updateDate}
-        </div>
-    </div>
-</body>
-</html>`;
+            miniHtml += '\n    </div>\n    <div class="footer">\n        <a href="https://github.com/dkurokawa" target="_blank">GitHub</a>\n        <div style="margin-top: 8px; font-size: 10px; color: #999;">\n            最終更新: ' + updateDate + '\n        </div>\n    </div>\n</body>\n</html>';
             
             fs.writeFileSync('mini-panel.html', miniHtml);
           }
