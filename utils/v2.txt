@@ -1,0 +1,105 @@
+Intel® Xeon® Processor E5 v2 Family
+Filter: View All | Embedded | Retail Box | Server
+47 Products 
+COMPARE ALL
+Product Name
+Launch Date
+Total Cores
+Max Turbo Frequency
+Processor Base Frequency
+Cache
+TDP
+Intel® Xeon® Processor E5-1428L v2
+Q1'14	6	2.70 GHz	2.20 GHz	15 MB Intel® Smart Cache	60 W
+Intel® Xeon® Processor E5-1620 v2
+Q3'13	4	3.90 GHz	3.70 GHz	10 MB Intel® Smart Cache	130 W
+Intel® Xeon® Processor E5-1650 v2
+Q3'13	6	3.90 GHz	3.50 GHz	12 MB Intel® Smart Cache	130 W
+Intel® Xeon® Processor E5-1660 v2
+Q3'13	6	4.00 GHz	3.70 GHz	15 MB Intel® Smart Cache	130 W
+Intel® Xeon® Processor E5-2403 v2
+Q1'14	4	1.80 GHz	1.80 GHz	10 MB Intel® Smart Cache	80 W
+Intel® Xeon® Processor E5-2407 v2
+Q1'14	4	2.40 GHz	2.40 GHz	10 MB Intel® Smart Cache	80 W
+Intel® Xeon® Processor E5-2418L v2
+Q1'14	6	2.00 GHz	2.00 GHz	15 MB Intel® Smart Cache	50 W
+Intel® Xeon® Processor E5-2420 v2
+Q1'14	6	2.70 GHz	2.20 GHz	15 MB Intel® Smart Cache	80 W
+Intel® Xeon® Processor E5-2428L v2
+Q1'14	8	2.30 GHz	1.80 GHz	20 MB Intel® Smart Cache	60 W
+Intel® Xeon® Processor E5-2430 v2
+Q1'14	6	3.00 GHz	2.50 GHz	15 MB Intel® Smart Cache	80 W
+Intel® Xeon® Processor E5-2430L v2
+Q1'14	6	2.80 GHz	2.40 GHz	15 MB Intel® Smart Cache	60 W
+Intel® Xeon® Processor E5-2440 v2
+Q1'14	8	2.40 GHz	1.90 GHz	20 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-2448L v2
+Q1'14	10	2.40 GHz	1.80 GHz	25 MB Intel® Smart Cache	70 W
+Intel® Xeon® Processor E5-2450 v2
+Q1'14	8	3.30 GHz	2.50 GHz	20 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-2450L v2
+Q1'14	10	2.10 GHz	1.70 GHz	25 MB Intel® Smart Cache	60 W
+Intel® Xeon® Processor E5-2470 v2
+Q1'14	10	3.20 GHz	2.40 GHz	25 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-2603 v2
+Q3'13	4		1.80 GHz	10 MB Intel® Smart Cache	80 W
+Intel® Xeon® Processor E5-2609 v2
+Q3'13	4	2.50 GHz	2.50 GHz	10 MB Intel® Smart Cache	80 W
+Intel® Xeon® Processor E5-2618L v2
+Q3'13	6	2.00 GHz	2.00 GHz	15 MB Intel® Smart Cache	50 W
+Intel® Xeon® Processor E5-2620 v2
+Q3'13	6	2.60 GHz	2.10 GHz	15 MB Intel® Smart Cache	80 W
+Intel® Xeon® Processor E5-2628L v2
+Q3'13	8	2.40 GHz	1.90 GHz	20 MB Intel® Smart Cache	70 W
+Intel® Xeon® Processor E5-2630 v2
+Q3'13	6	3.10 GHz	2.60 GHz	15 MB Intel® Smart Cache	80 W
+Intel® Xeon® Processor E5-2630L v2
+Q3'13	6	2.80 GHz	2.40 GHz	15 MB Intel® Smart Cache	60 W
+Intel® Xeon® Processor E5-2637 v2
+Q3'13	4	3.80 GHz	3.50 GHz	15 MB Intel® Smart Cache	130 W
+Intel® Xeon® Processor E5-2640 v2
+Q3'13	8	2.50 GHz	2.00 GHz	20 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-2643 v2
+Q3'13	6	3.80 GHz	3.50 GHz	25 MB Intel® Smart Cache	130 W
+Intel® Xeon® Processor E5-2648L v2
+Q3'13	10	2.50 GHz	1.90 GHz	25 MB Intel® Smart Cache	70 W
+Intel® Xeon® Processor E5-2650 v2
+Q3'13	8	3.40 GHz	2.60 GHz	20 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-2650L v2
+Q3'13	10	2.10 GHz	1.70 GHz	25 MB Intel® Smart Cache	70 W
+Intel® Xeon® Processor E5-2658 v2
+Q3'13	10	3.00 GHz	2.40 GHz	25 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-2660 v2
+Q3'13	10	3.00 GHz	2.20 GHz	25 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-2667 v2
+Q3'13	8	4.00 GHz	3.30 GHz	25 MB Intel® Smart Cache	130 W
+Intel® Xeon® Processor E5-2670 v2
+Q3'13	10	3.30 GHz	2.50 GHz	25 MB Intel® Smart Cache	115 W
+Intel® Xeon® Processor E5-2680 v2
+Q3'13	10	3.60 GHz	2.80 GHz	25 MB Intel® Smart Cache	115 W
+Intel® Xeon® Processor E5-2687W v2
+Q3'13	8	4.00 GHz	3.40 GHz	25 MB Intel® Smart Cache	150 W
+Intel® Xeon® Processor E5-2690 v2
+Q3'13	10	3.60 GHz	3.00 GHz	25 MB Intel® Smart Cache	130 W
+Intel® Xeon® Processor E5-2695 v2
+Q3'13	12	3.20 GHz	2.40 GHz	30 MB Intel® Smart Cache	115 W
+Intel® Xeon® Processor E5-2697 v2
+Q3'13	12	3.50 GHz	2.70 GHz	30 MB Intel® Smart Cache	130 W
+Intel® Xeon® Processor E5-4603 v2
+Q1'14	4	2.20 GHz	2.20 GHz	10 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-4607 v2
+Q1'14	6	2.60 GHz	2.60 GHz	15 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-4610 v2
+Q1'14	8	2.70 GHz	2.30 GHz	16 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-4620 v2
+Q1'14	8	3.00 GHz	2.60 GHz	20 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-4624L v2
+Q1'14	10	2.50 GHz	1.90 GHz	25 MB Intel® Smart Cache	70 W
+Intel® Xeon® Processor E5-4627 v2
+Q1'14	8	3.60 GHz	3.30 GHz	16 MB Intel® Smart Cache	130 W
+Intel® Xeon® Processor E5-4640 v2
+Q1'14	10	2.70 GHz	2.20 GHz	20 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-4650 v2
+Q1'14	10	2.90 GHz	2.40 GHz	25 MB Intel® Smart Cache	95 W
+Intel® Xeon® Processor E5-4657L v2
+Q1'14	12	2.90 GHz	2.40 GHz	30 MB Intel® Smart Cache	115 W
