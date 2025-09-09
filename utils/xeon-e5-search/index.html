@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<!--
+Intel Xeon E5 CPU Specification Search System
+Intel Xeon E5 CPU スペック検索システム
+Copyright (c) 2024 Daisuke Kurokawa
+
+LICENSE AND TERMS OF USE:
+The copyright of this system is retained by the developer.
+The intellectual property rights of CPU specification data belong to Intel Corporation.
+
+本ソフトウェアの使用許諾:
+本システムの著作権は開発者が保持します。
+CPUスペックデータの知的財産権はIntel Corporationに帰属します。
+
+DISCLAIMER:
+THIS SYSTEM AND INFORMATION ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+DEVELOPER BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+OR CONSEQUENTIAL DAMAGES ARISING FROM THE USE OR INABILITY TO USE THIS SYSTEM.
+
+免責事項:
+本システムおよび情報は「現状有姿」で提供されます。商品性、特定目的への
+適合性、非侵害性を含むがこれらに限定されない、明示または黙示のいかなる
+保証も行いません。本システムの使用または使用不能により生じた直接的、
+間接的、偶発的、特殊、懲罰的または結果的損害について、開発者は一切の
+責任を負いません。
+
+DATA ACCURACY:
+The CPU information provided is for reference only. Please refer to the official
+Intel website for accurate specifications.
+
+データの正確性:
+掲載されているCPU情報は参考値です。正確な仕様については
+Intel公式サイトをご確認ください。
+-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intel Xeon E5 CPU スペック検索</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0074D9, #001f3f);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1em;
+            margin: 0;
+        }
+
+        .oc-note {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            margin-top: 8px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 10px 15px;
+            font-size: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: #0074D9;
+            box-shadow: 0 0 15px rgba(0, 116, 217, 0.2);
+        }
+
+        .clear-btn {
+            padding: 10px 20px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background: #ff3838;
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .results-section {
+            padding: 10px 20px 20px 20px;
+        }
+
+        .results-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        /* モバイル用の短縮表記 */
+        @media (max-width: 768px) {
+            .desktop-label {
+                display: none;
+            }
+            .mobile-label {
+                display: inline;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .desktop-label {
+                display: inline;
+            }
+            .mobile-label {
+                display: none;
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #0074D9, #001f3f);
+            color: white;
+            padding: 0;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-size: 13px;
+        }
+        
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        
+        th.sortable > * {
+            display: block;
+            padding: 8px 6px;
+            width: 100%;
+        }
+
+        th:first-child > * {
+            padding-left: 12px;
+        }
+
+        th:last-child > * {
+            padding-right: 12px;
+        }
+
+        th:hover {
+            background: linear-gradient(135deg, #0056b3, #001a33);
+        }
+
+        th.sortable::after {
+            content: '';
+            margin-left: 8px;
+            opacity: 0.5;
+        }
+
+        th.sort-desc::after {
+            content: ' ↓';
+            opacity: 1;
+        }
+
+        th.sort-asc::after {
+            content: ' ↑';
+            opacity: 1;
+        }
+
+        td {
+            padding: 6px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+            font-size: 13px;
+        }
+
+        td:first-child {
+            padding-left: 12px;
+        }
+
+        td:last-child {
+            padding-right: 12px;
+        }
+
+        tr:hover {
+            background: rgba(0, 116, 217, 0.05);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cpu-name-cell {
+            font-weight: bold;
+            color: #001f3f;
+            white-space: nowrap;
+            font-size: 12px;
+        }
+
+        .generation-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .cores-cell {
+            font-weight: 600;
+            color: #2ecc71;
+        }
+
+        .threads-cell {
+            font-weight: 600;
+            color: #3498db;
+        }
+
+        .clock-cell {
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+        }
+
+        .cache-cell {
+            font-weight: 500;
+            color: #f39c12;
+        }
+
+        .tdp-cell {
+            font-weight: 500;
+            color: #9b59b6;
+        }
+
+        .oc-cell {
+            font-weight: 600;
+            color: #e67e22;
+            font-family: 'Courier New', monospace;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .no-results i {
+            font-size: 3em;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+
+        /* Filters section styling */
+        .filters-section {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 6px 10px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+
+        .filter-group select {
+            min-width: 120px;
+        }
+
+        .range-inputs {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .range-inputs input {
+            width: 70px;
+        }
+
+        .range-inputs span {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .filter-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-tag button {
+            background: none;
+            border: none;
+            color: #1976d2;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0 4px;
+            font-weight: bold;
+        }
+
+        .filter-tag button:hover {
+            color: #1565c0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .header {
+                padding: 10px 15px;
+            }
+
+            .search-section {
+                padding: 10px 15px;
+            }
+
+            .results-section {
+                padding: 5px 15px 15px 15px;
+            }
+
+            .search-box {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .stats {
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .stat-item {
+                min-width: 100px;
+                padding: 8px 12px;
+            }
+
+            .stat-value {
+                font-size: 1.3em;
+            }
+
+            th,
+            td {
+                padding: 4px 3px;
+                font-size: 11px;
+            }
+
+            th:first-child > * {
+                padding-left: 8px;
+            }
+            
+            td:first-child {
+                padding-left: 8px;
+            }
+
+            th:last-child > * {
+                padding-right: 8px;
+            }
+            
+            td:last-child {
+                padding-right: 8px;
+            }
+
+            .cpu-name-cell {
+                font-size: 10px;
+            }
+
+            .generation-badge {
+                font-size: 9px;
+                padding: 1px 6px;
+            }
+
+            /* Mobile filter adjustments */
+            .filters-section {
+                padding: 10px 15px;
+            }
+
+            .filter-controls {
+                gap: 10px;
+            }
+
+            .filter-group {
+                flex: 1 1 auto;
+                min-width: 120px;
+            }
+
+            .filter-group label {
+                font-size: 12px;
+            }
+
+            .filter-group select,
+            .filter-group input {
+                padding: 4px 6px;
+                font-size: 12px;
+            }
+
+            .range-inputs input {
+                width: 60px;
+            }
+
+            .filter-tag {
+                font-size: 11px;
+                padding: 3px 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Intel Xeon E5 CPU スペック検索</h1>
+        </div>
+
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="例: 2680, v3, E5-*70, 26*0 など..." autocomplete="off">
+                <button class="clear-btn" onclick="clearAllFilters()">全フィルタクリア</button>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalCount">-</div>
+                    <div>総CPU数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="matchCount">-</div>
+                    <div>検索結果</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="generationCount">-</div>
+                    <div>世代数</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filters-section">
+            <div class="active-filters" id="activeFilters">
+                <!-- Active filters will be displayed here -->
+            </div>
+            
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label>世代</label>
+                    <select id="generationFilter">
+                        <option value="">すべて</option>
+                        <option value="v1">v1 (Sandy Bridge)</option>
+                        <option value="v2">v2 (Ivy Bridge)</option>
+                        <option value="v3">v3 (Haswell)</option>
+                        <option value="v4">v4 (Broadwell)</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>コア数</label>
+                    <div class="range-inputs">
+                        <input type="number" id="coresMin" placeholder="最小" min="2" max="22">
+                        <span>～</span>
+                        <input type="number" id="coresMax" placeholder="最大" min="2" max="22">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>TDP (W)</label>
+                    <div class="range-inputs">
+                        <input type="number" id="tdpMin" placeholder="最小" min="45" max="160">
+                        <span>～</span>
+                        <input type="number" id="tdpMax" placeholder="最大" min="45" max="160">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>ベースクロック (GHz)</label>
+                    <div class="range-inputs">
+                        <input type="number" id="baseClockMin" placeholder="最小" min="1.6" max="3.7" step="0.1">
+                        <span>～</span>
+                        <input type="number" id="baseClockMax" placeholder="最大" min="1.6" max="3.7" step="0.1">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>ターボクロック (GHz)</label>
+                    <div class="range-inputs">
+                        <input type="number" id="turboClockMin" placeholder="最小" min="1.7" max="4.0" step="0.1">
+                        <span>～</span>
+                        <input type="number" id="turboClockMax" placeholder="最大" min="1.7" max="4.0" step="0.1">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>キャッシュ (MB)</label>
+                    <div class="range-inputs">
+                        <input type="number" id="cacheMin" placeholder="最小" min="5" max="60">
+                        <span>～</span>
+                        <input type="number" id="cacheMax" placeholder="最大" min="5" max="60">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div class="results-table" id="resultsContainer">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Intel Xeon E5 CPU データベース - v1.txt, v2.txt, v3.txt, v4.txtから完全なデータを統合
+        const xeonE5Database = [
+            // E5 v1 (Sandy Bridge-EP)
+            { name: "E5-1428L", generation: "v1", cores: 6, baseClock: "1.80 GHz", turboClock: "", cache: "15 MB L3 Cache", tdp: "60 W", launch: "Q2'12" },
+            { name: "E5-2403", generation: "v1", cores: 4, baseClock: "1.80 GHz", turboClock: "", cache: "10 MB Intel® Smart Cache", tdp: "80 W", launch: "Q2'12" },
+            { name: "E5-2407", generation: "v1", cores: 4, baseClock: "2.20 GHz", turboClock: "", cache: "10 MB Intel® Smart Cache", tdp: "80 W", launch: "Q2'12" },
+            { name: "E5-2418L", generation: "v1", cores: 4, baseClock: "2.00 GHz", turboClock: "2.10 GHz", cache: "10 MB Intel® Smart Cache", tdp: "50 W", launch: "Q2'12" },
+            { name: "E5-2420", generation: "v1", cores: 6, baseClock: "1.90 GHz", turboClock: "2.40 GHz", cache: "15 MB Intel® Smart Cache", tdp: "95 W", launch: "Q2'12" },
+            { name: "E5-2428L", generation: "v1", cores: 6, baseClock: "1.80 GHz", turboClock: "2.00 GHz", cache: "15 MB Intel® Smart Cache", tdp: "60 W", launch: "Q2'12" },
+            { name: "E5-2430", generation: "v1", cores: 6, baseClock: "2.20 GHz", turboClock: "2.70 GHz", cache: "15 MB Intel® Smart Cache", tdp: "95 W", launch: "Q2'12" },
+            { name: "E5-2430L", generation: "v1", cores: 6, baseClock: "2.00 GHz", turboClock: "2.50 GHz", cache: "15 MB Intel® Smart Cache", tdp: "60 W", launch: "Q2'12" },
+            { name: "E5-2440", generation: "v1", cores: 6, baseClock: "2.40 GHz", turboClock: "2.90 GHz", cache: "15 MB Intel® Smart Cache", tdp: "95 W", launch: "Q2'12" },
+            { name: "E5-2448L", generation: "v1", cores: 8, baseClock: "1.80 GHz", turboClock: "2.10 GHz", cache: "20 MB Intel® Smart Cache", tdp: "70 W", launch: "Q2'12" },
+            { name: "E5-2450", generation: "v1", cores: 8, baseClock: "2.10 GHz", turboClock: "2.90 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q2'12" },
+            { name: "E5-2450L", generation: "v1", cores: 8, baseClock: "1.80 GHz", turboClock: "2.30 GHz", cache: "20 MB Intel® Smart Cache", tdp: "70 W", launch: "Q2'12" },
+            { name: "E5-2470", generation: "v1", cores: 8, baseClock: "2.30 GHz", turboClock: "3.10 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q2'12" },
+            { name: "E5-4603", generation: "v1", cores: 4, baseClock: "2.00 GHz", turboClock: "", cache: "10 MB Intel® Smart Cache", tdp: "95 W", launch: "Q2'12" },
+            { name: "E5-4607", generation: "v1", cores: 6, baseClock: "2.20 GHz", turboClock: "", cache: "12 MB Intel® Smart Cache", tdp: "95 W", launch: "Q2'12" },
+            { name: "E5-4610", generation: "v1", cores: 6, baseClock: "2.40 GHz", turboClock: "2.90 GHz", cache: "15 MB Intel® Smart Cache", tdp: "95 W", launch: "Q2'12" },
+            { name: "E5-4617", generation: "v1", cores: 6, baseClock: "2.90 GHz", turboClock: "3.40 GHz", cache: "15 MB Intel® Smart Cache", tdp: "130 W", launch: "Q2'12" },
+            { name: "E5-4620", generation: "v1", cores: 8, baseClock: "2.20 GHz", turboClock: "2.60 GHz", cache: "16 MB Intel® Smart Cache", tdp: "95 W", launch: "Q2'12" },
+            { name: "E5-4640", generation: "v1", cores: 8, baseClock: "2.40 GHz", turboClock: "2.80 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q2'12" },
+            { name: "E5-4650", generation: "v1", cores: 8, baseClock: "2.70 GHz", turboClock: "3.30 GHz", cache: "20 MB Intel® Smart Cache", tdp: "130 W", launch: "Q2'12" },
+            { name: "E5-4650L", generation: "v1", cores: 8, baseClock: "2.60 GHz", turboClock: "3.10 GHz", cache: "20 MB Intel® Smart Cache", tdp: "115 W", launch: "Q2'12" },
+            { name: "E5-1620", generation: "v1", cores: 4, baseClock: "3.60 GHz", turboClock: "3.80 GHz", cache: "10 MB Intel® Smart Cache", tdp: "130 W", launch: "Q1'12" },
+            { name: "E5-1650", generation: "v1", cores: 6, baseClock: "3.20 GHz", turboClock: "3.80 GHz", cache: "12 MB Intel® Smart Cache", tdp: "130 W", launch: "Q1'12" },
+            { name: "E5-1660", generation: "v1", cores: 6, baseClock: "3.30 GHz", turboClock: "3.90 GHz", cache: "15 MB Intel® Smart Cache", tdp: "130 W", launch: "Q1'12" },
+            { name: "E5-2603", generation: "v1", cores: 4, baseClock: "1.80 GHz", turboClock: "", cache: "10 MB Intel® Smart Cache", tdp: "80 W", launch: "Q1'12" },
+            { name: "E5-2609", generation: "v1", cores: 4, baseClock: "2.40 GHz", turboClock: "", cache: "10 MB Intel® Smart Cache", tdp: "80 W", launch: "Q1'12" },
+            { name: "E5-2620", generation: "v1", cores: 6, baseClock: "2.00 GHz", turboClock: "2.50 GHz", cache: "15 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'12" },
+            { name: "E5-2630", generation: "v1", cores: 6, baseClock: "2.30 GHz", turboClock: "2.80 GHz", cache: "15 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'12" },
+            { name: "E5-2630L", generation: "v1", cores: 6, baseClock: "2.00 GHz", turboClock: "2.50 GHz", cache: "15 MB Intel® Smart Cache", tdp: "60 W", launch: "Q1'12" },
+            { name: "E5-2637", generation: "v1", cores: 2, baseClock: "3.00 GHz", turboClock: "3.50 GHz", cache: "5 MB Intel® Smart Cache", tdp: "80 W", launch: "Q1'12" },
+            { name: "E5-2640", generation: "v1", cores: 6, baseClock: "2.50 GHz", turboClock: "3.00 GHz", cache: "15 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'12" },
+            { name: "E5-2643", generation: "v1", cores: 4, baseClock: "3.30 GHz", turboClock: "3.50 GHz", cache: "10 MB Intel® Smart Cache", tdp: "130 W", launch: "Q1'12" },
+            { name: "E5-2648L", generation: "v1", cores: 8, baseClock: "1.80 GHz", turboClock: "2.10 GHz", cache: "20 MB Intel® Smart Cache", tdp: "70 W", launch: "Q1'12" },
+            { name: "E5-2650", generation: "v1", cores: 8, baseClock: "2.00 GHz", turboClock: "2.80 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'12" },
+            { name: "E5-2650L", generation: "v1", cores: 8, baseClock: "1.80 GHz", turboClock: "2.30 GHz", cache: "20 MB Intel® Smart Cache", tdp: "70 W", launch: "Q1'12" },
+            { name: "E5-2658", generation: "v1", cores: 8, baseClock: "2.10 GHz", turboClock: "2.40 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'12" },
+            { name: "E5-2660", generation: "v1", cores: 8, baseClock: "2.20 GHz", turboClock: "3.00 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'12" },
+            { name: "E5-2665", generation: "v1", cores: 8, baseClock: "2.40 GHz", turboClock: "3.10 GHz", cache: "20 MB Intel® Smart Cache", tdp: "115 W", launch: "Q1'12" },
+            { name: "E5-2667", generation: "v1", cores: 6, baseClock: "2.90 GHz", turboClock: "3.50 GHz", cache: "15 MB Intel® Smart Cache", tdp: "130 W", launch: "Q1'12" },
+            { name: "E5-2670", generation: "v1", cores: 8, baseClock: "2.60 GHz", turboClock: "3.30 GHz", cache: "20 MB Intel® Smart Cache", tdp: "115 W", launch: "Q1'12" },
+            { name: "E5-2680", generation: "v1", cores: 8, baseClock: "2.70 GHz", turboClock: "3.50 GHz", cache: "20 MB Intel® Smart Cache", tdp: "130 W", launch: "Q1'12" },
+            { name: "E5-2687W", generation: "v1", cores: 8, baseClock: "3.10 GHz", turboClock: "3.80 GHz", cache: "20 MB Intel® Smart Cache", tdp: "150 W", launch: "Q1'12" },
+            { name: "E5-2690", generation: "v1", cores: 8, baseClock: "2.90 GHz", turboClock: "3.80 GHz", cache: "20 MB Intel® Smart Cache", tdp: "135 W", launch: "Q1'12" },
+            
+            // E5 v2 (Ivy Bridge-EP)
+            { name: "E5-1428L v2", generation: "v2", cores: 6, baseClock: "2.20 GHz", turboClock: "2.70 GHz", cache: "15 MB Intel® Smart Cache", tdp: "60 W", launch: "Q1'14" },
+            { name: "E5-1620 v2", generation: "v2", cores: 4, baseClock: "3.70 GHz", turboClock: "3.90 GHz", cache: "10 MB Intel® Smart Cache", tdp: "130 W", launch: "Q3'13" },
+            { name: "E5-1650 v2", generation: "v2", cores: 6, baseClock: "3.50 GHz", turboClock: "3.90 GHz", cache: "12 MB Intel® Smart Cache", tdp: "130 W", launch: "Q3'13" },
+            { name: "E5-1660 v2", generation: "v2", cores: 6, baseClock: "3.70 GHz", turboClock: "4.00 GHz", cache: "15 MB Intel® Smart Cache", tdp: "130 W", launch: "Q3'13" },
+            { name: "E5-2403 v2", generation: "v2", cores: 4, baseClock: "1.80 GHz", turboClock: "1.80 GHz", cache: "10 MB Intel® Smart Cache", tdp: "80 W", launch: "Q1'14" },
+            { name: "E5-2407 v2", generation: "v2", cores: 4, baseClock: "2.40 GHz", turboClock: "2.40 GHz", cache: "10 MB Intel® Smart Cache", tdp: "80 W", launch: "Q1'14" },
+            { name: "E5-2418L v2", generation: "v2", cores: 6, baseClock: "2.00 GHz", turboClock: "2.00 GHz", cache: "15 MB Intel® Smart Cache", tdp: "50 W", launch: "Q1'14" },
+            { name: "E5-2420 v2", generation: "v2", cores: 6, baseClock: "2.20 GHz", turboClock: "2.70 GHz", cache: "15 MB Intel® Smart Cache", tdp: "80 W", launch: "Q1'14" },
+            { name: "E5-2428L v2", generation: "v2", cores: 8, baseClock: "1.80 GHz", turboClock: "2.30 GHz", cache: "20 MB Intel® Smart Cache", tdp: "60 W", launch: "Q1'14" },
+            { name: "E5-2430 v2", generation: "v2", cores: 6, baseClock: "2.50 GHz", turboClock: "3.00 GHz", cache: "15 MB Intel® Smart Cache", tdp: "80 W", launch: "Q1'14" },
+            { name: "E5-2430L v2", generation: "v2", cores: 6, baseClock: "2.40 GHz", turboClock: "2.80 GHz", cache: "15 MB Intel® Smart Cache", tdp: "60 W", launch: "Q1'14" },
+            { name: "E5-2440 v2", generation: "v2", cores: 8, baseClock: "1.90 GHz", turboClock: "2.40 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'14" },
+            { name: "E5-2448L v2", generation: "v2", cores: 10, baseClock: "1.80 GHz", turboClock: "2.40 GHz", cache: "25 MB Intel® Smart Cache", tdp: "70 W", launch: "Q1'14" },
+            { name: "E5-2450 v2", generation: "v2", cores: 8, baseClock: "2.50 GHz", turboClock: "3.30 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'14" },
+            { name: "E5-2450L v2", generation: "v2", cores: 10, baseClock: "1.70 GHz", turboClock: "2.10 GHz", cache: "25 MB Intel® Smart Cache", tdp: "60 W", launch: "Q1'14" },
+            { name: "E5-2470 v2", generation: "v2", cores: 10, baseClock: "2.40 GHz", turboClock: "3.20 GHz", cache: "25 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'14" },
+            { name: "E5-2603 v2", generation: "v2", cores: 4, baseClock: "1.80 GHz", turboClock: "", cache: "10 MB Intel® Smart Cache", tdp: "80 W", launch: "Q3'13" },
+            { name: "E5-2609 v2", generation: "v2", cores: 4, baseClock: "2.50 GHz", turboClock: "2.50 GHz", cache: "10 MB Intel® Smart Cache", tdp: "80 W", launch: "Q3'13" },
+            { name: "E5-2618L v2", generation: "v2", cores: 6, baseClock: "2.00 GHz", turboClock: "2.00 GHz", cache: "15 MB Intel® Smart Cache", tdp: "50 W", launch: "Q3'13" },
+            { name: "E5-2620 v2", generation: "v2", cores: 6, baseClock: "2.10 GHz", turboClock: "2.60 GHz", cache: "15 MB Intel® Smart Cache", tdp: "80 W", launch: "Q3'13" },
+            { name: "E5-2628L v2", generation: "v2", cores: 8, baseClock: "1.90 GHz", turboClock: "2.40 GHz", cache: "20 MB Intel® Smart Cache", tdp: "70 W", launch: "Q3'13" },
+            { name: "E5-2630 v2", generation: "v2", cores: 6, baseClock: "2.60 GHz", turboClock: "3.10 GHz", cache: "15 MB Intel® Smart Cache", tdp: "80 W", launch: "Q3'13" },
+            { name: "E5-2630L v2", generation: "v2", cores: 6, baseClock: "2.40 GHz", turboClock: "2.80 GHz", cache: "15 MB Intel® Smart Cache", tdp: "60 W", launch: "Q3'13" },
+            { name: "E5-2637 v2", generation: "v2", cores: 4, baseClock: "3.50 GHz", turboClock: "3.80 GHz", cache: "15 MB Intel® Smart Cache", tdp: "130 W", launch: "Q3'13" },
+            { name: "E5-2640 v2", generation: "v2", cores: 8, baseClock: "2.00 GHz", turboClock: "2.50 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q3'13" },
+            { name: "E5-2643 v2", generation: "v2", cores: 6, baseClock: "3.50 GHz", turboClock: "3.80 GHz", cache: "25 MB Intel® Smart Cache", tdp: "130 W", launch: "Q3'13" },
+            { name: "E5-2648L v2", generation: "v2", cores: 10, baseClock: "1.90 GHz", turboClock: "2.50 GHz", cache: "25 MB Intel® Smart Cache", tdp: "70 W", launch: "Q3'13" },
+            { name: "E5-2650 v2", generation: "v2", cores: 8, baseClock: "2.60 GHz", turboClock: "3.40 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q3'13" },
+            { name: "E5-2650L v2", generation: "v2", cores: 10, baseClock: "1.70 GHz", turboClock: "2.10 GHz", cache: "25 MB Intel® Smart Cache", tdp: "70 W", launch: "Q3'13" },
+            { name: "E5-2658 v2", generation: "v2", cores: 10, baseClock: "2.40 GHz", turboClock: "3.00 GHz", cache: "25 MB Intel® Smart Cache", tdp: "95 W", launch: "Q3'13" },
+            { name: "E5-2660 v2", generation: "v2", cores: 10, baseClock: "2.20 GHz", turboClock: "3.00 GHz", cache: "25 MB Intel® Smart Cache", tdp: "95 W", launch: "Q3'13" },
+            { name: "E5-2667 v2", generation: "v2", cores: 8, baseClock: "3.30 GHz", turboClock: "4.00 GHz", cache: "25 MB Intel® Smart Cache", tdp: "130 W", launch: "Q3'13" },
+            { name: "E5-2670 v2", generation: "v2", cores: 10, baseClock: "2.50 GHz", turboClock: "3.30 GHz", cache: "25 MB Intel® Smart Cache", tdp: "115 W", launch: "Q3'13" },
+            { name: "E5-2680 v2", generation: "v2", cores: 10, baseClock: "2.80 GHz", turboClock: "3.60 GHz", cache: "25 MB Intel® Smart Cache", tdp: "115 W", launch: "Q3'13" },
+            { name: "E5-2687W v2", generation: "v2", cores: 8, baseClock: "3.40 GHz", turboClock: "4.00 GHz", cache: "25 MB Intel® Smart Cache", tdp: "150 W", launch: "Q3'13" },
+            { name: "E5-2690 v2", generation: "v2", cores: 10, baseClock: "3.00 GHz", turboClock: "3.60 GHz", cache: "25 MB Intel® Smart Cache", tdp: "130 W", launch: "Q3'13" },
+            { name: "E5-2695 v2", generation: "v2", cores: 12, baseClock: "2.40 GHz", turboClock: "3.20 GHz", cache: "30 MB Intel® Smart Cache", tdp: "115 W", launch: "Q3'13" },
+            { name: "E5-2697 v2", generation: "v2", cores: 12, baseClock: "2.70 GHz", turboClock: "3.50 GHz", cache: "30 MB Intel® Smart Cache", tdp: "130 W", launch: "Q3'13" },
+            { name: "E5-4603 v2", generation: "v2", cores: 4, baseClock: "2.20 GHz", turboClock: "2.20 GHz", cache: "10 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'14" },
+            { name: "E5-4607 v2", generation: "v2", cores: 6, baseClock: "2.60 GHz", turboClock: "2.60 GHz", cache: "15 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'14" },
+            { name: "E5-4610 v2", generation: "v2", cores: 8, baseClock: "2.30 GHz", turboClock: "2.70 GHz", cache: "16 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'14" },
+            { name: "E5-4620 v2", generation: "v2", cores: 8, baseClock: "2.60 GHz", turboClock: "3.00 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'14" },
+            { name: "E5-4624L v2", generation: "v2", cores: 10, baseClock: "1.90 GHz", turboClock: "2.50 GHz", cache: "25 MB Intel® Smart Cache", tdp: "70 W", launch: "Q1'14" },
+            { name: "E5-4627 v2", generation: "v2", cores: 8, baseClock: "3.30 GHz", turboClock: "3.60 GHz", cache: "16 MB Intel® Smart Cache", tdp: "130 W", launch: "Q1'14" },
+            { name: "E5-4640 v2", generation: "v2", cores: 10, baseClock: "2.20 GHz", turboClock: "2.70 GHz", cache: "20 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'14" },
+            { name: "E5-4650 v2", generation: "v2", cores: 10, baseClock: "2.40 GHz", turboClock: "2.90 GHz", cache: "25 MB Intel® Smart Cache", tdp: "95 W", launch: "Q1'14" },
+            { name: "E5-4657L v2", generation: "v2", cores: 12, baseClock: "2.40 GHz", turboClock: "2.90 GHz", cache: "30 MB Intel® Smart Cache", tdp: "115 W", launch: "Q1'14" },
+            
+            // E5 v3 (Haswell-EP)
+            { name: "E5-4610 v3", generation: "v3", cores: 10, baseClock: "1.70 GHz", turboClock: "1.70 GHz", cache: "25 MB", tdp: "105 W", launch: "Q2'15" },
+            { name: "E5-4620 v3", generation: "v3", cores: 10, baseClock: "2.00 GHz", turboClock: "2.60 GHz", cache: "25 MB", tdp: "105 W", launch: "Q2'15" },
+            { name: "E5-4627 v3", generation: "v3", cores: 10, baseClock: "2.60 GHz", turboClock: "3.20 GHz", cache: "25 MB", tdp: "135 W", launch: "Q2'15" },
+            { name: "E5-4640 v3", generation: "v3", cores: 12, baseClock: "1.90 GHz", turboClock: "2.60 GHz", cache: "30 MB", tdp: "105 W", launch: "Q2'15" },
+            { name: "E5-4648 v3", generation: "v3", cores: 12, baseClock: "1.70 GHz", turboClock: "2.20 GHz", cache: "30 MB", tdp: "105 W", launch: "Q2'15" },
+            { name: "E5-4650 v3", generation: "v3", cores: 12, baseClock: "2.10 GHz", turboClock: "2.80 GHz", cache: "30 MB", tdp: "105 W", launch: "Q2'15" },
+            { name: "E5-4655 v3", generation: "v3", cores: 6, baseClock: "2.90 GHz", turboClock: "3.20 GHz", cache: "30 MB", tdp: "135 W", launch: "Q2'15" },
+            { name: "E5-4660 v3", generation: "v3", cores: 14, baseClock: "2.10 GHz", turboClock: "2.90 GHz", cache: "35 MB", tdp: "120 W", launch: "Q2'15" },
+            { name: "E5-4667 v3", generation: "v3", cores: 16, baseClock: "2.00 GHz", turboClock: "2.90 GHz", cache: "40 MB", tdp: "135 W", launch: "Q2'15" },
+            { name: "E5-4669 v3", generation: "v3", cores: 18, baseClock: "2.10 GHz", turboClock: "2.90 GHz", cache: "45 MB", tdp: "135 W", launch: "Q2'15" },
+            { name: "E5-2658A v3", generation: "v3", cores: 12, baseClock: "2.20 GHz", turboClock: "2.90 GHz", cache: "30 MB Intel® Smart Cache", tdp: "105 W", launch: "Q1'15" },
+            { name: "E5-1428L v3", generation: "v3", cores: 8, baseClock: "2.00 GHz", turboClock: "", cache: "20 MB", tdp: "65 W", launch: "Q1'15" },
+            { name: "E5-2408L v3", generation: "v3", cores: 4, baseClock: "1.80 GHz", turboClock: "", cache: "10 MB", tdp: "45 W", launch: "Q1'15" },
+            { name: "E5-2418L v3", generation: "v3", cores: 6, baseClock: "2.00 GHz", turboClock: "", cache: "15 MB", tdp: "50 W", launch: "Q1'15" },
+            { name: "E5-2428L v3", generation: "v3", cores: 8, baseClock: "1.80 GHz", turboClock: "", cache: "20 MB", tdp: "55 W", launch: "Q1'15" },
+            { name: "E5-2438L v3", generation: "v3", cores: 10, baseClock: "1.80 GHz", turboClock: "", cache: "25 MB", tdp: "70 W", launch: "Q1'15" },
+            { name: "E5-1620 v3", generation: "v3", cores: 4, baseClock: "3.50 GHz", turboClock: "3.60 GHz", cache: "10 MB Intel® Smart Cache", tdp: "140 W", launch: "Q3'14" },
+            { name: "E5-1630 v3", generation: "v3", cores: 4, baseClock: "3.70 GHz", turboClock: "3.80 GHz", cache: "10 MB Intel® Smart Cache", tdp: "140 W", launch: "Q3'14" },
+            { name: "E5-1650 v3", generation: "v3", cores: 6, baseClock: "3.50 GHz", turboClock: "3.80 GHz", cache: "15 MB Intel® Smart Cache", tdp: "140 W", launch: "Q3'14" },
+            { name: "E5-1660 v3", generation: "v3", cores: 8, baseClock: "3.00 GHz", turboClock: "3.50 GHz", cache: "20 MB Intel® Smart Cache", tdp: "140 W", launch: "Q3'14" },
+            { name: "E5-1680 v3", generation: "v3", cores: 8, baseClock: "3.20 GHz", turboClock: "3.80 GHz", cache: "20 MB Intel® Smart Cache", tdp: "140 W", launch: "Q3'14" },
+            { name: "E5-2603 v3", generation: "v3", cores: 6, baseClock: "1.60 GHz", turboClock: "", cache: "15 MB Intel® Smart Cache", tdp: "85 W", launch: "Q3'14" },
+            { name: "E5-2608L v3", generation: "v3", cores: 6, baseClock: "2.00 GHz", turboClock: "", cache: "15 MB Intel® Smart Cache", tdp: "52 W", launch: "Q3'14" },
+            { name: "E5-2609 v3", generation: "v3", cores: 6, baseClock: "1.90 GHz", turboClock: "", cache: "15 MB Intel® Smart Cache", tdp: "85 W", launch: "Q3'14" },
+            { name: "E5-2618L v3", generation: "v3", cores: 8, baseClock: "2.30 GHz", turboClock: "3.40 GHz", cache: "20 MB Intel® Smart Cache", tdp: "75 W", launch: "Q3'14" },
+            { name: "E5-2620 v3", generation: "v3", cores: 6, baseClock: "2.40 GHz", turboClock: "3.20 GHz", cache: "15 MB Intel® Smart Cache", tdp: "85 W", launch: "Q3'14" },
+            { name: "E5-2623 v3", generation: "v3", cores: 4, baseClock: "3.00 GHz", turboClock: "3.50 GHz", cache: "10 MB Intel® Smart Cache", tdp: "105 W", launch: "Q3'14" },
+            { name: "E5-2628L v3", generation: "v3", cores: 10, baseClock: "2.00 GHz", turboClock: "2.50 GHz", cache: "25 MB Intel® Smart Cache", tdp: "75 W", launch: "Q3'14" },
+            { name: "E5-2630 v3", generation: "v3", cores: 8, baseClock: "2.40 GHz", turboClock: "3.20 GHz", cache: "20 MB Intel® Smart Cache", tdp: "85 W", launch: "Q3'14" },
+            { name: "E5-2630L v3", generation: "v3", cores: 8, baseClock: "1.80 GHz", turboClock: "2.90 GHz", cache: "20 MB Intel® Smart Cache", tdp: "55 W", launch: "Q3'14" },
+            { name: "E5-2637 v3", generation: "v3", cores: 4, baseClock: "3.50 GHz", turboClock: "3.70 GHz", cache: "15 MB Intel® Smart Cache", tdp: "135 W", launch: "Q3'14" },
+            { name: "E5-2640 v3", generation: "v3", cores: 8, baseClock: "2.60 GHz", turboClock: "3.40 GHz", cache: "20 MB Intel® Smart Cache", tdp: "90 W", launch: "Q3'14" },
+            { name: "E5-2643 v3", generation: "v3", cores: 6, baseClock: "3.40 GHz", turboClock: "3.70 GHz", cache: "20 MB Intel® Smart Cache", tdp: "135 W", launch: "Q3'14" },
+            { name: "E5-2648L v3", generation: "v3", cores: 12, baseClock: "1.80 GHz", turboClock: "2.50 GHz", cache: "30 MB Intel® Smart Cache", tdp: "75 W", launch: "Q3'14" },
+            { name: "E5-2650 v3", generation: "v3", cores: 10, baseClock: "2.30 GHz", turboClock: "3.00 GHz", cache: "25 MB Intel® Smart Cache", tdp: "105 W", launch: "Q3'14" },
+            { name: "E5-2650L v3", generation: "v3", cores: 12, baseClock: "1.80 GHz", turboClock: "2.50 GHz", cache: "30 MB Intel® Smart Cache", tdp: "65 W", launch: "Q3'14" },
+            { name: "E5-2658 v3", generation: "v3", cores: 12, baseClock: "2.20 GHz", turboClock: "2.90 GHz", cache: "30 MB Intel® Smart Cache", tdp: "105 W", launch: "Q3'14" },
+            { name: "E5-2660 v3", generation: "v3", cores: 10, baseClock: "2.60 GHz", turboClock: "3.30 GHz", cache: "25 MB Intel® Smart Cache", tdp: "105 W", launch: "Q3'14" },
+            { name: "E5-2667 v3", generation: "v3", cores: 8, baseClock: "3.20 GHz", turboClock: "3.60 GHz", cache: "20 MB Intel® Smart Cache", tdp: "135 W", launch: "Q3'14" },
+            { name: "E5-2670 v3", generation: "v3", cores: 12, baseClock: "2.30 GHz", turboClock: "3.10 GHz", cache: "30 MB Intel® Smart Cache", tdp: "120 W", launch: "Q3'14" },
+            { name: "E5-2680 v3", generation: "v3", cores: 12, baseClock: "2.50 GHz", turboClock: "3.30 GHz", cache: "30 MB Intel® Smart Cache", tdp: "120 W", launch: "Q3'14" },
+            { name: "E5-2683 v3", generation: "v3", cores: 14, baseClock: "2.00 GHz", turboClock: "3.00 GHz", cache: "35 MB Intel® Smart Cache", tdp: "120 W", launch: "Q3'14" },
+            { name: "E5-2687W v3", generation: "v3", cores: 10, baseClock: "3.10 GHz", turboClock: "3.50 GHz", cache: "25 MB Intel® Smart Cache", tdp: "160 W", launch: "Q3'14" },
+            { name: "E5-2690 v3", generation: "v3", cores: 12, baseClock: "2.60 GHz", turboClock: "3.50 GHz", cache: "30 MB Intel® Smart Cache", tdp: "135 W", launch: "Q3'14" },
+            { name: "E5-2695 v3", generation: "v3", cores: 14, baseClock: "2.30 GHz", turboClock: "3.30 GHz", cache: "35 MB Intel® Smart Cache", tdp: "120 W", launch: "Q3'14" },
+            { name: "E5-2697 v3", generation: "v3", cores: 14, baseClock: "2.60 GHz", turboClock: "3.60 GHz", cache: "35 MB Intel® Smart Cache", tdp: "145 W", launch: "Q3'14" },
+            { name: "E5-2698 v3", generation: "v3", cores: 16, baseClock: "2.30 GHz", turboClock: "3.60 GHz", cache: "40 MB Intel® Smart Cache", tdp: "135 W", launch: "Q3'14" },
+            { name: "E5-2699 v3", generation: "v3", cores: 18, baseClock: "2.30 GHz", turboClock: "3.60 GHz", cache: "45 MB Intel® Smart Cache", tdp: "145 W", launch: "Q3'14" },
+            
+            // E5 v4 (Broadwell-EP)
+            { name: "E5-2699A v4", generation: "v4", cores: 22, baseClock: "2.40 GHz", turboClock: "3.60 GHz", cache: "55 MB", tdp: "145 W", launch: "04'16" },
+            { name: "E5-2699R v4", generation: "v4", cores: 22, baseClock: "2.20 GHz", turboClock: "3.60 GHz", cache: "55 MB", tdp: "145 W", launch: "04'16" },
+            { name: "E5-4610 v4", generation: "v4", cores: 10, baseClock: "1.80 GHz", turboClock: "1.80 GHz", cache: "25 MB", tdp: "105 W", launch: "Q2'16" },
+            { name: "E5-4620 v4", generation: "v4", cores: 10, baseClock: "2.10 GHz", turboClock: "2.60 GHz", cache: "25 MB", tdp: "105 W", launch: "Q2'16" },
+            { name: "E5-4627 v4", generation: "v4", cores: 10, baseClock: "2.60 GHz", turboClock: "3.20 GHz", cache: "25 MB", tdp: "135 W", launch: "Q2'16" },
+            { name: "E5-4628L v4", generation: "v4", cores: 14, baseClock: "1.80 GHz", turboClock: "2.20 GHz", cache: "35 MB", tdp: "75 W", launch: "Q2'16" },
+            { name: "E5-4640 v4", generation: "v4", cores: 12, baseClock: "2.10 GHz", turboClock: "2.60 GHz", cache: "30 MB", tdp: "105 W", launch: "Q2'16" },
+            { name: "E5-4650 v4", generation: "v4", cores: 14, baseClock: "2.20 GHz", turboClock: "2.80 GHz", cache: "35 MB", tdp: "105 W", launch: "Q2'16" },
+            { name: "E5-4655 v4", generation: "v4", cores: 8, baseClock: "2.50 GHz", turboClock: "3.20 GHz", cache: "30 MB", tdp: "135 W", launch: "Q2'16" },
+            { name: "E5-4660 v4", generation: "v4", cores: 16, baseClock: "2.20 GHz", turboClock: "3.00 GHz", cache: "40 MB", tdp: "120 W", launch: "Q2'16" },
+            { name: "E5-4667 v4", generation: "v4", cores: 18, baseClock: "2.20 GHz", turboClock: "3.00 GHz", cache: "45 MB", tdp: "135 W", launch: "Q2'16" },
+            { name: "E5-4669 v4", generation: "v4", cores: 22, baseClock: "2.20 GHz", turboClock: "3.00 GHz", cache: "55 MB", tdp: "135 W", launch: "Q2'16" },
+            { name: "E5-1620 v4", generation: "v4", cores: 4, baseClock: "3.50 GHz", turboClock: "3.80 GHz", cache: "10 MB", tdp: "140 W", launch: "Q2'16" },
+            { name: "E5-1630 v4", generation: "v4", cores: 4, baseClock: "3.70 GHz", turboClock: "4.00 GHz", cache: "10 MB", tdp: "140 W", launch: "Q2'16" },
+            { name: "E5-1650 v4", generation: "v4", cores: 6, baseClock: "3.60 GHz", turboClock: "4.00 GHz", cache: "15 MB", tdp: "140 W", launch: "Q2'16" },
+            { name: "E5-1660 v4", generation: "v4", cores: 8, baseClock: "3.20 GHz", turboClock: "3.80 GHz", cache: "20 MB", tdp: "140 W", launch: "Q2'16" },
+            { name: "E5-1680 v4", generation: "v4", cores: 8, baseClock: "3.40 GHz", turboClock: "4.00 GHz", cache: "20 MB", tdp: "140 W", launch: "Q2'16" },
+            { name: "E5-2603 v4", generation: "v4", cores: 6, baseClock: "1.70 GHz", turboClock: "", cache: "15 MB Intel® Smart Cache", tdp: "85 W", launch: "Q1'16" },
+            { name: "E5-2608L v4", generation: "v4", cores: 8, baseClock: "1.60 GHz", turboClock: "1.70 GHz", cache: "20 MB Intel® Smart Cache", tdp: "50 W", launch: "Q1'16" },
+            { name: "E5-2609 v4", generation: "v4", cores: 8, baseClock: "1.70 GHz", turboClock: "", cache: "20 MB Intel® Smart Cache", tdp: "85 W", launch: "Q1'16" },
+            { name: "E5-2618L v4", generation: "v4", cores: 10, baseClock: "2.20 GHz", turboClock: "3.20 GHz", cache: "25 MB Intel® Smart Cache", tdp: "75 W", launch: "Q1'16" },
+            { name: "E5-2620 v4", generation: "v4", cores: 8, baseClock: "2.10 GHz", turboClock: "3.00 GHz", cache: "20 MB Intel® Smart Cache", tdp: "85 W", launch: "Q1'16" },
+            { name: "E5-2623 v4", generation: "v4", cores: 4, baseClock: "2.60 GHz", turboClock: "3.20 GHz", cache: "10 MB Intel® Smart Cache", tdp: "85 W", launch: "Q1'16" },
+            { name: "E5-2628L v4", generation: "v4", cores: 12, baseClock: "1.90 GHz", turboClock: "2.40 GHz", cache: "30 MB Intel® Smart Cache", tdp: "75 W", launch: "Q1'16" },
+            { name: "E5-2630 v4", generation: "v4", cores: 10, baseClock: "2.20 GHz", turboClock: "3.10 GHz", cache: "25 MB Intel® Smart Cache", tdp: "85 W", launch: "Q1'16" },
+            { name: "E5-2630L v4", generation: "v4", cores: 10, baseClock: "1.80 GHz", turboClock: "2.90 GHz", cache: "25 MB Intel® Smart Cache", tdp: "55 W", launch: "Q1'16" },
+            { name: "E5-2637 v4", generation: "v4", cores: 4, baseClock: "3.50 GHz", turboClock: "3.70 GHz", cache: "15 MB Intel® Smart Cache", tdp: "135 W", launch: "Q1'16" },
+            { name: "E5-2640 v4", generation: "v4", cores: 10, baseClock: "2.40 GHz", turboClock: "3.40 GHz", cache: "25 MB Intel® Smart Cache", tdp: "90 W", launch: "Q1'16" },
+            { name: "E5-2643 v4", generation: "v4", cores: 6, baseClock: "3.40 GHz", turboClock: "3.70 GHz", cache: "20 MB Intel® Smart Cache", tdp: "135 W", launch: "Q1'16" },
+            { name: "E5-2648L v4", generation: "v4", cores: 14, baseClock: "1.80 GHz", turboClock: "2.50 GHz", cache: "35 MB Intel® Smart Cache", tdp: "75 W", launch: "Q1'16" },
+            { name: "E5-2650 v4", generation: "v4", cores: 12, baseClock: "2.20 GHz", turboClock: "2.90 GHz", cache: "30 MB Intel® Smart Cache", tdp: "105 W", launch: "Q1'16" },
+            { name: "E5-2650L v4", generation: "v4", cores: 14, baseClock: "1.70 GHz", turboClock: "2.50 GHz", cache: "35 MB Intel® Smart Cache", tdp: "65 W", launch: "Q1'16" },
+            { name: "E5-2658 v4", generation: "v4", cores: 14, baseClock: "2.30 GHz", turboClock: "2.80 GHz", cache: "35 MB Intel® Smart Cache", tdp: "105 W", launch: "Q1'16" },
+            { name: "E5-2660 v4", generation: "v4", cores: 14, baseClock: "2.00 GHz", turboClock: "3.20 GHz", cache: "35 MB", tdp: "105 W", launch: "Q1'16" },
+            { name: "E5-2667 v4", generation: "v4", cores: 8, baseClock: "3.20 GHz", turboClock: "3.60 GHz", cache: "25 MB Intel® Smart Cache", tdp: "135 W", launch: "Q1'16" },
+            { name: "E5-2680 v4", generation: "v4", cores: 14, baseClock: "2.40 GHz", turboClock: "3.30 GHz", cache: "35 MB Intel® Smart Cache", tdp: "120 W", launch: "Q1'16" },
+            { name: "E5-2683 v4", generation: "v4", cores: 16, baseClock: "2.10 GHz", turboClock: "3.00 GHz", cache: "40 MB Intel® Smart Cache", tdp: "120 W", launch: "Q1'16" },
+            { name: "E5-2687W v4", generation: "v4", cores: 12, baseClock: "3.00 GHz", turboClock: "3.50 GHz", cache: "30 MB Intel® Smart Cache", tdp: "160 W", launch: "Q1'16" },
+            { name: "E5-2690 v4", generation: "v4", cores: 14, baseClock: "2.60 GHz", turboClock: "3.50 GHz", cache: "35 MB Intel® Smart Cache", tdp: "135 W", launch: "Q1'16" },
+            { name: "E5-2695 v4", generation: "v4", cores: 18, baseClock: "2.10 GHz", turboClock: "3.30 GHz", cache: "45 MB Intel® Smart Cache", tdp: "120 W", launch: "Q1'16" },
+            { name: "E5-2697 v4", generation: "v4", cores: 18, baseClock: "2.30 GHz", turboClock: "3.60 GHz", cache: "45 MB Intel® Smart Cache", tdp: "145 W", launch: "Q1'16" },
+            { name: "E5-2697A v4", generation: "v4", cores: 16, baseClock: "2.60 GHz", turboClock: "3.60 GHz", cache: "40 MB Intel® Smart Cache", tdp: "145 W", launch: "Q1'16" },
+            { name: "E5-2698 v4", generation: "v4", cores: 20, baseClock: "2.20 GHz", turboClock: "3.60 GHz", cache: "50 MB Intel® Smart Cache", tdp: "135 W", launch: "Q1'16" },
+            { name: "E5-2699 v4", generation: "v4", cores: 22, baseClock: "2.20 GHz", turboClock: "3.60 GHz", cache: "55 MB Intel® Smart Cache", tdp: "145 W", launch: "Q1'16" }
+        ];
+
+        let filteredResults = [...xeonE5Database];
+        let currentSort = [];
+        let filters = {
+            name: '',
+            generation: '',
+            coresMin: null,
+            coresMax: null,
+            tdpMin: null,
+            tdpMax: null,
+            baseClockMin: null,
+            baseClockMax: null,
+            turboClockMin: null,
+            turboClockMax: null,
+            cacheMin: null,
+            cacheMax: null
+        };
+
+        function initializeApp() {
+            updateStats();
+            displayResults(filteredResults);
+
+            // 検索入力イベント
+            document.getElementById('searchInput').addEventListener('input', applyAllFilters);
+            
+            // フィルターイベント
+            document.getElementById('generationFilter').addEventListener('change', applyAllFilters);
+            document.getElementById('coresMin').addEventListener('input', applyAllFilters);
+            document.getElementById('coresMax').addEventListener('input', applyAllFilters);
+            document.getElementById('tdpMin').addEventListener('input', applyAllFilters);
+            document.getElementById('tdpMax').addEventListener('input', applyAllFilters);
+            document.getElementById('baseClockMin').addEventListener('input', applyAllFilters);
+            document.getElementById('baseClockMax').addEventListener('input', applyAllFilters);
+            document.getElementById('turboClockMin').addEventListener('input', applyAllFilters);
+            document.getElementById('turboClockMax').addEventListener('input', applyAllFilters);
+            document.getElementById('cacheMin').addEventListener('input', applyAllFilters);
+            document.getElementById('cacheMax').addEventListener('input', applyAllFilters);
+
+            // カラムヘッダーにクリックイベントを追加
+            document.addEventListener('click', function (e) {
+                // クリックされた要素またはその親要素でsortableクラスを持つものを探す
+                const sortableHeader = e.target.closest('th.sortable');
+                if (sortableHeader) {
+                    const column = sortableHeader.dataset.column;
+                    sortByColumn(column, sortableHeader);
+                }
+            });
+        }
+
+        function applyAllFilters() {
+            // フィルター値を収集
+            filters.name = document.getElementById('searchInput').value.toLowerCase().trim();
+            filters.generation = document.getElementById('generationFilter').value;
+            filters.coresMin = document.getElementById('coresMin').value ? parseInt(document.getElementById('coresMin').value) : null;
+            filters.coresMax = document.getElementById('coresMax').value ? parseInt(document.getElementById('coresMax').value) : null;
+            filters.tdpMin = document.getElementById('tdpMin').value ? parseInt(document.getElementById('tdpMin').value) : null;
+            filters.tdpMax = document.getElementById('tdpMax').value ? parseInt(document.getElementById('tdpMax').value) : null;
+            filters.baseClockMin = document.getElementById('baseClockMin').value ? parseFloat(document.getElementById('baseClockMin').value) : null;
+            filters.baseClockMax = document.getElementById('baseClockMax').value ? parseFloat(document.getElementById('baseClockMax').value) : null;
+            filters.turboClockMin = document.getElementById('turboClockMin').value ? parseFloat(document.getElementById('turboClockMin').value) : null;
+            filters.turboClockMax = document.getElementById('turboClockMax').value ? parseFloat(document.getElementById('turboClockMax').value) : null;
+            filters.cacheMin = document.getElementById('cacheMin').value ? parseInt(document.getElementById('cacheMin').value) : null;
+            filters.cacheMax = document.getElementById('cacheMax').value ? parseInt(document.getElementById('cacheMax').value) : null;
+
+            // フィルタリング実行
+            filteredResults = xeonE5Database.filter(cpu => {
+                // 名前フィルター（空欄なら全表示）
+                if (filters.name !== '') {
+                    const regex = createWildcardRegex(filters.name);
+                    const nameMatch = regex.test(cpu.name.toLowerCase()) ||
+                        cpu.name.toLowerCase().includes(filters.name);
+                    if (!nameMatch) return false;
+                }
+
+                // 世代フィルター
+                if (filters.generation && cpu.generation !== filters.generation) {
+                    return false;
+                }
+
+                // コア数フィルター
+                if (filters.coresMin !== null && cpu.cores < filters.coresMin) return false;
+                if (filters.coresMax !== null && cpu.cores > filters.coresMax) return false;
+
+                // TDPフィルター
+                const tdpValue = parseInt(cpu.tdp.replace(' W', ''));
+                if (filters.tdpMin !== null && tdpValue < filters.tdpMin) return false;
+                if (filters.tdpMax !== null && tdpValue > filters.tdpMax) return false;
+
+                // ベースクロックフィルター
+                const baseClockValue = parseFloat(cpu.baseClock.replace(' GHz', ''));
+                if (filters.baseClockMin !== null && baseClockValue < filters.baseClockMin) return false;
+                if (filters.baseClockMax !== null && baseClockValue > filters.baseClockMax) return false;
+
+                // ターボクロックフィルター
+                if (cpu.turboClock && cpu.turboClock !== '') {
+                    const turboClockValue = parseFloat(cpu.turboClock.replace(' GHz', ''));
+                    if (filters.turboClockMin !== null && turboClockValue < filters.turboClockMin) return false;
+                    if (filters.turboClockMax !== null && turboClockValue > filters.turboClockMax) return false;
+                } else {
+                    if (filters.turboClockMin !== null || filters.turboClockMax !== null) return false;
+                }
+
+                // キャッシュフィルター
+                const cacheMatch = cpu.cache.match(/(\d+)\s*MB/);
+                if (cacheMatch) {
+                    const cacheValue = parseInt(cacheMatch[1]);
+                    if (filters.cacheMin !== null && cacheValue < filters.cacheMin) return false;
+                    if (filters.cacheMax !== null && cacheValue > filters.cacheMax) return false;
+                }
+
+                return true;
+            });
+
+            // 現在のソート設定を適用
+            applySorting();
+            updateActiveFilters();
+            updateStats();
+            displayResults(filteredResults);
+        }
+
+        function createWildcardRegex(query) {
+            // *をワイルドカードとして扱う
+            if (query.includes('*')) {
+                // 特殊文字をエスケープし、*を.*に変換
+                const escapedQuery = query
+                    .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // 特殊文字をエスケープ
+                    .replace(/\*/g, '.*'); // *を.*に変換
+
+                return new RegExp(escapedQuery, 'i');
+            } else {
+                // *が含まれていない場合は部分一致
+                return new RegExp(query.replace(/[.+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            }
+        }
+
+        function sortByColumn(column, headerElement) {
+            const existingSort = currentSort.find(s => s.column === column);
+            
+            if (existingSort) {
+                // 既存のソートを更新
+                if (existingSort.direction === 'desc') {
+                    existingSort.direction = 'asc';
+                    headerElement.classList.remove('sort-desc');
+                    headerElement.classList.add('sort-asc');
+                } else {
+                    // ソートを削除
+                    currentSort = currentSort.filter(s => s.column !== column);
+                    headerElement.classList.remove('sort-asc');
+                }
+            } else {
+                // 新しいソートを追加（Shiftキーで複数ソート、それ以外は単一ソート）
+                if (!event.shiftKey) {
+                    // 既存のソートをクリア
+                    document.querySelectorAll('th.sortable').forEach(th => {
+                        th.classList.remove('sort-desc', 'sort-asc');
+                    });
+                    currentSort = [];
+                }
+                
+                currentSort.push({ column: column, direction: 'desc' });
+                headerElement.classList.add('sort-desc');
+            }
+
+            applySorting();
+            displayResults(filteredResults);
+            updateActiveFilters();
+        }
+
+        function applySorting() {
+            if (currentSort.length === 0) return;
+
+            filteredResults.sort((a, b) => {
+                for (const sort of currentSort) {
+                    let valueA, valueB;
+
+                    switch (sort.column) {
+                        case 'name':
+                            valueA = a.name.toLowerCase();
+                            valueB = b.name.toLowerCase();
+                            break;
+                        case 'generation':
+                            // v1, v2, v3, v4 の順序を保持
+                            const genOrder = { 'v1': 1, 'v2': 2, 'v3': 3, 'v4': 4 };
+                            valueA = genOrder[a.generation] || 0;
+                            valueB = genOrder[b.generation] || 0;
+                            break;
+                        case 'cores':
+                            valueA = a.cores;
+                            valueB = b.cores;
+                            break;
+                        case 'baseClock':
+                            valueA = parseFloat(a.baseClock.replace(' GHz', ''));
+                            valueB = parseFloat(b.baseClock.replace(' GHz', ''));
+                            break;
+                        case 'turboClock':
+                            valueA = a.turboClock ? parseFloat(a.turboClock.replace(' GHz', '')) : 0;
+                            valueB = b.turboClock ? parseFloat(b.turboClock.replace(' GHz', '')) : 0;
+                            break;
+                        case 'cache':
+                            const cacheMatchA = a.cache.match(/(\d+)\s*MB/);
+                            const cacheMatchB = b.cache.match(/(\d+)\s*MB/);
+                            valueA = cacheMatchA ? parseInt(cacheMatchA[1]) : 0;
+                            valueB = cacheMatchB ? parseInt(cacheMatchB[1]) : 0;
+                            break;
+                        case 'tdp':
+                            valueA = parseInt(a.tdp.replace(' W', ''));
+                            valueB = parseInt(b.tdp.replace(' W', ''));
+                            break;
+                        case 'launch':
+                            valueA = a.launch;
+                            valueB = b.launch;
+                            break;
+                        default:
+                            valueA = a[sort.column];
+                            valueB = b[sort.column];
+                    }
+
+                    let compareResult;
+                    if (sort.direction === 'desc') {
+                        compareResult = valueA < valueB ? 1 : valueA > valueB ? -1 : 0;
+                    } else {
+                        compareResult = valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+                    }
+
+                    if (compareResult !== 0) {
+                        return compareResult;
+                    }
+                }
+                return 0;
+            });
+        }
+
+        function clearAllFilters() {
+            // すべてのフィルターをクリア
+            document.getElementById('searchInput').value = '';
+            document.getElementById('generationFilter').value = '';
+            document.getElementById('coresMin').value = '';
+            document.getElementById('coresMax').value = '';
+            document.getElementById('tdpMin').value = '';
+            document.getElementById('tdpMax').value = '';
+            document.getElementById('baseClockMin').value = '';
+            document.getElementById('baseClockMax').value = '';
+            document.getElementById('turboClockMin').value = '';
+            document.getElementById('turboClockMax').value = '';
+            document.getElementById('cacheMin').value = '';
+            document.getElementById('cacheMax').value = '';
+
+            // ソート状態をクリア
+            currentSort = [];
+            document.querySelectorAll('th.sortable').forEach(th => {
+                th.classList.remove('sort-desc', 'sort-asc');
+            });
+
+            // フィルターオブジェクトをリセット
+            filters = {
+                name: '',
+                generation: '',
+                coresMin: null,
+                coresMax: null,
+                tdpMin: null,
+                tdpMax: null,
+                baseClockMin: null,
+                baseClockMax: null,
+                turboClockMin: null,
+                turboClockMax: null,
+                cacheMin: null,
+                cacheMax: null
+            };
+
+            filteredResults = [...xeonE5Database];
+            updateActiveFilters();
+            updateStats();
+            displayResults(filteredResults);
+            document.getElementById('searchInput').focus();
+        }
+
+        function updateStats() {
+            const totalCount = xeonE5Database.length;
+            const matchCount = filteredResults.length;
+            const generationCount = [...new Set(filteredResults.map(cpu => cpu.generation))].length;
+
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('matchCount').textContent = matchCount;
+            document.getElementById('generationCount').textContent = generationCount;
+        }
+
+        function displayResults(results) {
+            const container = document.getElementById('resultsContainer');
+
+            if (results.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <i>🔍</i>
+                        <h3>条件に一致するCPUが見つかりません</h3>
+                        <p>フィルター条件を調整してください</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // ヘッダーにソート状態を反映
+            const headers = [];
+            const columns = [
+                { key: 'name', label: 'CPU名', mobileLabel: 'CPU' },
+                { key: 'generation', label: '世代', mobileLabel: '世代' },
+                { key: 'cores', label: 'コア', mobileLabel: 'コア' },
+                { key: 'baseClock', label: 'ベースクロック', mobileLabel: 'Base' },
+                { key: 'turboClock', label: 'ターボクロック', mobileLabel: 'Turbo' },
+                { key: 'cache', label: 'キャッシュ', mobileLabel: 'Cache' },
+                { key: 'tdp', label: 'TDP', mobileLabel: 'TDP' },
+                { key: 'launch', label: '発売日', mobileLabel: '発売' }
+            ];
+
+            columns.forEach(col => {
+                const sort = currentSort.find(s => s.column === col.key);
+                const sortIndex = sort ? currentSort.indexOf(sort) + 1 : null;
+                const sortClass = sort ? (sort.direction === 'desc' ? 'sort-desc' : 'sort-asc') : '';
+                const sortIndicator = sortIndex ? `<span class="sort-indicator">${sortIndex}</span>` : '';
+                
+                headers.push(`<th class="sortable ${sortClass}" data-column="${col.key}"><div><span class="desktop-label">${col.label}</span><span class="mobile-label">${col.mobileLabel}</span>${sortIndicator}</div></th>`);
+            });
+
+            const tableHtml = `
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                ${headers.join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${results.map(cpu => `
+                                <tr>
+                                    <td class="cpu-name-cell">Intel Xeon ${cpu.name}</td>
+                                    <td><span class="generation-badge">${cpu.generation}</span></td>
+                                    <td class="cores-cell">${cpu.cores}</td>
+                                    <td class="clock-cell">${cpu.baseClock}</td>
+                                    <td class="clock-cell">${cpu.turboClock || '-'}</td>
+                                    <td class="cache-cell">${cpu.cache}</td>
+                                    <td class="tdp-cell">${cpu.tdp}</td>
+                                    <td>${cpu.launch}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            container.innerHTML = tableHtml;
+
+            // フッターに免責事項を追加
+            if (!document.getElementById('disclaimerFooter')) {
+                const footer = document.createElement('div');
+                footer.id = 'disclaimerFooter';
+                footer.style.cssText = `
+                    text-align: center;
+                    padding: 20px;
+                    margin-top: 30px;
+                    color: #666;
+                    font-size: 12px;
+                    line-height: 1.6;
+                    border-top: 1px solid #eee;
+                `;
+                footer.innerHTML = `
+                    <p>※ 掲載されているCPU情報は参考値です。正確な仕様については<a href="https://ark.intel.com" target="_blank">Intel ARK</a>をご確認ください。<br>
+                    <span style="font-size: 11px;">* CPU information provided is for reference only. Please refer to <a href="https://ark.intel.com" target="_blank">Intel ARK</a> for accurate specifications.</span></p>
+                    <p>本システムの使用により生じたいかなる損害についても責任を負いません。<br>
+                    <span style="font-size: 11px;">The developer is not liable for any damages arising from the use of this system.</span></p>
+                    <p style="margin-top: 10px; font-size: 11px;">Intel® Xeon®はIntel Corporationの商標です。 / Intel® Xeon® is a trademark of Intel Corporation.</p>
+                `;
+                document.querySelector('.container').appendChild(footer);
+            }
+        }
+
+        function updateActiveFilters() {
+            const activeFiltersEl = document.getElementById('activeFilters');
+            const activeFilterTags = [];
+
+            // 名前フィルター
+            if (filters.name) {
+                activeFilterTags.push(`<div class="filter-tag">名前: ${filters.name} <button onclick="clearFilter('name')">×</button></div>`);
+            }
+
+            // 世代フィルター
+            if (filters.generation) {
+                activeFilterTags.push(`<div class="filter-tag">世代: ${filters.generation} <button onclick="clearFilter('generation')">×</button></div>`);
+            }
+
+            // 範囲フィルター
+            if (filters.coresMin !== null || filters.coresMax !== null) {
+                const min = filters.coresMin !== null ? filters.coresMin : '―';
+                const max = filters.coresMax !== null ? filters.coresMax : '―';
+                activeFilterTags.push(`<div class="filter-tag">コア: ${min}～${max} <button onclick="clearFilter('cores')">×</button></div>`);
+            }
+
+            if (filters.tdpMin !== null || filters.tdpMax !== null) {
+                const min = filters.tdpMin !== null ? filters.tdpMin : '―';
+                const max = filters.tdpMax !== null ? filters.tdpMax : '―';
+                activeFilterTags.push(`<div class="filter-tag">TDP: ${min}～${max}W <button onclick="clearFilter('tdp')">×</button></div>`);
+            }
+
+            if (filters.baseClockMin !== null || filters.baseClockMax !== null) {
+                const min = filters.baseClockMin !== null ? filters.baseClockMin : '―';
+                const max = filters.baseClockMax !== null ? filters.baseClockMax : '―';
+                activeFilterTags.push(`<div class="filter-tag">ベース: ${min}～${max}GHz <button onclick="clearFilter('baseClock')">×</button></div>`);
+            }
+
+            if (filters.turboClockMin !== null || filters.turboClockMax !== null) {
+                const min = filters.turboClockMin !== null ? filters.turboClockMin : '―';
+                const max = filters.turboClockMax !== null ? filters.turboClockMax : '―';
+                activeFilterTags.push(`<div class="filter-tag">ターボ: ${min}～${max}GHz <button onclick="clearFilter('turboClock')">×</button></div>`);
+            }
+
+            if (filters.cacheMin !== null || filters.cacheMax !== null) {
+                const min = filters.cacheMin !== null ? filters.cacheMin : '―';
+                const max = filters.cacheMax !== null ? filters.cacheMax : '―';
+                activeFilterTags.push(`<div class="filter-tag">キャッシュ: ${min}～${max}MB <button onclick="clearFilter('cache')">×</button></div>`);
+            }
+
+            // ソート情報
+            if (currentSort.length > 0) {
+                const sortLabels = {
+                    'name': 'CPU名',
+                    'generation': '世代',
+                    'cores': 'コア',
+                    'baseClock': 'ベースクロック',
+                    'turboClock': 'ターボクロック',
+                    'cache': 'キャッシュ',
+                    'tdp': 'TDP',
+                    'launch': '発売日'
+                };
+                
+                currentSort.forEach((sort, index) => {
+                    const direction = sort.direction === 'desc' ? '降順' : '昇順';
+                    activeFilterTags.push(`<div class="filter-tag">ソート${index + 1}: ${sortLabels[sort.column]} ${direction} <button onclick="clearSort('${sort.column}')">×</button></div>`);
+                });
+            }
+
+            activeFiltersEl.innerHTML = activeFilterTags.join('');
+        }
+
+        function clearFilter(filterType) {
+            switch (filterType) {
+                case 'name':
+                    document.getElementById('searchInput').value = '';
+                    break;
+                case 'generation':
+                    document.getElementById('generationFilter').value = '';
+                    break;
+                case 'cores':
+                    document.getElementById('coresMin').value = '';
+                    document.getElementById('coresMax').value = '';
+                    break;
+                case 'tdp':
+                    document.getElementById('tdpMin').value = '';
+                    document.getElementById('tdpMax').value = '';
+                    break;
+                case 'baseClock':
+                    document.getElementById('baseClockMin').value = '';
+                    document.getElementById('baseClockMax').value = '';
+                    break;
+                case 'turboClock':
+                    document.getElementById('turboClockMin').value = '';
+                    document.getElementById('turboClockMax').value = '';
+                    break;
+                case 'cache':
+                    document.getElementById('cacheMin').value = '';
+                    document.getElementById('cacheMax').value = '';
+                    break;
+            }
+            applyAllFilters();
+        }
+
+        function clearSort(column) {
+            currentSort = currentSort.filter(s => s.column !== column);
+            const header = document.querySelector(`th[data-column="${column}"]`);
+            if (header) {
+                header.classList.remove('sort-desc', 'sort-asc');
+            }
+            applySorting();
+            displayResults(filteredResults);
+            updateActiveFilters();
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+
+</html>
