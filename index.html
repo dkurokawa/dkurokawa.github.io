@@ -175,6 +175,40 @@
 </div>
   <!-- summaries end -->
   
+  <!-- API一覧セクション -->
+  <div style="margin: 60px 0; text-align: center; max-width: 1200px; width: 100%;">
+    <h2 style="font-size: 1.8rem; margin-bottom: 30px;">🌍 PPN Hub API カタログ</h2>
+    <div style="background: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+      <div id="api-stats" style="display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;">
+        <div style="background: #f0f9ff; padding: 15px 25px; border-radius: 8px;">
+          <div style="font-size: 2rem; font-weight: bold; color: #0284c7;">-</div>
+          <div style="font-size: 0.9rem; color: #666;">合計 API</div>
+        </div>
+        <div style="background: #f0fdf4; padding: 15px 25px; border-radius: 8px;">
+          <div style="font-size: 2rem; font-weight: bold; color: #16a34a;">-</div>
+          <div style="font-size: 0.9rem; color: #666;">本番稼働</div>
+        </div>
+        <div style="background: #fef3c7; padding: 15px 25px; border-radius: 8px;">
+          <div style="font-size: 2rem; font-weight: bold; color: #ca8a04;">-</div>
+          <div style="font-size: 0.9rem; color: #666;">開発中</div>
+        </div>
+        <div style="background: #fae8ff; padding: 15px 25px; border-radius: 8px;">
+          <div style="font-size: 2rem; font-weight: bold; color: #a855f7;">-</div>
+          <div style="font-size: 0.9rem; color: #666;">グループ</div>
+        </div>
+      </div>
+
+      <div id="api-groups" style="text-align: left;">
+        <p style="text-align: center; color: #999;">読み込み中...</p>
+      </div>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; color: #666; font-size: 0.9rem;">
+        <p style="margin: 5px 0;">🧪 <strong>ベータテスト中</strong> - 全API無料でご利用いただけます</p>
+        <p style="margin: 5px 0;">課金機能は未実装（PayPal Business統合予定）</p>
+      </div>
+    </div>
+  </div>
+
   <div style="margin: 40px 0; text-align: center;">
     <h2 style="font-size: 1.5rem; margin-bottom: 20px;">ツール</h2>
     <ul style="list-style: none; padding: 0; display: flex; gap: 24px; justify-content: center;">
@@ -196,10 +230,109 @@
           button.textContent = 'コピー';
           button.classList.remove('copied');
         }, 2000);
-      }).catch(function(err) {
-        console.error('コピーに失敗しました:', err);
+      }).catch(function() {
+        console.error('コピーに失敗しました');
       });
     }
+
+    // API一覧をローカルデータから読み込み（将来的にはproduct-managerのエンドポイントから取得）
+    async function loadAPIData() {
+      try {
+        // デモ用：ローカルデータ（将来的にはfetch()で取得）
+        const apiData = {
+          totalApis: 32,
+          activeApis: 31,
+          developmentApis: 1,
+          totalGroups: 8,
+          groups: [
+            {
+              id: 'alert-jp',
+              name: 'Alert-JP',
+              description: '日本緊急速報配信サービス',
+              domain: 'alert-jp.org',
+              apis: [
+                { name: 'Alert-JP API', status: 'active', description: '日本の緊急速報をリアルタイム配信', endpoint: 'https://api.alert-jp.org' }
+              ]
+            },
+            {
+              id: 'harmonias',
+              name: 'Harmonias',
+              description: 'エネルギー分析APIプラットフォーム',
+              domain: 'harmonias.org',
+              apis: [
+                { name: 'Solaria', status: 'active', description: '太陽光発電最適化', endpoint: 'https://solaria.harmonias.org' },
+                { name: 'Windaria', status: 'active', description: '風力発電最適化', endpoint: 'https://windaria.harmonias.org' },
+                { name: 'Hydria', status: 'active', description: '水力発電最適化', endpoint: 'https://hydria.harmonias.org' },
+                { name: 'Geothermia', status: 'active', description: '地熱発電最適化', endpoint: 'https://geothermia.harmonias.org' },
+                { name: 'Gasturbia', status: 'active', description: 'ガス火力最適化', endpoint: 'https://gasturbia.harmonias.org' },
+                { name: 'Biomassia', status: 'active', description: 'バイオマス最適化', endpoint: 'https://biomassia.harmonias.org' },
+                { name: 'Reactoria', status: 'active', description: '原子力安全評価', endpoint: 'https://reactoria.harmonias.org' }
+              ]
+            },
+            {
+              id: 'earth-ppn',
+              name: 'Earth PPN',
+              description: '地球科学統合データプラットフォーム',
+              domain: 'ppn-hub.com',
+              apis: [
+                { name: 'Terra', status: 'active', description: '植生・バイオーム評価', endpoint: 'https://terra.ppn-hub.com' },
+                { name: 'Hydros', status: 'active', description: '水資源・水文学', endpoint: 'https://hydros.ppn-hub.com' },
+                { name: 'Atmos', status: 'active', description: '大気環境評価', endpoint: 'https://atmos.ppn-hub.com' },
+                { name: 'Lithos', status: 'active', description: 'テロワール適性評価（土壌・気候・地形）', endpoint: 'https://lithos.ppn-hub.com/api' }
+              ]
+            },
+            {
+              id: 'sakurahub',
+              name: 'SakuraHub',
+              description: '日本特化型APIプラットフォーム',
+              domain: 'sakurahub.org',
+              apis: [
+                { name: 'Address API', status: 'active', description: '日本住所統合API', endpoint: 'https://address.sakurahub.org' },
+                { name: 'Landmark API', status: 'active', description: 'ランドマーク検索API', endpoint: 'https://landmark.sakurahub.org' },
+                { name: 'FoodSense', status: 'active', description: 'AI食品分析API（20ヶ国対応、8言語翻訳）', endpoint: 'https://foodsense.sakurahub.org' },
+                { name: 'SchoolGuard', status: 'development', description: '学校エリア判定API', endpoint: 'https://schoolguard.sakurahub.org' }
+              ]
+            }
+          ]
+        };
+
+        // 統計情報を更新
+        document.querySelectorAll('#api-stats > div')[0].querySelector('div').textContent = apiData.totalApis;
+        document.querySelectorAll('#api-stats > div')[1].querySelector('div').textContent = apiData.activeApis;
+        document.querySelectorAll('#api-stats > div')[2].querySelector('div').textContent = apiData.developmentApis;
+        document.querySelectorAll('#api-stats > div')[3].querySelector('div').textContent = apiData.totalGroups;
+
+        // APIグループを表示
+        const groupsHtml = apiData.groups.map(group => `
+          <div style="margin-bottom: 30px; padding: 20px; background: #fafafa; border-radius: 8px;">
+            <h3 style="margin: 0 0 10px 0; color: #0284c7; font-size: 1.3rem;">
+              ${group.name}
+              <span style="font-size: 0.85rem; color: #666; font-weight: normal;">(${group.domain})</span>
+            </h3>
+            <p style="margin: 0 0 15px 0; color: #666; font-size: 0.95rem;">${group.description}</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;">
+              ${group.apis.map(api => `
+                <div style="background: #fff; padding: 12px; border-radius: 6px; border-left: 3px solid ${api.status === 'active' ? '#16a34a' : '#ca8a04'};">
+                  <div style="font-weight: 600; margin-bottom: 5px; display: flex; align-items: center; gap: 8px;">
+                    ${api.status === 'active' ? '✅' : '🔄'} ${api.name}
+                  </div>
+                  <div style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">${api.description}</div>
+                  ${api.endpoint ? `<a href="${api.endpoint}" target="_blank" style="font-size: 0.8rem; color: #0284c7; text-decoration: none;">→ エンドポイント</a>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `).join('');
+
+        document.getElementById('api-groups').innerHTML = groupsHtml;
+      } catch (error) {
+        document.getElementById('api-groups').innerHTML = '<p style="text-align: center; color: #ef4444;">API一覧の読み込みに失敗しました</p>';
+        console.error('API一覧の読み込みエラー:', error);
+      }
+    }
+
+    // ページ読み込み時に実行
+    document.addEventListener('DOMContentLoaded', loadAPIData);
   </script>
   
   <div style="text-align: center; margin-top: 40px; padding: 20px 0; color: #666; font-size: 0.9rem;">
