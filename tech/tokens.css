@@ -1,0 +1,48 @@
+/* Hallmark · genre: editorial · macrostructure: Long Document · theme: Almanac (JP-adapted · Shippori Mincho + IBM Plex Sans JP) · enrichment: none · nav: N9 · footer: Ft4 */
+:root {
+  /* paper — warm washi, anchor hue 80 (warm) */
+  --color-paper:       oklch(96.5% 0.009 80);
+  --color-paper-2:     oklch(93.5% 0.012 80);
+  --color-rule:        oklch(84% 0.012 70);
+  --color-rule-strong: oklch(60% 0.014 60);
+  --color-neutral:     oklch(55% 0.012 60);
+  --color-muted:       oklch(42% 0.015 50);
+  --color-ink:         oklch(21% 0.014 45);
+  /* accent — shu (vermilion), one hue only */
+  --color-accent:      oklch(55% 0.19 35);
+  --color-accent-deep: oklch(45% 0.16 35);
+  --color-focus:       oklch(50% 0.17 35);
+
+  --font-display: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-body:    "IBM Plex Sans JP", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+  /* type scale — major third (1.25) on 16px */
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-md:   1.25rem;
+  --text-lg:   1.5625rem;
+  --text-xl:   1.9531rem;
+  --text-2xl:  2.4414rem;
+  --text-display: clamp(2.3rem, 3.2vw + 1.2rem, 3.4rem);
+
+  /* 4pt spacing scale */
+  --space-2xs: 0.25rem;
+  --space-xs:  0.5rem;
+  --space-sm:  0.75rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:     cubic-bezier(0.7, 0, 0.84, 0);
+  --dur-micro:   120ms;
+  --dur-short:   220ms;
+
+  --rule-hairline: 1px solid var(--color-rule);
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --measure: 44rem;
+  --measure-wide: 60rem;
+}

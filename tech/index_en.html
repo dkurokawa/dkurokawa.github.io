@@ -4,587 +4,298 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tech Portfolio - Daisuke Kurokawa</title>
-  <style>
-    :root {
-      --primary-color: #1a73e8;
-      --success-color: #0d9488;
-      --warning-color: #ea580c;
-      --info-color: #6366f1;
-      --bg-light: #f8f9fa;
-      --bg-white: #ffffff;
-      --text-primary: #1f2937;
-      --text-secondary: #6b7280;
-      --border-color: #e5e7eb;
-      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-primary);
-      line-height: 1.6;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(135deg, var(--primary-color), var(--info-color));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .subtitle {
-      font-size: 1.25rem;
-      color: var(--text-secondary);
-      margin-bottom: 2rem;
-    }
-
-    .lang-switch {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-    }
-
-    .lang-switch a {
-      color: var(--primary-color);
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border: 1px solid var(--primary-color);
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-
-    .lang-switch a:hover {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    .section {
-      margin-bottom: 3rem;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .section-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 1rem;
-      font-size: 1.5rem;
-    }
-
-    .section-icon.achievements {
-      background-color: rgba(13, 148, 136, 0.1);
-      color: var(--success-color);
-    }
-
-    .section-icon.wip {
-      background-color: rgba(234, 88, 12, 0.1);
-      color: var(--warning-color);
-    }
-
-    .section-icon.interests {
-      background-color: rgba(99, 102, 241, 0.1);
-      color: var(--info-color);
-    }
-
-    h2 {
-      font-size: 1.75rem;
-      font-weight: 600;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .project-card {
-      background: var(--bg-white);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.3s ease;
-      border: 1px solid var(--border-color);
-    }
-
-    .project-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
-    }
-
-    .project-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1rem;
-    }
-
-    .project-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .project-version {
-      font-size: 0.875rem;
-      padding: 0.25rem 0.75rem;
-      background-color: var(--bg-light);
-      border-radius: 20px;
-      color: var(--text-secondary);
-    }
-
-    .project-env {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      margin-bottom: 0.5rem;
-    }
-
-    .project-description {
-      color: var(--text-primary);
-      margin-bottom: 1rem;
-      line-height: 1.5;
-    }
-
-    .project-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .btn {
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      font-size: 0.875rem;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .btn-primary {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background-color: #1557b0;
-    }
-
-    .btn-secondary {
-      background-color: var(--bg-light);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-    }
-
-    .btn-secondary:hover {
-      background-color: #e5e7eb;
-    }
-
-    .install-command {
-      font-family: monospace;
-      background-color: #f3f4f6;
-      padding: 0.75rem 1rem;
-      border-radius: 6px;
-      margin: 0.75rem 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.875rem;
-    }
-
-    .copy-btn {
-      background-color: #e5e7eb;
-      border: none;
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.75rem;
-      transition: all 0.2s;
-    }
-
-    .copy-btn:hover {
-      background-color: #d1d5db;
-    }
-
-    .copy-btn.copied {
-      background-color: var(--success-color);
-      color: white;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      background-color: var(--bg-light);
-      border-radius: 20px;
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      margin-right: 0.5rem;
-    }
-
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-
-    .status-active {
-      background-color: rgba(13, 148, 136, 0.1);
-      color: var(--success-color);
-    }
-
-    .status-wip {
-      background-color: rgba(234, 88, 12, 0.1);
-      color: var(--warning-color);
-    }
-
-    .status-planned {
-      background-color: rgba(99, 102, 241, 0.1);
-      color: var(--info-color);
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 4rem;
-      padding: 2rem 0;
-      border-top: 1px solid var(--border-color);
-      color: var(--text-secondary);
-    }
-
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .social-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .social-links a:hover {
-      color: var(--primary-color);
-    }
-
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-      .lang-switch {
-        position: static;
-        text-align: center;
-        margin-bottom: 1rem;
-      }
-    }
-  </style>
+  <meta name="description" content="Daisuke Kurokawa (dkurokawa) — AI × Full-stack Engineer. Personal work building LLM / RAG / multi-agent systems into real products, with professional experience across web, mobile, and infrastructure.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="dossier.css">
 </head>
 <body>
-  <div class="lang-switch">
-    <a href="index.html">日本語</a>
-  </div>
-  
-  <div class="container">
-    <header>
-      <h1>Tech Portfolio</h1>
-      <p class="subtitle">Work + Personal Projects + OSS</p>
+  <div class="stage">
+    <header class="nav-edge">
+      <a class="wordmark" href="https://github.com/dkurokawa">dkurokawa</a>
+      <a class="lang" href="index.html">日本語</a>
     </header>
 
-    <section class="section">
-      <div class="section-header">
-        <div class="section-icon achievements">💼</div>
-        <h2>Work</h2>
-      </div>
-      
-      <div class="projects-grid">
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">Used Car Auction Platform</h3>
-            <span class="status-badge status-active">● Active</span>
-          </div>
-          <div class="project-env">Current Work · KATIX Inc.</div>
-          <p class="project-description">
-            Development and operation of a used car auction platform using an image assessment system. Responsible for environment setup, feature additions, AI image inspection, and leading data lake construction.
-          </p>
-          <div class="project-actions">
-            <span class="tag">Next.js</span>
-            <span class="tag">AWS</span>
-            <span class="tag">AI Inference</span>
-          </div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">Game Development & Operations</h3>
-          </div>
-          <div class="project-env">Work History · GREE</div>
-          <p class="project-description">
-            Development and operation of high-availability social games from frontend to server-side. Responsible for new feature additions, load management, automation setup, and refactoring.
-          </p>
-          <div class="project-actions">
-            <span class="tag">PHP7</span>
-            <span class="tag">Flare</span>
-            <span class="tag">AWS</span>
-          </div>
-        </div>
-
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">In-house Software Development for Toyota</h3>
-          </div>
-          <div class="project-env">Work History · Toyota Communication Systems</div>
-          <p class="project-description">
-            Details are confidential due to internal software. Responsible for acceptance testing and partial development of Windows desktop applications.
-          </p>
-          <div class="project-actions">
-            <span class="tag">Windows</span>
-            <span class="tag">VC++</span>
-          </div>
-        </div>
-
+    <main class="doc">
+      <div class="masthead">
+        <p class="kana">黒川 大輔</p>
+        <h1>Daisuke Kurokawa<span class="seal" aria-hidden="true"></span></h1>
+        <p class="role">AI × Full-stack Engineer</p>
+        <p class="lede">
+          I wrote my first BASIC on a programmable calculator at age ten, and I still write code every day.
+          Professionally I have shipped across PS / GBC native, iOS / Android, AWS, and the Cloudflare edge.
+          These days my personal work focuses on <strong>building LLM / RAG / multi-agent systems into real products</strong> —
+          not stopping at PoC, but getting things live and public.
+        </p>
       </div>
 
-    </section>
+      <!-- Live demo -->
+      <section>
+        <h2>Running now</h2>
+        <p class="section-note">Personal projects currently live in production. Numbers can be checked live on the dashboard.</p>
 
-    <section class="section">
-      <div class="section-header">
-        <div class="section-icon achievements">💼</div>
-        <h2>Personal Projects</h2>
-      </div>
-      
-      <div class="projects-grid">
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">Commercial API Development & Operations</h3>
-            <span class="status-badge status-active">● Partial Trial Operation</span>
-          </div>
-          <div class="project-env">In Development · B2B/C</div>
-          <p class="project-description">
-            Developing and operating multiple commercial APIs. Implementing scalable microservice architecture for high availability and performance. Also used by personal development apps.
+        <div class="entry">
+          <h3>paper-pipeline <span class="status on">running</span></h3>
+          <p class="env">6-stage RAG pipeline / personal project</p>
+          <p>
+            A RAG pipeline that continuously collects large volumes of documents and — instead of passing them
+            to an LLM whole — decomposes them and structures, verifies, and synthesizes them step by step with
+            <strong>local LLMs</strong>. Every AI inference stage runs entirely on LLMs at home.
           </p>
-          <div class="project-actions">
-            <span class="tag">API Development</span>
-            <span class="tag">CloudFlare</span>
-            <span class="tag">Grafana Cloud</span>
-          </div>
         </div>
+      </section>
 
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">◯◯◯◯ Management App Development</h3>
-            <span class="status-badge status-wip">● In Development</span>
+      <div class="breakout">
+        <div class="statline">
+          <div class="stat">
+            <span class="n">84k</span>
+            <span class="l">documents verified (and growing)</span>
           </div>
-          <div class="project-env">Cross-platform</div>
-          <p class="project-description">
-            Still under wraps. An unprecedented ◯◯◯◯ management app that works on iOS, Android, and Web. Aiming to achieve both flexible usability and high performance through various APIs.
-          </p>
-          <div class="project-actions">
-            <span class="tag">React Native + Expo</span>
-            <span class="tag">Next.js + React</span>
+          <div class="stat">
+            <span class="n">39k</span>
+            <span class="l">AI-synthesized (and growing)</span>
           </div>
         </div>
       </div>
 
-    </section>
+      <p class="go">
+        <a class="link" href="https://paper-pipeline.ppn-hub.com/viewer" target="_blank" rel="noopener">Live Viewer →</a>
+        <a class="link" href="https://paper-pipeline.ppn-hub.com/docs" target="_blank" rel="noopener">/docs (OpenAPI) →</a>
+      </p>
+      <p class="stack">Cloudflare Workers · Ollama (llama4 MoE / llama3.1) · Neon · R2 · Hono / TS</p>
 
-    <!-- Achievements -->
-    <section class="section">
-      <div class="section-header">
-        <div class="section-icon achievements">✓</div>
-        <h2>Achievements & Published Projects</h2>
-      </div>
-      <div class="projects-grid">
-        <!-- Portman -->
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">Portman</h3>
-            <span class="project-version">v1.4.0</span>
-          </div>
-          <div class="project-env">CLI Tool (macOS, Linux)</div>
-          <p class="project-description">
-            Port arbitration tool. Prevents port conflicts in development environments and automatically manages port numbers between projects. Integration with Claude code has been verified.
+      <!-- Personal projects -->
+      <section>
+        <h2>Personal projects</h2>
+        <p class="section-note">AI-driven development in earnest, growing several projects in parallel.</p>
+
+        <div class="entry">
+          <h3>PPN — Planetary Prosperity Network</h3>
+          <p class="env">B2B AI API family</p>
+          <p>
+            A multi-domain family of commercial APIs covering air, water, seismic, weather, environmental
+            energy, and more. Built as microservices on Cloudflare Workers and operated with availability
+            and observability in mind. Also consumed by my own apps.
           </p>
-          <div class="install-command">
+          <p class="stack">Cloudflare Workers · Neon · R2 · Hono / TS · Grafana Cloud</p>
+        </div>
+
+        <div class="entry">
+          <h3>AI inference router</h3>
+          <p class="env">Multi-provider failover</p>
+          <p>
+            Routes each job — as appropriate — between local LLMs (vLLM / Ollama on the Mac Studio and
+            a custom PC) and external APIs (Workers AI / Gemini / GPT / Claude), failing over as needed.
+            Work that local LLMs can handle stays local to keep costs down; external APIs take the rest.
+          </p>
+          <p class="stack">TypeScript · Cloudflare Workers · Local LLM (Mac Studio / RTX 5080) · Workers AI · Gemini / GPT / Claude</p>
+        </div>
+
+        <div class="entry">
+          <h3>green-path <span class="status">in development</span></h3>
+          <p class="env">Camera × plant recognition, mobile app</p>
+          <p>
+            An Expo app that recognizes plants through the camera. Trying on-device Qwen3-VL inference,
+            falling back to Workers AI when accuracy falls short — a hybrid setup.
+          </p>
+          <p class="stack">React Native + Expo · ONNX · Workers AI</p>
+        </div>
+
+        <div class="entry">
+          <h3>ppn-ci</h3>
+          <p class="env">Multi-stage AI code review</p>
+          <p>
+            Multi-stage review by Director + Architect + Gatekeeper + Auditor. An experimental CI aid that
+            uses merged PRs as few-shot examples to sharpen its review perspectives.
+          </p>
+          <p class="stack">TypeScript · high-accuracy = GPT-5.6 sol / routine = cheaper model (in flux)</p>
+        </div>
+      </section>
+
+      <!-- Career -->
+      <section>
+        <h2>Career</h2>
+        <p class="section-note">Recent roles first. The full timeline is on LinkedIn.</p>
+
+        <div class="entry">
+          <h3>KATIX Inc. <span class="status on">current</span></h3>
+          <p class="env">2024/08— / Lead Engineer</p>
+          <p>
+            Development and operation of a used-car auction platform built on image-based assessment.
+            Feature work, plus involvement in AI image inspection and the data-lake side.
+          </p>
+          <p class="stack">Next.js · TypeScript · AWS · AI inference</p>
+        </div>
+
+        <div class="entry">
+          <h3>Kusurino-Madoguchi Inc.</h3>
+          <p class="env">2023/04—2024/08 / Lead Engineer</p>
+          <p>
+            Led product development in the medical / healthcare domain, working across multiple layers:
+            server-side (PHP), QA, and Unity + TypeScript.
+          </p>
+          <p class="stack">PHP · TypeScript · Unity · QA</p>
+        </div>
+
+        <div class="entry">
+          <h3>GREE, Inc.</h3>
+          <p class="env">2012—2023 / frontend — server — infrastructure</p>
+          <p>
+            Developed and operated high-availability social games across frontend, server-side, and
+            infrastructure. New features, load countermeasures, automation, refactoring, and GitHub
+            Enterprise operations.
+          </p>
+          <p class="stack">PHP · Unity / iOS · Flare (persistent memcached) · AWS</p>
+        </div>
+      </section>
+
+      <!-- Earlier career -->
+      <section class="tight">
+        <h2>Earlier career</h2>
+        <p class="section-note">Before GREE: console games, contract work, and dispatch engagements — including mission-critical settings.</p>
+      </section>
+
+      <div class="breakout">
+        <table class="spec">
+          <tr>
+            <td class="k">2011—2012</td>
+            <td>
+              <div class="org">FEYNMAN Inc. (later acquired by GREE)</div>
+              <div class="role">iOS / Android app development. Hired after completing iPhone Camp in Gifu (run by Pasona Tech).</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="k">2005—2010</td>
+            <td>
+              <div class="org">Adecco (dispatch) — Toyota-affiliated CAE / automotive contract development</div>
+              <div class="role">
+                At Toyota Communication Systems, worked on the porting and modernization of a crash-safety
+                CAE preprocessor (diff review, quality control). Also built MATLAB support tooling and
+                pre-cut data editing software. Experienced first-hand the rigor of a field where human
+                lives are at stake.
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="k">1998—2005</td>
+            <td>
+              <div class="org">Flight-Plan Co., Ltd.</div>
+              <div class="role">Programmer on consumer games (PS / PS2 era), later a planner.</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- OSS -->
+      <section>
+        <h2>Open-source &amp; tools</h2>
+
+        <div class="entry">
+          <h3>Portman <span class="status">in development</span></h3>
+          <p class="env">CLI tool (macOS / Linux)</p>
+          <p>
+            Prevents port conflicts in development environments and auto-arbitrates port numbers across
+            projects. Integration with Claude Code verified.
+          </p>
+          <div class="cmd">
             <code>brew install dkurokawa/tap/portman</code>
-            <button class="copy-btn" onclick="copyToClipboard('brew install dkurokawa/tap/portman', this)">Copy</button>
+            <button class="copy-btn" onclick="copyToClipboard('brew install dkurokawa/tap/portman', this)">copy</button>
           </div>
-          <div class="project-actions">
-            <a href="https://github.com/dkurokawa/portman" class="btn btn-primary" target="_blank">GitHub</a>
-            <span class="status-badge status-active">● Active Development</span>
-          </div>
+          <p class="go"><a class="link" href="https://github.com/dkurokawa/portman" target="_blank" rel="noopener">GitHub →</a></p>
         </div>
 
-        <!-- CPU Harmony -->
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">CPU Harmony</h3>
-          </div>
-          <div class="project-env">macOS System Tool</div>
-          <p class="project-description">
-            CPU resource arbitration tool that ensures minimum system responsiveness. Maintains system operability even when heavy processing is running.
+        <div class="entry">
+          <h3>check-nc-licenses <span class="status on">published</span></h3>
+          <p class="env">npm package</p>
+          <p>
+            Detects non-commercial (NC) licenses among npm dependencies, preventing license violations
+            in commercial projects.
           </p>
-          <div class="install-command">
-            <code>brew install dkurokawa/tap/cpu-harmony</code>
-            <button class="copy-btn" onclick="copyToClipboard('brew install dkurokawa/tap/cpu-harmony', this)">Copy</button>
-          </div>
-          <div class="project-actions">
-            <a href="https://github.com/dkurokawa/cpu-harmony" class="btn btn-primary" target="_blank">GitHub</a>
-            <span class="status-badge status-active">● Stable</span>
-          </div>
-        </div>
-
-        <!-- check-nc-licenses -->
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">check-nc-licenses</h3>
-            <span class="project-version">v0.2.0</span>
-          </div>
-          <div class="project-env">npm Package</div>
-          <p class="project-description">
-            Detects non-commercial (NC) licenses in npm dependencies. Prevents license violations in commercial projects.
-          </p>
-          <div class="install-command">
+          <div class="cmd">
             <code>npm install -g check-nc-licenses</code>
-            <button class="copy-btn" onclick="copyToClipboard('npm install -g check-nc-licenses', this)">Copy</button>
+            <button class="copy-btn" onclick="copyToClipboard('npm install -g check-nc-licenses', this)">copy</button>
           </div>
-          <div class="project-actions">
-            <a href="https://www.npmjs.com/package/check-nc-licenses" class="btn btn-primary" target="_blank">npm</a>
-            <span class="status-badge status-active">● Published</span>
-          </div>
+          <p class="go"><a class="link" href="https://www.npmjs.com/package/check-nc-licenses" target="_blank" rel="noopener">npm →</a></p>
         </div>
 
-        <!-- VSCode Port Monitor -->
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">VSCode Port Monitor</h3>
-            <span class="project-version">v0.5.1</span>
-          </div>
-          <div class="project-env">VS Code Extension</div>
-          <p class="project-description">
-            Register and display real-time port usage during system development in VS Code. Improves development efficiency.
+        <div class="entry">
+          <h3>vscode-mini-sysmon</h3>
+          <p class="env">VS Code extension</p>
+          <p>
+            Lightweight CPU / Memory / GPU / Ollama status display inside VS Code — keep an eye on load
+            while running local LLMs during development.
           </p>
-          <div class="project-actions">
-            <a href="vscode:extension/dkurokawa.vscode-port-monitor" class="btn btn-primary">Open in VS Code</a>
-            <a href="https://marketplace.visualstudio.com/items?itemName=dkurokawa.vscode-port-monitor" class="btn btn-secondary" target="_blank">Marketplace</a>
-          </div>
+          <p class="go"><a class="link" href="https://github.com/dkurokawa/vscode-mini-sysmon" target="_blank" rel="noopener">GitHub →</a></p>
         </div>
 
-        <!-- VSCode Web Panel -->
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">VSCode Web Panel</h3>
-            <span class="project-version">v0.2.0</span>
-          </div>
-          <div class="project-env">VS Code Extension</div>
-          <p class="project-description">
-            Display web pages in VS Code panels or side views. Allows development while viewing dashboards or documentation.
+        <div class="entry">
+          <h3>VSCode Port Monitor / Web Panel</h3>
+          <p class="env">VS Code extensions</p>
+          <p>
+            Port Monitor shows real-time port usage during development; Web Panel displays any web page
+            inside a VS Code panel.
           </p>
-          <div class="project-actions">
-            <a href="vscode:extension/dkurokawa.vscode-web-panel" class="btn btn-primary">Open in VS Code</a>
-            <a href="https://marketplace.visualstudio.com/items?itemName=dkurokawa.vscode-web-panel" class="btn btn-secondary" target="_blank">Marketplace</a>
-          </div>
+          <p class="go">
+            <a class="link" href="https://marketplace.visualstudio.com/items?itemName=dkurokawa.vscode-port-monitor" target="_blank" rel="noopener">Port Monitor →</a>
+            <a class="link" href="https://marketplace.visualstudio.com/items?itemName=dkurokawa.vscode-web-panel" target="_blank" rel="noopener">Web Panel →</a>
+          </p>
         </div>
+
+        <div class="entry">
+          <h3>Other public repositories</h3>
+          <p class="env">GitHub @dkurokawa</p>
+          <p>nanobase-examples (usage examples for PPN nanobase) and more.</p>
+          <p class="go"><a class="link" href="https://github.com/dkurokawa" target="_blank" rel="noopener">All repositories →</a></p>
+        </div>
+      </section>
+
+      <!-- Home lab -->
+      <section class="tight">
+        <h2>Home lab (AI inference)</h2>
+        <p class="section-note">Local LLM inference and training run continuously on a Tailscale private network.</p>
+      </section>
+
+      <div class="breakout">
+        <table class="spec">
+          <tr>
+            <td class="k">Mac Studio M3 Ultra</td>
+            <td class="role">unified memory 512GB — production inference (llama4:128x17b / gpt-oss:120b / devstral / qwen3-coder, etc.)</td>
+          </tr>
+          <tr>
+            <td class="k">Custom PC (Linux)</td>
+            <td class="role">Ryzen 5 7600X3D / 64GB / RTX 5080 — vLLM (Llama-3.1-8B) / Ollama / YOLO / BERT training as systemd services</td>
+          </tr>
+          <tr>
+            <td class="k">Mac mini M4 Pro</td>
+            <td class="role">unified memory 64GB — 8B-class backup inference + main development machine</td>
+          </tr>
+        </table>
       </div>
-    </section>
-
-    <!-- Work in Progress -->
-    <section class="section">
-      <div class="section-header">
-        <div class="section-icon wip">⚡</div>
-        <h2>Work in Progress</h2>
-      </div>
-      <div class="projects-grid">
-        <!-- Books -->
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">Retro Game Development Hands-on</h3>
-            <span class="status-badge status-active">● Ongoing</span>
-          </div>
-          <div class="project-env">Online Book</div>
-          <p class="project-description">
-            Distributed at C106. JavaScript-focused development book project. Having fun experimenting with DI-based game engine design appearing in traditional game loops. Planning to cover assembly language topics based on PS/GBC era experience.
-          </p>
-          <div class="project-actions">
-            <a href="https://dkurokawa.github.io/books" class="btn btn-primary" target="_blank">Preview</a>
-          </div>
-        </div>
-
-        <!-- Portman MCP -->
-        <div class="project-card">
-          <div class="project-header">
-            <h3 class="project-title">Portman MCP Integration</h3>
-            <span class="status-badge status-wip">● In Development</span>
-          </div>
-          <div class="project-env">Claude MCP Server</div>
-          <p class="project-description">
-            Portman's MCP (Model Context Protocol) integration. Experimental feature that enables AI assistants to automatically manage ports. Currently facing challenges.
-          </p>
-          <div class="project-actions">
-            <span class="tag">Experimental Feature</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    </main>
 
     <footer>
-      <div class="social-links">
-        <a href="https://github.com/dkurokawa" target="_blank">GitHub</a>
-        <a href="https://www.linkedin.com/in/daisuke-kurokawa" target="_blank">LinkedIn</a>
-      </div>
-      <p>&copy; 2025 Daisuke Kurokawa. All rights reserved.</p>
+      <p>
+        <a href="https://github.com/dkurokawa" target="_blank" rel="noopener">GitHub</a> ·
+        <a href="https://www.linkedin.com/in/daisuke-kurokawa" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="mailto:daiskurokawa@gmail.com">Email</a><br>
+        &copy; 2026 Daisuke Kurokawa — Set in Shippori Mincho / IBM Plex Sans JP / IBM Plex Mono. Hand-built static HTML.
+      </p>
     </footer>
   </div>
 
   <script>
     function copyToClipboard(text, button) {
       navigator.clipboard.writeText(text).then(function() {
-        button.textContent = 'Copied';
+        button.textContent = 'copied';
         button.classList.add('copied');
         setTimeout(function() {
-          button.textContent = 'Copy';
+          button.textContent = 'copy';
           button.classList.remove('copied');
         }, 2000);
       }).catch(function(err) {
-        console.error('Failed to copy:', err);
+        console.error('copy failed:', err);
       });
     }
   </script>

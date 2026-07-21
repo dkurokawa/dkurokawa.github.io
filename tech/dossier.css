@@ -1,0 +1,293 @@
+/* Hallmark · genre: editorial · macrostructure: Long Document · theme: Almanac (JP-adapted) · enrichment: none · nav: N9 · footer: Ft4 · tone: technical-editorial · anchor hue: 35 (shu vermilion)
+ * contrast: pass (40–41) · slop: pass (42–45) · honest: pass (46) · chrome: pass (47) · tokens: pass (48) · responsive: pass (49) · mobile: pass (34, 50–57) */
+/* Hallmark · pre-emit critique: P4 H5 E4 S4 R5 V4 */
+
+* { box-sizing: border-box; }
+html { overflow-x: clip; }
+body {
+  overflow-x: clip;
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.85;
+  font-feature-settings: "palt";
+}
+
+/* ── document frame: centered 72rem stage, content column biased left ── */
+.stage {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.doc > * { max-width: var(--measure); }
+.doc > .breakout { max-width: var(--measure-wide); }
+
+/* ── nav · N9 edge-aligned minimal ── */
+.nav-edge {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-block: var(--space-md);
+  border-bottom: var(--rule-hairline);
+}
+.nav-edge .wordmark {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-edge .lang {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-accent);
+  padding-bottom: 1px;
+  white-space: nowrap;
+  transition: color var(--dur-micro) var(--ease-out),
+              border-color var(--dur-micro) var(--ease-out);
+}
+.nav-edge .lang:hover { color: var(--color-accent-deep); border-bottom-width: 2px; }
+
+/* ── name block · left-biased, no display gradient ── */
+.masthead { padding-block: var(--space-2xl) var(--space-3xl); }
+.masthead .kana {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.12em;
+  color: var(--color-muted);
+  margin: 0 0 var(--space-xs);
+}
+.masthead h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-display);
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  margin: 0;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.masthead h1 .seal {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  background: var(--color-accent);
+  margin-left: 0.35em;
+  vertical-align: 0.05em;
+}
+.masthead .role {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  color: var(--color-muted);
+  margin: var(--space-sm) 0 0;
+}
+.masthead .lede { margin-top: var(--space-xl); }
+.masthead .lede strong { font-weight: 700; }
+
+/* ── sections: inline heads, hairline rules, uneven rhythm ── */
+section { margin-block-start: var(--space-3xl); }
+section.tight { margin-block-start: var(--space-2xl); }
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-xl);
+  line-height: 1.3;
+  margin: 0;
+  padding-top: var(--space-md);
+  border-top: 2px solid var(--color-rule-strong);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.section-note {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  margin: var(--space-xs) 0 0;
+}
+
+/* ── entries (projects / jobs): stacked, hairline separated, no cards ── */
+.entry { padding-block: var(--space-xl) 0; }
+.entry + .entry { margin-top: var(--space-xl); border-top: var(--rule-hairline); }
+.entry h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-lg);
+  line-height: 1.35;
+  margin: 0;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.entry h3 .status {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  margin-left: var(--space-sm);
+  white-space: nowrap;
+}
+.entry h3 .status.on { color: var(--color-accent-deep); }
+.entry .env {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  margin: var(--space-2xs) 0 0;
+}
+.entry p { margin: var(--space-sm) 0 0; }
+.entry .stack {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-neutral);
+  margin: var(--space-sm) 0 0;
+  line-height: 1.7;
+}
+.entry .go { margin: var(--space-sm) 0 0; }
+
+/* featured stat line — the one deliberate grid-break */
+.statline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-2xl);
+  margin: var(--space-lg) 0 0;
+  padding: var(--space-md) 0;
+  border-top: var(--rule-hairline);
+  border-bottom: var(--rule-hairline);
+}
+.statline .stat { min-width: 0; }
+.statline .n {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-2xl);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  display: block;
+}
+.statline .l {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  display: block;
+  margin-top: var(--space-2xs);
+}
+
+/* ── C3 typographic links ── */
+a.link {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  white-space: nowrap;
+  transition: color var(--dur-micro) var(--ease-out);
+}
+a.link:hover { color: var(--color-accent-deep); }
+a.link:active { color: var(--color-accent); }
+a.link + a.link { margin-left: var(--space-lg); }
+p a { color: var(--color-accent-deep); text-underline-offset: 0.2em; }
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* ── install command rows ── */
+.cmd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin: var(--space-sm) 0 0;
+  border-left: 2px solid var(--color-rule-strong);
+  padding: var(--space-xs) 0 var(--space-xs) var(--space-md);
+  background: var(--color-paper-2);
+}
+.cmd code {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  overflow-x: auto;
+  white-space: nowrap;
+  min-width: 0;
+}
+.copy-btn {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-rule-strong);
+  padding: 0 0 1px;
+  margin-right: var(--space-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--dur-micro) var(--ease-out),
+              transform 100ms var(--ease-out);
+}
+.copy-btn:hover { color: var(--color-ink); border-bottom-color: var(--color-ink); }
+.copy-btn:active { transform: translateY(1px); }
+.copy-btn.copied { color: var(--color-accent-deep); border-bottom-color: var(--color-accent); }
+.copy-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ── F3 tabular spec sheets ── */
+table.spec {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--space-lg);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+table.spec td {
+  padding: var(--space-sm) var(--space-md) var(--space-sm) 0;
+  border-top: var(--rule-hairline);
+  vertical-align: top;
+}
+table.spec tr:first-child td { border-top: none; }
+table.spec .k {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+  white-space: nowrap;
+  width: 1%;
+  padding-right: var(--space-lg);
+}
+table.spec .org { font-weight: 700; }
+table.spec .role { color: var(--color-muted); }
+
+/* ── footer · Ft4 dense colophon ── */
+footer {
+  margin-top: var(--space-3xl);
+  border-top: 2px solid var(--color-rule-strong);
+  padding-block: var(--space-lg) var(--space-2xl);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 2;
+  color: var(--color-muted);
+}
+footer a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  white-space: nowrap;
+  transition: color var(--dur-micro) var(--ease-out);
+}
+footer a:hover { color: var(--color-accent-deep); }
+
+/* ── responsive ── */
+@media (max-width: 40rem) {
+  .masthead { padding-block: var(--space-xl) var(--space-2xl); }
+  section { margin-block-start: var(--space-2xl); }
+  .statline { gap: var(--space-xs) var(--space-xl); }
+  table.spec .k { padding-right: var(--space-md); white-space: normal; min-width: 6.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 150ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+  }
+}
