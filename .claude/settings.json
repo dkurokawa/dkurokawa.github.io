@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in */tech/index.html|*/tech/index_en.html) node \"$(git -C \"$(dirname \"$f\")\" rev-parse --show-toplevel)/tech/check-i18n-drift.mjs\" 1>&2 || echo '{\"systemMessage\":\"⚠ JP/EN portfolio drift — run: node tech/check-i18n-drift.mjs\"}' ;; esac",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  }
+}
