@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>稼働中のダッシュボード — Daisuke Kurokawa</title>
+  <meta name="description" content="個人開発で本番稼働している ML 学習ループ・災害情報マップ・文書処理パイプラインのダッシュボード索引。いずれも公開中で、そのまま開いて中身を確認できます。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+JP:wght@350;400;700&family=Shippori+Mincho:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="stage">
+    <header class="mast">
+      <p class="mast-line">Aperio · Live Dashboards</p>
+      <h1 class="mast-name">稼働中のダッシュボード</h1>
+      <p class="mast-sub">黒川 大輔 — 個人開発で本番運用している system の観測面</p>
+      <hr class="mast-rule" aria-hidden="true">
+    </header>
+
+    <main>
+      <p class="lede">
+        個人で運用している system のうち、<strong>中を見せられるものだけ</strong>を並べています。
+        スクリーンショットではなく実際に動いている画面なので、開いた時点の状態がそのまま出ます。
+        値が取れなかった項目は「取得失敗」と表示されます — 前回値で埋めない方針のためです。
+      </p>
+
+      <section class="index" aria-label="ダッシュボード索引">
+
+        <article class="entry">
+          <p class="entry-kind">MLOps</p>
+          <div class="entry-body">
+            <h2 class="entry-name">
+              <a href="https://internal.ppn-hub.com/sagemaker-dashboard/public">住所 NER の学習ループ</a>
+            </h2>
+            <p class="entry-desc">
+              Amazon SageMaker Pipeline で住所解析モデルを月次で再学習し、
+              <em>自動の品質ゲートと人の承認の2段</em>を通ったモデルだけを本番へ配信しています。
+              画面では実行ごとのステップの成否、ラベル別スコアの推移、
+              承認済みモデルと本番稼働中モデルの一致まで確認できます。
+              金額・アカウント識別子は落とした秘匿版です。
+            </p>
+            <p class="entry-meta">
+              <span>SageMaker Pipeline</span><span>Model Registry</span><span>Cloudflare Workers</span><span>R2</span>
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <p class="entry-kind">Realtime</p>
+          <div class="entry-body">
+            <h2 class="entry-name">
+              <a href="https://planet.ppn-hub.com">地球の今</a>
+            </h2>
+            <p class="entry-desc">
+              気象庁が発表した緊急地震速報・津波・気象警報・火山情報を、
+              電文のまま SSE で流し込んで日本地図に重ねています。
+              引用しやすいよう配信元を明示し、OBS のブラウザソースとして埋め込める形にもしてあります。
+              <em>公式の緊急速報の代替ではありません。</em>
+            </p>
+            <p class="entry-meta">
+              <span>Server-Sent Events</span><span>気象庁電文</span><span>Cloudflare Workers</span><span>Hono</span>
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <p class="entry-kind">Data</p>
+          <div class="entry-body">
+            <h2 class="entry-name">
+              <a href="https://paper-pipeline.ppn-hub.com/viewer">論文処理パイプライン</a>
+            </h2>
+            <p class="entry-desc">
+              OpenAlex・IEA・IRENA・FAO・USGS などから論文を収集し、
+              取り込み → 選別 → 抽出 → 構造化までを 6 段で処理しています。
+              各段の推論は<em>すべて自宅の LLM</em> で完結させ、クラウド LLM は fallback 側に置いています。
+              画面は総件数と直近 24 時間・7 日の処理量を出します。
+            </p>
+            <p class="entry-meta">
+              <span>Ollama</span><span>Mac Studio M3 Ultra</span><span>Neon</span><span>R2</span>
+            </p>
+          </div>
+        </article>
+
+      </section>
+
+      <p class="note">
+        いずれも <a href="https://dkurokawa.github.io/tech/">技術ポートフォリオ</a> に書いている個人開発の一部です。
+        API 本体やソースの話はそちらに置いています。
+      </p>
+    </main>
+  </div>
+
+  <footer class="foot-line">
+    <p>
+      Daisuke Kurokawa ·
+      <a href="https://dkurokawa.github.io/tech/">Portfolio</a> ·
+      <a href="https://github.com/dkurokawa">GitHub</a> ·
+      <a href="https://www.linkedin.com/in/daisuke-kurokawa">LinkedIn</a>
+    </p>
+  </footer>
+</body>
+</html>

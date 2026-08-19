@@ -1,0 +1,214 @@
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V4 */
+/* Hallmark · macrostructure: Index-First · nav: N6 · footer: Ft2
+ * theme: Wakan (dark) · tone: technical · anchor hue: 80 (warm) · accent: shu 35
+ * enrichment: none (typography only)
+ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  padding: 0 0 var(--space-2xl);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 350;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.stage {
+  max-width: var(--measure-wide);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+/* ── N6 · Newspaper masthead ───────────────────────────────────── */
+
+.mast {
+  display: grid;
+  gap: var(--space-2xs);
+  text-align: center;
+  padding-block: var(--space-xl) 0;
+}
+
+.mast-line {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-neutral);
+}
+
+.mast-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.mast-sub {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.mast-rule {
+  border: 0;
+  border-top: var(--rule-hair) solid var(--color-rule-strong);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+  height: 3px;
+  margin: var(--space-md) 0 0;
+}
+
+/* ── Lede ──────────────────────────────────────────────────────── */
+
+.lede {
+  max-width: var(--measure);
+  margin: var(--space-xl) 0 var(--space-2xl);
+  color: var(--color-muted);
+}
+
+.lede strong {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+/* ── The index itself ──────────────────────────────────────────── */
+
+.index {
+  border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+/* Single column at every width. The kind label stacks directly above the
+ * entry name rather than sitting in a left-hand column beside it: a label
+ * parked to the left of its own heading is the templated-editorial tell
+ * (slop-test gate 54), and it survives even when the label is this short. */
+.entry {
+  display: block;
+  padding-block: var(--space-lg);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.entry-kind {
+  margin: 0 0 var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.entry-body { min-width: 0; }
+
+.entry-name {
+  margin: 0 0 var(--space-2xs);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  font-size: var(--text-lg);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.entry-name a {
+  color: var(--color-ink);
+  text-decoration: none;
+  background-image: linear-gradient(var(--color-accent), var(--color-accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 var(--rule-hair);
+  transition: background-size var(--dur-short) var(--ease-out),
+              color var(--dur-micro) var(--ease-out);
+}
+
+.entry-name a:hover,
+.entry-name a:focus-visible {
+  color: var(--color-accent-deep);
+  background-size: 100% var(--rule-hair);
+}
+
+.entry-name a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.entry-desc {
+  margin: 0 0 var(--space-sm);
+  color: var(--color-muted);
+  max-width: var(--measure);
+}
+
+.entry-desc em {
+  font-style: italic;
+  color: var(--color-ink);
+}
+
+.entry-meta {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-neutral);
+  overflow-wrap: anywhere;
+}
+
+.entry-meta span + span::before {
+  content: " · ";
+  color: var(--color-rule-strong);
+}
+
+/* ── Closing note ──────────────────────────────────────────────── */
+
+.note {
+  max-width: var(--measure);
+  margin: var(--space-2xl) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-neutral);
+}
+
+.note a { color: var(--color-accent-deep); }
+
+/* ── Ft2 · Inline rule single line ─────────────────────────────── */
+
+.foot-line {
+  max-width: var(--measure-wide);
+  margin: var(--space-2xl) auto 0;
+  padding: var(--space-md) var(--gutter) 0;
+  border-top: var(--rule-hair) solid var(--color-rule);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-neutral);
+}
+
+.foot-line p { margin: 0; }
+
+.foot-line a {
+  color: var(--color-neutral);
+  text-underline-offset: 3px;
+  transition: color var(--dur-micro) var(--ease-out);
+}
+
+.foot-line a:hover { color: var(--color-accent-deep); }
+
+.foot-line a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

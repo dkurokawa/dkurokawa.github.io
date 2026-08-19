@@ -1,0 +1,48 @@
+/* Hallmark · macrostructure: Index-First · nav: N6 · footer: Ft2
+ * theme: Wakan (dark) · paper-band: dark · display: high-contrast-serif · accent: warm (shu 35)
+ * Relates to tech/ (Almanac, light washi) by sharing the shu accent and the
+ * Shippori Mincho + IBM Plex Sans JP pairing; differs by inverting the paper.
+ */
+:root {
+  /* paper — sumi ink, anchor hue 80 kept warm so it reads as washi's reverse */
+  --color-paper:       oklch(15% 0.010 80);
+  --color-paper-2:     oklch(19% 0.012 80);
+  --color-rule:        oklch(32% 0.010 75);
+  --color-rule-strong: oklch(46% 0.012 70);
+  --color-neutral:     oklch(62% 0.010 70);
+  --color-muted:       oklch(74% 0.008 75);
+  --color-ink:         oklch(94% 0.007 80);
+  /* accent — shu (vermilion), same hue as tech/, lifted for dark paper */
+  --color-accent:      oklch(64% 0.17 35);
+  --color-accent-deep: oklch(72% 0.15 35);
+  --color-focus:       oklch(70% 0.17 35);
+
+  --font-display: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-body:    "IBM Plex Sans JP", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+  --text-xs:   0.8125rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-md:   1.25rem;
+  --text-lg:   1.5625rem;
+  --text-xl:   1.9531rem;
+  --text-2xl:  2.4414rem;
+
+  --space-2xs: 0.25rem;
+  --space-xs:  0.5rem;
+  --space-sm:  0.75rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2.5rem;
+  --space-2xl: 4rem;
+
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+
+  --rule-hair: 1px;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --measure: 42rem;
+  --measure-wide: 58rem;
+}
