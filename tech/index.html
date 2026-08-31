@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tech Portfolio - Daisuke Kurokawa</title>
-  <meta name="description" content="黒川 大輔 (dkurokawa) — AI × Full-stack Engineer。LLM / RAG / マルチエージェントを実プロダクトに組み込む個人開発と、Web / モバイル / インフラの実務経験。">
+  <meta name="description" content="黒川 大輔 (dkurokawa) — AI 駆動開発で「作れる範囲」を広げるエンジニア。エッジと AWS の使い分け、止めない運用、データを構造化して配る基盤まで、フロントからインフラまで縦断して作る。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@600;700&display=swap" rel="stylesheet">
@@ -22,13 +22,64 @@
       <div class="masthead">
         <p class="kana">黒川 大輔</p>
         <h1>Daisuke Kurokawa<span class="seal" aria-hidden="true"></span></h1>
-        <p class="role">AI × Full-stack Engineer</p>
+        <p class="role">AI 駆動開発 / エッジ・クラウド / フロント〜インフラ縦断</p>
         <p class="lede">
-          10 歳の関数電卓 BASIC から書き始め、いまも現役。PS / GBC ネイティブ → iOS / Android → AWS →
-          Cloudflare Edge まで実務で経験してきました。直近は <strong>LLM / RAG / マルチエージェントを実プロダクトに組み込む</strong>
-          個人開発に注力し、PoC で終わらせず「動いて公開されているもの」に届けることを大事にしています。
+          <strong>ここ 15 年はウェブが中心です。</strong>フロントエンドからサーバー、インフラ、
+          エッジまで一人で作って本番まで持っていきます。
+          いまは AI と組んだ進め方に寄せていて、扱える本数と領域が桁で変わりました。
         </p>
+        <ul class="points">
+          <li>Cloudflare のエッジに約 30 ドメイン・120 以上の Workers を一人で本番運用。月間 1,000 万リクエスト規模</li>
+          <li>6 段のパイプラインとメダリオン構成のデータレイクを、設計から運用まで自分で</li>
+          <li>画像推論をブラウザ ONNX ＋ サーバ GPU の 2 段で構成。882 枚で 95.0%</li>
+          <li>GREE でオンプレから AWS への移行を 100 規模。Master/Slave の運用と引っ越しも</li>
+          <li>AWS Certified Machine Learning Engineer – Associate</li>
+          <li>AWS Certified AI Practitioner</li>
+        </ul>
       </div>
+
+      <!-- AI 駆動開発 -->
+      <section>
+        <h2>AI 駆動開発</h2>
+        
+
+        <div class="entry">
+          <h3>使い分けと、手放さない範囲</h3>
+          <p>
+            設計は自分が 7 割、実装は生成とレビューに寄せ、検証は協働。この配分に落ち着きました。
+            設計を投げると崩れ、実装を全部自分で書くと遅い。
+            AI が書いたコードは自分で読んで採否を決めています。
+          </p>
+          <ul class="points">
+            <li>業務用語をコードの行番号と 1:1 で紐付けた用語集をモデルに読ませ、型の取り違えを止めた</li>
+            <li>PR 作成・テスト項目生成・QA 依頼・デプロイをカスタムスキル化し、進捗は機械可読の JSON</li>
+            <li>追跡の運用負担が週 2〜3 時間から 15 分に</li>
+          </ul>
+          <p class="stack">Claude Code · Cursor · Gemini · Perplexity · 自作の多段レビュー</p>
+        </div>
+      </section>
+
+      <div class="breakout">
+        <div class="statline">
+          <div class="stat">
+            <span class="n">2倍以上</span>
+            <span class="l">8ヶ月のコミット数 / 直前7ヶ月比</span>
+          </div>
+          <div class="stat">
+            <span class="n">50+</span>
+            <span class="l">8ヶ月で手がけたプロジェクト（従来 1〜2）</span>
+          </div>
+          <div class="stat">
+            <span class="n">7</span>
+            <span class="l">新規に踏み込んだ領域</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="statline-note">
+        コミット数は指標として粗く、巨大な変更ほど 1 コミットに畳まれます。
+        意味があるのは、扱える本数と新規領域が桁で変わったことの方です。
+      </p>
 
       <!-- 動いているもの (Live Demo) -->
       <section>
@@ -37,12 +88,17 @@
 
         <div class="entry">
           <h3>paper-pipeline <span class="status on">稼働中</span></h3>
-          <p class="env">6 段 RAG パイプライン / 個人プロジェクト</p>
+          <p class="env">6 段パイプライン / メダリオン構成のデータレイク</p>
           <p>
-            大量のドキュメントを自動収集し、丸ごと LLM に渡さず、要素分解して段階的に
-            <strong>ローカル LLM</strong>で構造化・検証・合成する RAG パイプライン。
-            AI 推論の各ステージをすべて自宅の LLM で完結させています。
+            大量のドキュメントを自動収集し、要素分解して段階的に構造化・検証・合成する文書処理基盤です。
           </p>
+          <ul class="points">
+            <li>AI 推論の 4 段すべてを自宅のローカル LLM で完結。外部 API のコストはゼロ</li>
+            <li>データレイクは bronze（生）→ silver（構造化）→ gold（配信できる形）の 3 層を自分で設計・実装</li>
+            <li>層の実体は R2、処理の進行は PostgreSQL のステートマシン。データと進行を分離</li>
+            <li>取り込み時に関連文書をまとめて LLM に渡し、合意点・矛盾・空白を合成（バッチの RAG）。クエリ時の生成は下流に分けています</li>
+            <li>出口は埋め込みベースの検索 API。常駐ワーカー 9 本と watchdog で運用</li>
+          </ul>
         </div>
       </section>
 
@@ -72,17 +128,37 @@
       <!-- 個人プロジェクト -->
       <section>
         <h2>個人プロジェクト</h2>
-        <p class="section-note">AI 駆動開発を本格導入し、複数プロジェクトを並行して育てています。</p>
+        <p class="section-note">エッジ・推論・モバイル。</p>
 
         <div class="entry">
           <h3>PPN — Planetary Prosperity Network</h3>
-          <p class="env">toB 向け AI API 群</p>
+          <p class="env">toB 向け AI API 群 / 一人で本番運用</p>
           <p>
-            大気 / 水 / 地震 / 気象 / 環境エネルギー 等をカバーする複数ドメインの
-            商用 API 群。Cloudflare Workers 上のマイクロサービスとして構築し、
-            高可用性・観測可能性を意識して運用しています。個人開発アプリからも利用。
+            大気 / 水 / 地震 / 気象 / 環境エネルギー 等をカバーする複数ドメインの API 群です。
+            設計・実装・運用・監視まで一人で見ています。
           </p>
-          <p class="stack">Cloudflare Workers · Neon · R2 · Hono / TS · Grafana Cloud</p>
+          <ul class="points">
+            <li>Cloudflare の全世界エッジに約 30 ドメイン・120 以上の Workers を本番稼働</li>
+            <li>うち 50 以上を API として本番ドメインで公開。月間 1,000 万リクエスト規模</li>
+            <li>AWS と Cloudflare は適材適所。地理的に分散して低遅延で返すものはエッジ、堅牢さと既存資産が要るものは AWS</li>
+            <li>重い処理と状態は後段に降ろし、エッジ側は薄く保つ</li>
+          </ul>
+          <p class="stack">Cloudflare Workers · Neon · R2 · Hono / TS · Grafana Cloud · self-hosted Langfuse</p>
+        </div>
+
+        <div class="entry">
+          <h3>車両インパネの2段ハイブリッド推論</h3>
+          <p class="env">ブラウザ ONNX + サーバ GPU / 業務の空き時間に個人的に進めた取り組み</p>
+          <p>
+            車両の計器盤画像から状態を判定する推論を、2 段構成で組みました。
+          </p>
+          <ul class="points">
+            <li>ブラウザ上の ONNX（YOLOv8・5.8MB）で一次判定し、判断がつかない画像だけサーバの GPU で本推論</li>
+            <li>全部を GPU に投げる構成に比べ、処理を大きく削れる</li>
+            <li>検証データ 882 枚で精度 95.0%（混同行列つき）。ar_id 単位の 5-fold で測り直しても 94.9%（±2.4）</li>
+            <li>スマホで動くところまで作りましたが、本番には乗っていません</li>
+          </ul>
+          <p class="stack">YOLOv8 · ONNX Runtime Web · Python · GPU 推論</p>
         </div>
 
         <div class="entry">
@@ -107,15 +183,6 @@
           <p class="stack">React Native + Expo · ONNX · Workers AI</p>
         </div>
 
-        <div class="entry">
-          <h3>ppn-ci</h3>
-          <p class="env">多段 AI コードレビュー</p>
-          <p>
-            Director + Architect + Gatekeeper + Auditor の多段レビュー。
-            マージ済み PR を few-shot 学習に使って観点を強化する実験的 CI 補助ツール。
-          </p>
-          <p class="stack">TypeScript · 高精度=GPT-5.6 sol / 定型=安価モデル（変更中）</p>
-        </div>
       </section>
 
       <!-- 職務経歴 -->
@@ -128,9 +195,14 @@
           <p class="env">2024/08〜 / リードエンジニア</p>
           <p>
             画像査定を用いた中古車オークションプラットフォームの開発・運用。
-            機能追加のほか、AI 画像検査やデータレイク周りにも関わっています。
           </p>
-          <p class="stack">Next.js · TypeScript · AWS · AI 推論</p>
+          <ul class="points">
+            <li>分析基盤の初期疎通を開通。本番 RDS のデータを S3 に出し、Glue でカタログ化して Athena でクエリできる状態まで。その先の基盤化は別メンバーへ引き継ぎ</li>
+            <li>QuickSight の唯一の AUTHOR として、複数領域の分析ダッシュボードを継続制作。オークション・査定・入出金・CS 応答・開発 KPI</li>
+            <li>バイク版のデータ基盤整備では技術リードとして若手に指導</li>
+            <li>MySQL 8.0 → 8.4 の、止めずに上げる検証手順を提案</li>
+          </ul>
+          <p class="stack">Next.js · TypeScript · AWS（RDS / S3 / Glue / Athena / QuickSight / ECS） · AI 推論</p>
         </div>
 
         <div class="entry">
@@ -147,18 +219,23 @@
           <h3>グリー株式会社</h3>
           <p class="env">2012〜2023 / フロント〜サーバー〜インフラ</p>
           <p>
-            高可用性が求められるソーシャルゲームを、フロントエンドからサーバーサイド・
-            インフラまで横断して開発・運用。新機能追加・負荷対策・自動化整備・
-            リファクタリング・GitHub Enterprise 運用などに従事。
+            止められないサービスを、フロントエンドからサーバーサイド・インフラまで横断して開発・運用。
           </p>
-          <p class="stack">PHP · Unity / iOS · Flare（永続化 memcached） · AWS</p>
+          <ul class="points">
+            <li>オンプレから AWS への移行を 100 規模。設計をゼロから引いたのではなく実行側で、止めないことと戻せる状態を保つことに気を使った</li>
+            <li>Xen ホスト 5 台の保守。電源故障を踏んだがフェイルオーバーで表面上は無停止</li>
+            <li>Master/Slave 構成の DB 運用と Master の引っ越し</li>
+            <li>前段に分散 KVS（flare）を挟み DB へのクエリを単純な参照に限定する負荷設計。その構造を理解した上で、制約の中で実装と運用改善</li>
+            <li>flare で複合キーの設計、期限が設定されず消えないレコードの解析と掃除、肥大化した全件キャッシュの個別化。DynamoDB と同種の KVS</li>
+          </ul>
+          <p class="stack">PHP · Unity / iOS · flare（分散KVS、DynamoDB と同種） · AWS · MySQL</p>
         </div>
       </section>
 
       <!-- 過去の主な職歴 -->
       <section class="tight">
         <h2>過去の主な職歴</h2>
-        <p class="section-note">GREE 以前。コンシューマ機・受託・派遣で、ミッションクリティカルな現場を含む幅広い開発を経験しました。</p>
+        <p class="section-note">GREE 以前。コンシューマ機・受託・派遣。</p>
       </section>
 
       <div class="breakout">
@@ -186,6 +263,37 @@
             <td>
               <div class="org">株式会社フライトプラン</div>
               <div class="role">コンシューマゲーム（PS / PS2 世代）のプログラマ → 後半はプランナー。</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- 資格 -->
+      <section class="tight">
+        <h2>資格</h2>
+      </section>
+
+      <div class="breakout">
+        <table class="spec">
+          <tr>
+            <td class="k">2026</td>
+            <td>
+              <div class="org">AWS Certified Machine Learning Engineer – Associate</div>
+              <div class="role">学習・デプロイ・監視まで、ML をどう運用に乗せるかを問う Associate。</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="k">2026</td>
+            <td>
+              <div class="org">AWS Certified AI Practitioner</div>
+              <div class="role">生成 AI と基盤モデルが配点の半分。責任ある AI、AI ガバナンス、主要 AI サービスまで。</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="k">2022</td>
+            <td>
+              <div class="org">paiza スキルチェック A ランク（レーティング 1574）</div>
+              <div class="role">アルゴリズム実装の客観スコア。</div>
             </td>
           </tr>
         </table>

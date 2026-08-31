@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tech Portfolio - Daisuke Kurokawa</title>
-  <meta name="description" content="Daisuke Kurokawa (dkurokawa) — AI × Full-stack Engineer. Personal work building LLM / RAG / multi-agent systems into real products, with professional experience across web, mobile, and infrastructure.">
+  <meta name="description" content="Daisuke Kurokawa (dkurokawa) — an engineer widening what he can build, with AI. Edge and AWS side by side, operations that stay up, and pipelines that structure data and serve it — front end through infrastructure.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@600;700&display=swap" rel="stylesheet">
@@ -22,14 +22,64 @@
       <div class="masthead">
         <p class="kana">黒川 大輔</p>
         <h1>Daisuke Kurokawa<span class="seal" aria-hidden="true"></span></h1>
-        <p class="role">AI × Full-stack Engineer</p>
+        <p class="role">AI-driven development / Edge &amp; cloud / Front end through infrastructure</p>
         <p class="lede">
-          I wrote my first BASIC on a programmable calculator at age ten, and I still write code every day.
-          Professionally I have shipped across PS / GBC native, iOS / Android, AWS, and the Cloudflare edge.
-          These days my personal work focuses on <strong>building LLM / RAG / multi-agent systems into real products</strong> —
-          not stopping at PoC, but getting things live and public.
+          <strong>The last 15 years have been mostly web.</strong> Front end, server, infrastructure and the
+          edge, built on my own and taken through to production.
+          These days I design alongside AI, and the number of things I can carry has changed by an order of magnitude.
         </p>
+        <ul class="points">
+          <li>Around 30 domains and 120+ Workers on Cloudflare's global edge, operated solo. Roughly 10 million requests a month</li>
+          <li>A 6-stage pipeline and a medallion data lake, designed and operated by me</li>
+          <li>Image inference in two stages, browser ONNX plus server GPU. 95.0% on 882 images</li>
+          <li>At GREE, on-premises to AWS migrations on the order of 100. Master/Slave operation and migrations</li>
+          <li>AWS Certified Machine Learning Engineer – Associate</li>
+          <li>AWS Certified AI Practitioner</li>
+        </ul>
       </div>
+
+      <!-- AI-driven development -->
+      <section>
+        <h2>AI-driven development</h2>
+        
+
+        <div class="entry">
+          <h3>What I hand over, and what I keep</h3>
+          <p>
+            I hold about 70% of the design layer, lean on generation and review for implementation,
+            and treat verification as joint work. <strong>Hand off the design and it falls apart;
+            write every line myself and it's slow.</strong> I read the code AI writes and decide what to keep.
+          </p>
+          <ul class="points">
+            <li>A glossary mapping domain terms to specific line numbers, read by the model, stopped the type mix-ups</li>
+            <li>Opening PRs, generating test cases, filing QA requests and deploying moved into custom skills, progress kept as machine-readable JSON</li>
+            <li>Tracking overhead went from 2–3 hours a week to 15 minutes</li>
+          </ul>
+          <p class="stack">Claude Code · Cursor · Gemini · Perplexity · a homegrown multi-stage review</p>
+        </div>
+      </section>
+
+      <div class="breakout">
+        <div class="statline">
+          <div class="stat">
+            <span class="n">2×+</span>
+            <span class="l">commits over 8 months vs. the prior 7</span>
+          </div>
+          <div class="stat">
+            <span class="n">50+</span>
+            <span class="l">projects worked on in 8 months (was 1–2)</span>
+          </div>
+          <div class="stat">
+            <span class="n">7</span>
+            <span class="l">areas newly taken on</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="statline-note">
+        Commit count is a coarse measure: the bigger the change, the more it collapses into one commit.
+        What matters is that the number of things I can carry, and the new ground, changed by an order of magnitude.
+      </p>
 
       <!-- Live demo -->
       <section>
@@ -38,12 +88,18 @@
 
         <div class="entry">
           <h3>paper-pipeline <span class="status on">running</span></h3>
-          <p class="env">6-stage RAG pipeline / personal project</p>
+          <p class="env">6-stage pipeline / medallion data lake</p>
           <p>
-            A RAG pipeline that continuously collects large volumes of documents and — instead of passing them
-            to an LLM whole — decomposes them and structures, verifies, and synthesizes them step by step with
-            <strong>local LLMs</strong>. Every AI inference stage runs entirely on LLMs at home.
+            A document-processing platform that collects documents at volume, decomposes them, and structures,
+            verifies and synthesizes them stage by stage.
           </p>
+          <ul class="points">
+            <li>All four inference stages run on local LLMs at home. External API cost is zero</li>
+            <li>The lake is a medallion of bronze (raw) → silver (structured) → gold (ready to serve), designed and implemented by me</li>
+            <li>Layers live in R2, processing state in a PostgreSQL state machine. Data and progress kept separate</li>
+            <li>At ingest, related documents are gathered and passed to an LLM to synthesize consensus, contradictions and gaps (batch RAG). Query-time generation is left downstream</li>
+            <li>The exit is an embedding-based search API. Nine resident workers and a watchdog</li>
+          </ul>
         </div>
       </section>
 
@@ -73,17 +129,37 @@
       <!-- Personal projects -->
       <section>
         <h2>Personal projects</h2>
-        <p class="section-note">AI-driven development in earnest, growing several projects in parallel.</p>
+        <p class="section-note">Edge, inference, mobile.</p>
 
         <div class="entry">
           <h3>PPN — Planetary Prosperity Network</h3>
-          <p class="env">B2B AI API family</p>
+          <p class="env">B2B AI API family / operated solo in production</p>
           <p>
-            A multi-domain family of commercial APIs covering air, water, seismic, weather, environmental
-            energy, and more. Built as microservices on Cloudflare Workers and operated with availability
-            and observability in mind. Also consumed by my own apps.
+            A multi-domain family of APIs covering air, water, seismic, weather, environmental energy, and more.
+            Design, implementation, operation and monitoring are all mine.
           </p>
-          <p class="stack">Cloudflare Workers · Neon · R2 · Hono / TS · Grafana Cloud</p>
+          <ul class="points">
+            <li>Around 30 domains and 120+ Workers in production across Cloudflare's global edge</li>
+            <li>50+ of them published as APIs on production domains. Roughly 10 million requests a month</li>
+            <li>AWS or Cloudflare by what the job needs: the edge for things that must be geographically distributed and answer fast, AWS where durability and existing assets matter</li>
+            <li>Heavy work and state go to later stages, the edge stays thin</li>
+          </ul>
+          <p class="stack">Cloudflare Workers · Neon · R2 · Hono / TS · Grafana Cloud · self-hosted Langfuse</p>
+        </div>
+
+        <div class="entry">
+          <h3>Two-stage hybrid inference on vehicle dashboards</h3>
+          <p class="env">Browser ONNX + server GPU / taken on personally, in slack time at work</p>
+          <p>
+            Inference that reads vehicle instrument-panel images, built in two stages.
+          </p>
+          <ul class="points">
+            <li>A first pass in the browser on ONNX (YOLOv8, 5.8MB); only the images it can't settle go to the server GPU</li>
+            <li>Against sending everything to the GPU, that cuts the work substantially</li>
+            <li>95.0% on 882 validation images with a confusion matrix. 94.9% (±2.4) when re-measured with 5-fold splits grouped by ar_id</li>
+            <li>It ran on a phone, but never went to production</li>
+          </ul>
+          <p class="stack">YOLOv8 · ONNX Runtime Web · Python · GPU inference</p>
         </div>
 
         <div class="entry">
@@ -107,15 +183,6 @@
           <p class="stack">React Native + Expo · ONNX · Workers AI</p>
         </div>
 
-        <div class="entry">
-          <h3>ppn-ci</h3>
-          <p class="env">Multi-stage AI code review</p>
-          <p>
-            Multi-stage review by Director + Architect + Gatekeeper + Auditor. An experimental CI aid that
-            uses merged PRs as few-shot examples to sharpen its review perspectives.
-          </p>
-          <p class="stack">TypeScript · high-accuracy = GPT-5.6 sol / routine = cheaper model (in flux)</p>
-        </div>
       </section>
 
       <!-- Career -->
@@ -128,9 +195,14 @@
           <p class="env">2024/08— / Lead Engineer</p>
           <p>
             Development and operation of a used-car auction platform built on image-based assessment.
-            Feature work, plus involvement in AI image inspection and the data-lake side.
           </p>
-          <p class="stack">Next.js · TypeScript · AWS · AI inference</p>
+          <ul class="points">
+            <li>Opened the initial path for the analytics platform: production RDS data to S3, catalogued with Glue, queryable through Athena. Building it out properly was handed to another member</li>
+            <li>Sole QuickSight AUTHOR, producing analytics dashboards across multiple domains: auctions, assessment, escrow payments, CS response, development KPIs</li>
+            <li>Led the motorcycle-side data work technically, coaching a junior engineer</li>
+            <li>Proposed the verification procedure for the MySQL 8.0 → 8.4 upgrade without downtime</li>
+          </ul>
+          <p class="stack">Next.js · TypeScript · AWS (RDS / S3 / Glue / Athena / QuickSight / ECS) · AI inference</p>
         </div>
 
         <div class="entry">
@@ -147,18 +219,23 @@
           <h3>GREE, Inc.</h3>
           <p class="env">2012—2023 / frontend — server — infrastructure</p>
           <p>
-            Developed and operated high-availability social games across frontend, server-side, and
-            infrastructure. New features, load countermeasures, automation, refactoring, and GitHub
-            Enterprise operations.
+            Built and operated services that could not go down, across frontend, server-side, and infrastructure.
           </p>
-          <p class="stack">PHP · Unity / iOS · Flare (persistent memcached) · AWS</p>
+          <ul class="points">
+            <li>On-premises to AWS migrations on the order of 100. Not drawing the architecture from scratch but on the execution side, where not dropping traffic during cutover and keeping a way back is what matters</li>
+            <li>Maintained five Xen hosts. A power-supply failure was absorbed by failover with no visible outage</li>
+            <li>Ran Master/Slave DBs and performed Master migrations by hand</li>
+            <li>A load design with a distributed KVS (flare) in front, keeping DB queries to simple reads. I understood that structure and worked inside its constraints</li>
+            <li>On flare: composite key design, clearing records that never expired because no TTL was set, breaking up an oversized full-table cache. The same kind of KVS as DynamoDB</li>
+          </ul>
+          <p class="stack">PHP · Unity / iOS · flare (distributed KVS, same family as DynamoDB) · AWS · MySQL</p>
         </div>
       </section>
 
       <!-- Earlier career -->
       <section class="tight">
         <h2>Earlier career</h2>
-        <p class="section-note">Before GREE: console games, contract work, and dispatch engagements — including mission-critical settings.</p>
+        <p class="section-note">Before GREE: console games, contract work, dispatch engagements.</p>
       </section>
 
       <div class="breakout">
@@ -187,6 +264,37 @@
             <td>
               <div class="org">Flight-Plan Co., Ltd.</div>
               <div class="role">Programmer on consumer games (PS / PS2 era), later a planner.</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Certifications -->
+      <section class="tight">
+        <h2>Certifications</h2>
+      </section>
+
+      <div class="breakout">
+        <table class="spec">
+          <tr>
+            <td class="k">2026</td>
+            <td>
+              <div class="org">AWS Certified Machine Learning Engineer – Associate</div>
+              <div class="role">Associate level, covering training, deployment, and monitoring — how ML is actually operated.</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="k">2026</td>
+            <td>
+              <div class="org">AWS Certified AI Practitioner</div>
+              <div class="role">Generative AI and foundation models are half the exam, plus responsible AI, AI governance, and the core AI services.</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="k">2022</td>
+            <td>
+              <div class="org">paiza skill check, rank A (rating 1574)</div>
+              <div class="role">An external score for algorithm implementation.</div>
             </td>
           </tr>
         </table>
