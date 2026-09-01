@@ -52,10 +52,12 @@
           </p>
           <ul class="points">
             <li>業務用語をコードの行番号と 1:1 で紐付けた用語集をモデルに読ませ、型の取り違えを止めた</li>
-            <li>PR 作成・テスト項目生成・QA 依頼・デプロイをカスタムスキル化し、進捗は機械可読の JSON</li>
+            <li>開発フローの各段（PR 作成・実装・QA 依頼・green/blue デプロイ）を自作のスキルとして 15 本用意し、issue 番号を渡すと進む形に。進捗は機械可読の JSON</li>
+            <li>PR の差分と issue の完了条件を突き合わせて、<strong>動作確認シートを HTML で自動生成</strong>。確認する URL も自動で並ぶ</li>
+            <li>過去 10 ヶ月分の issue・PR・レビューコメント・差分に現行ソースを加えて<strong>意味検索する RAG を自作</strong>。実装前に決定の経緯を引き、grep より先に当たりを付ける</li>
             <li>追跡の運用負担が週 2〜3 時間から 15 分に</li>
           </ul>
-          <p class="stack">Claude Code · Cursor · Gemini · Perplexity · 自作の多段レビュー</p>
+          <p class="stack">Claude Code · Cursor · Gemini · Perplexity · 自作スキル / CLI · 自作 RAG（voyage embedding + rerank） · 自作の多段レビュー</p>
         </div>
       </section>
 

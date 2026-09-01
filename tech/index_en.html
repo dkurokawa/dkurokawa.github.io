@@ -52,10 +52,12 @@
           </p>
           <ul class="points">
             <li>A glossary mapping domain terms to specific line numbers, read by the model, stopped the type mix-ups</li>
-            <li>Opening PRs, generating test cases, filing QA requests and deploying moved into custom skills, progress kept as machine-readable JSON</li>
+            <li>Each step of the dev flow (opening PRs, implementing, filing QA requests, green/blue deploys) is one of 15 skills I wrote; hand it an issue number and it moves. Progress kept as machine-readable JSON</li>
+            <li>PR diffs are matched against the issue's acceptance criteria to <strong>generate a QA checklist as HTML</strong>, with the URLs to check listed automatically</li>
+            <li>Ten months of issues, PRs, review comments and diffs, plus the current source, <strong>indexed in a RAG I built</strong> for semantic search. I pull the history behind a decision before implementing, ahead of reaching for grep</li>
             <li>Tracking overhead went from 2–3 hours a week to 15 minutes</li>
           </ul>
-          <p class="stack">Claude Code · Cursor · Gemini · Perplexity · a homegrown multi-stage review</p>
+          <p class="stack">Claude Code · Cursor · Gemini · Perplexity · my own skills / CLI · my own RAG (voyage embedding + rerank) · a homegrown multi-stage review</p>
         </div>
       </section>
 
